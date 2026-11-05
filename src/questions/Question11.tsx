@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { type Question } from "../types";
+import { asset } from "../asset";
 import classNames from "classnames";
 
 const VideoQuestion = () => {
@@ -11,7 +12,7 @@ const VideoQuestion = () => {
         <video
           autoPlay
           controls={false}
-          src="/video/bertelq-2.mp4"
+          src={asset("/video/bertelq-2.mp4")}
           className={classNames("transition-opacity", end && "opacity-25")}
           onEnded={() => setEnd(true)}
         />
@@ -36,7 +37,7 @@ export const Question11: Question = {
   answer: (
     <>
       <div className="flex justify-center items-center w-300 aspect-video rounded-2xl overflow-hidden">
-        <video autoPlay controls={false} src="/video/bertala-2.mp4" />
+        <video autoPlay controls={false} src={asset("/video/bertala-2.mp4")} />
       </div>
     </>
   ),

@@ -1,4 +1,5 @@
 import { type Question } from "../types";
+import { asset } from "../asset";
 export const Question14: Question = {
   id: "14",
   setVolume: 0.05,
@@ -7,7 +8,7 @@ export const Question14: Question = {
       <video
         autoPlay
         controls={false}
-        src="/video/viersaasode.mp4"
+        src={asset("/video/viersaasode.mp4")}
         className="w-175"
       />
       <p className="text-4xl mt-4">
@@ -16,5 +17,5 @@ export const Question14: Question = {
       </p>
     </>
   ),
-  answer: <img src="/images/tunnel.png" className="mx-auto w-225" />,
+  answer: <img src={asset("/images/tunnel.png")} className="mx-auto w-225" />,
 };

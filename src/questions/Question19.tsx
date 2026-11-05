@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { type Question } from "../types";
+import { asset } from "../asset";
 
 const Body = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -9,7 +10,7 @@ const Body = () => {
     <>
       <video
         ref={videoRef}
-        src="/video/letgo.mp4"
+        src={asset("/video/letgo.mp4")}
         className="w-275"
         onEnded={() => setEnded(true)}
       />
@@ -33,7 +34,7 @@ const Answer = () => {
     <>
       <video
         autoPlay
-        src="/video/letgoansw.mp4"
+        src={asset("/video/letgoansw.mp4")}
         className="w-275"
         onEnded={() => setEnded(true)}
       />
@@ -48,7 +49,7 @@ export const Question19: Question = {
   setVolume: 0.4,
   answer: (
     <>
-      <video autoPlay src="/video/letgoansw.mp4" className="w-275" />,
+      <video autoPlay src={asset("/video/letgoansw.mp4")} className="w-275" />
       <p className="text-7xl font-bold">7</p>
     </>
   ),
