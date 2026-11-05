@@ -33,12 +33,13 @@ Waku 0.27 (React Server Components) med React 19 og React Compiler (Babel-plugin
 - `src/pages/_layout.tsx` er en serverkomponent (fonte, favicon, `styles.css`). Alt andet med
   tilstand, lyd eller browser-API'er er `"use client"`.
 - `src/pages/index.tsx` vælger quiz-packen efter mount ud fra `?quiz=<pack>` (ellers `DEFAULT_QUIZ`
-  i `src/config.ts`), fordi siden prerenderes uden URL'en; indtil da vises kun en tom grøn placeholder-baggrund (den eneste hårdkodede grønne).
-  Et ukendt navn viser en liste over packs som `?quiz=`-links. `QuizBoard` er hele quizzen for én
-  pack: lågegitteret, holdenes point, baggrundsmusik, sneen (kun hvis packens `snow`) og fyrværkeriet ved afslutning.
-  `QuizBoard` sætter packens farver som CSS-variabler (`--color-page|board|door|doorHighlight|doorDone|screen|text`,
-  plus `--font-title`) på en omsluttende `div`; komponenter bruger `bg-(--color-…)`-klasser og
-  aldrig hårdkodede farver.
+  i `src/config.ts`), fordi siden prerenderes uden URL'en; indtil da vises kun en tom grøn
+  placeholder-baggrund. Et ukendt navn viser en liste over packs som `?quiz=`-links. `QuizBoard` er
+  hele quizzen for én pack: lågegitteret, holdenes point, baggrundsmusik, sneen (kun hvis packens
+  `snow`) og fyrværkeriet ved afslutning. `QuizBoard` sætter packens farver som CSS-variabler
+  (`--color-page|board|door|doorHighlight|doorDone|screen|text`, plus `--font-title`) på en
+  omsluttende `div`; komponenter bruger `bg-(--color-…)`-klasser og aldrig hårdkodede farver,
+  undtagen spillene `FoxChickenGrain`, `MusicBox` og `WordPuzzle`.
   Rækkefølgen blandes ved mount, hvis packen har `shuffle`; kun `QuestionCard`-prop'en får
   gitterpladsen, mens `Question.id` gemmes af `quizState.ts` (nøgle `julequiz-state-v2:<pack>`, én
   pr. pack) og skal være stabil.
@@ -53,7 +54,8 @@ Waku 0.27 (React Server Components) med React 19 og React Compiler (Babel-plugin
 ### Spørgsmål
 
 Hver quiz er en pack i `src/quizzes/<pack>/` (kebab-case): `quiz.ts` default-eksporterer en `Quiz`
-(`src/types.ts`: titel, holdnavne, lågeord, shuffle, point, musik, tema: `snow`, `titleFont`, `colors`), og hver låge er en
+(`src/types.ts`: titel, holdnavne, lågeord, shuffle, point, musik, tema: `snow`, `titleFont`,
+`colors`), og hver låge er en
 `QuestionSpec` i `src/quizzes/<pack>/questions/NN-<slug>.tsx` med `export default`. Filnavnet uden
 endelse er lågens id, og filnavnsrækkefølgen er den forfattede rækkefølge. `src/quizzes/index.ts`
 finder alle packs med `import.meta.glob` (eager) og eksporterer `QUIZZES`. Kopiér en pack-mappe
