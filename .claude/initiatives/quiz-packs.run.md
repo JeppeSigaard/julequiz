@@ -8,3 +8,4 @@
 - question-types: flettet i PR #7 (6c1d250) efter 1 review + 1 minor-fix.
 - dynamic-board: flettet i PR #8 (2237260) efter 1 review uden fund.
 - bølge 1 færdig.
+- interactive-types: worktree oprettet; planlægning startet.
