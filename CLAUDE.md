@@ -78,9 +78,10 @@ dørindholdets størrelsestrin (fx `textSize`, `mediaFrame` i `Standard.tsx`) bo
 lågers og prøvespørgsmåls billeder, video og lyd (`Question.preload`: rå stier fra begge sider,
 udledt i `toQuestion`; en `custom`-låge angiver selv alle sine medier med `preload`) og lågens
 lydeffekter hentes som blobs ved start af `preloadMedia` i `src/mediaCache.ts`, mens footeren viser
-fremskridtet. Renderere opløser stier med `useAsset` (kun lydeffekter, som `use-sound` ikke allerede
-har hentet ved start på brættet, går gennem `useCachedUrl`) én gang pr. montering, og `useSound`
-skal have `format`, fordi en `blob:`-URL ingen filendelse har. En ny type skal tilføjes i
+fremskridtet. Renderere opløser stier med `useAsset` (lydeffekterne i `QuestionScreen`, `Music` og
+`GuessThatCat` med `useCachedUrl`; `WordPuzzle`s `ding`/`wrong2` har brættets `use-sound` allerede
+hentet) én gang pr. montering, og `useSound` skal have `format`, fordi en `blob:`-URL ingen
+filendelse har. En ny type skal tilføjes i
 `QuestionSpec` og i `toQuestion` (switchen har ingen default med vilje). Kopiér den nærmeste
 eksisterende låge frem for at opfinde en ny form.
 
