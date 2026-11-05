@@ -126,8 +126,8 @@ export const TeamPlaque: FC<{
             {team}
           </span>
         )}
-        <span className={`relative flex flex-col ${size === "end" ? "items-center" : ""}`}>
-          <span className={`font-black uppercase tracking-[0.08em] ${s.name} ${t.name}`}>{name}</span>
+        <span className={`relative flex min-w-0 max-w-full flex-col ${size === "end" ? "items-center" : ""}`}>
+          <span className={`font-black uppercase tracking-[0.08em] max-w-full break-words ${s.name} ${t.name}`}>{name}</span>
           <span className={`font-display font-bold leading-[0.95] ${s.points}`}>
             <AnimatedNumber value={points} /> {size === "board" && unit}
           </span>

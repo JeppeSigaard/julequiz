@@ -53,7 +53,9 @@ og `exactOptionalPropertyTypes`. `src/pages.gen.ts` genereres af Waku og rediger
 - `src/components/QuestionScreen.tsx` er den åbne låge: et papirkort med bånd, kristtorn og
   sløret mørk baggrund. Tastatur: Enter/mellemrum viser svaret, 1/2 giver lågen til et hold, q/x til
   ingen, Escape lukker eller går tilbage til spørgsmålet. `m` åbner indstillinger (`SettingsMenu`,
-  Escape lukker), når ingen låge er åben; `ResetQuizSetting` nulstiller pakkens gemte quiz.
+  Escape lukker), når ingen låge er åben; `TeamNamesSetting` ændrer holdnavnene (gemt pr. pakke
+  under sin egen nøgle i `src/quizState.ts`, så de overlever nulstilling; et tomt felt falder
+  tilbage til `Quiz.teamNames`), og `ResetQuizSetting` nulstiller pakkens gemte quiz.
 
 ### Quiz-pakker
 
