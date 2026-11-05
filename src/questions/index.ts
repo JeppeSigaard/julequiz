@@ -1,3 +1,5 @@
+import { toQuestion } from "../questionTypes";
+import { type Question, type QuestionSpec } from "../types";
 import { Question1 } from "./Question1";
 import { Question2 } from "./Question2";
 import { Question3 } from "./Question3";
@@ -23,7 +25,7 @@ import { Question22 } from "./Question22";
 import { Question23 } from "./Question23";
 import { Question24 } from "./Question24";
 
-export const QUESTIONS = [
+const SPECS: QuestionSpec[] = [
   Question1,
   Question2,
   Question3,
@@ -49,3 +51,5 @@ export const QUESTIONS = [
   Question23,
   Question24,
 ];
+
+export const QUESTIONS: Question[] = SPECS.map((spec, index) => toQuestion(spec, String(index + 1)));

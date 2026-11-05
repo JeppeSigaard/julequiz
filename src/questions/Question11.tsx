@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { type Question } from "../types";
+import { type QuestionSpec } from "../types";
 import { asset } from "../asset";
 import classNames from "classnames";
 
@@ -30,9 +30,9 @@ const VideoQuestion = () => {
   );
 };
 
-export const Question11: Question = {
-  id: "11",
-  setVolume: 0.1,
+export const Question11: QuestionSpec = {
+  type: "custom",
+  backgroundVolume: 0.1,
   body: <VideoQuestion />,
   answer: (
     <>

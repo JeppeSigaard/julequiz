@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react";
 import useSound from "use-sound";
 import { WordPuzzle } from "../components/WordPuzzle";
-import { type Question } from "../types";
+import { type QuestionSpec } from "../types";
 import dingSFX from "../sfx/ding.mp3";
 import wrongSFX from "../sfx/wrong2.mp3";
 
@@ -21,8 +21,8 @@ const Body: FunctionComponent = () => {
   );
 };
 
-export const Question20: Question = {
-  id: "20",
+export const Question20: QuestionSpec = {
+  type: "custom",
   body: <Body />,
   answer: <p className="font-bold text-9xl">BRÆNDTE MANDLER</p>,
 };

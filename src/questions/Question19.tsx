@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { type Question } from "../types";
+import { type QuestionSpec } from "../types";
 import { asset } from "../asset";
 
 const Body = () => {
@@ -43,10 +43,10 @@ const Answer = () => {
   );
 };
 
-export const Question19: Question = {
-  id: "19",
+export const Question19: QuestionSpec = {
+  type: "custom",
   body: <Body />,
-  setVolume: 0.4,
+  backgroundVolume: 0.4,
   answer: (
     <>
       <video autoPlay src={asset("/video/letgoansw.mp4")} className="w-275" />

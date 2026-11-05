@@ -1,20 +1,9 @@
-import { type Question } from "../types";
-import { asset } from "../asset";
-export const Question3: Question = {
-  id: "3",
-  body: (
-    <div className="mb-4 mx-auto w-220 grid gap-4">
-      <img src={asset("/images/tryksen-1982.jpg")} />
-      <p className="text-3xl">
-        Hvad hedder "rammehistorien" med Jesper Klein i alle roller, som blev
-        tilføjet til genudsendelsen af Jullerup Færgeby i 1982?
-      </p>
-    </div>
-  ),
-  answer: (
-    <div className="mb-4 mx-auto w-220 grid gap-4">
-      <img src={asset("/images/tryksen-1982.jpg")} />
-      <p className="text-7xl text-center font-extrabold">Avisen</p>
-    </div>
-  ),
+import { type QuestionSpec } from "../types";
+export const Question3: QuestionSpec = {
+  type: "standard",
+  question: {
+    image: "/images/tryksen-1982.jpg",
+    text: "Hvad hedder \"rammehistorien\" med Jesper Klein i alle roller, som blev tilføjet til genudsendelsen af Jullerup Færgeby i 1982?",
+  },
+  answer: { image: "/images/tryksen-1982.jpg", text: "Avisen" },
 };
