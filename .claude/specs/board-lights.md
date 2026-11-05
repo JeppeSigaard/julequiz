@@ -26,8 +26,12 @@ snefaldet en smule.
 - Tænding → på selve klikket blinker lyset ~1,1 s og lyser derefter fast; alt andet starter på
   klikket som i dag. Ingen lyd.
 - Stop → lyset slukker øjeblikkeligt uden blink; næste klik tænder igen med blink.
-- Slukket-niveau → ét fælles filter for pærer, titel og snirkel: `brightness(0.3) saturate(0.4)`.
-  Blinket afspilles synkront på alle tre, fordi de får klassen i samme render.
+- Slukket-niveau → guirlanden: `brightness(0.3) saturate(0.4)`. Titlen og snirklen (brugerens
+  tilføjelse efter første review: "gør titlen lidt lysere i slukket tilstand, og snirklen"):
+  `brightness(0.5) saturate(0.6)`. `@keyframes flicker` er uændret; dens OFF-trin (0.3/0.4)
+  gælder også titel og snirkel under blinket, så de dykker en anelse dybere end hvilende slukket,
+  mens de blinker. Det er ønsket og kræver ingen variabel eller ekstra keyframes. Blinket er stadig
+  synkront på alle tre.
 - Snefald (brugerens tilføjelse: "øg også snefaldet en smule") → `snowflakeCount` fra 60 til 90
   både på tavlen og i `EndScreen`, så de to forbliver ens.
 
@@ -64,7 +68,7 @@ snefaldet en smule.
    className med en template-streng som pæren gør i samme fil. Rør ikke pærernes egne klasser.
 3. `src/components/board/BoardHeader.tsx`: tilføj prop `lit: boolean` i typen og destruktureringen.
    Definér øverst i komponenten en konstant, fx `const light = lit ? "animate-flicker" :
-   "[filter:brightness(0.3)_saturate(0.4)]";` — komponenten er i dag en pil med implicit return;
+   "[filter:brightness(0.5)_saturate(0.6)]";` — komponenten er i dag en pil med implicit return;
    omskriv den til krop med `return (…)`. Tilføj `light` til `<h1>`'s className (h1 har i dag ingen
    className) og til snirkel-`<svg>`'s className. Undertitlens `<span>` og holdskiltene får den
    ikke.
@@ -72,7 +76,8 @@ snefaldet en smule.
 5. Sæt `snowflakeCount={60}` til `snowflakeCount={90}` i `<Snowfall>` i `src/pages/index.tsx`
    (i `QuizBoard`, bag `started &&`) og i `src/components/EndScreen.tsx` (linje ~49).
 6. `CLAUDE.md`, afsnittet "Farver og stil", punktet om animationer: tilføj `animate-flicker`
-   (guirlanden, titlen og snirklen er dæmpet med `brightness(0.3) saturate(0.4)`, indtil quizzen
+   (guirlanden er dæmpet med `brightness(0.3) saturate(0.4)` og titel/snirkel med
+   `brightness(0.5) saturate(0.6)`, indtil quizzen
    startes, og blinker én gang op, når den startes; stop slukker dem uden blink). Hold det til én
    sætning i samme stil.
 
@@ -93,8 +98,8 @@ snefaldet en smule.
   unødvendigt; og blinket må kun ske ved klik, ikke ved mount/genindlæsning.
 - **Brug ikke Tailwinds `brightness-*`/`saturate-*`-utilities til slukket-tilstanden.** De sætter
   `filter` via `--tw-*`-variabler, så værdien ikke står ordret som i keyframes; brug den arbitrære
-  egenskab `[filter:brightness(0.3)_saturate(0.4)]` (understreg = mellemrum), så første og sidste
-  keyframe og slukket-tilstanden er samme tekst.
+  egenskab `[filter:brightness(0.3)_saturate(0.4)]` / `[filter:brightness(0.5)_saturate(0.6)]`
+  (understreg = mellemrum), så guirlandens slukket-tilstand og keyframes' OFF-trin er samme tekst.
 - **Ingen rå hex, ingen paletteklasser** (CLAUDE.md). Ændringen bruger kun filtre, ingen farver.
 - Kommentarer: ingen er nødvendige. Højst én kort dansk kommentar i `Garland.tsx` ved filteret på
   det yderste `<div>`, der siger hvorfor det ligger dér og ikke på pærerne (twinkle ejer pærernes
