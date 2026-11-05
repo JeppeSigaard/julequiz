@@ -1,7 +1,7 @@
 import type { Quiz } from "../../types";
 
 const quiz: Quiz = {
-  title: "den store julequiz",
+  title: "Den Store Julequiz",
   teamNames: ["Hold 1", "Hold 2"],
   doorWord: "Låge",
   shuffle: true,
