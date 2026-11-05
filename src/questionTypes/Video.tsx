@@ -1,6 +1,6 @@
 import { useState } from "react";
 import classNames from "classnames";
-import { asset } from "../asset";
+import { useAsset } from "../mediaCache";
 import { mediaFrame } from "./Standard";
 
 export const VideoBody = ({
@@ -13,6 +13,7 @@ export const VideoBody = ({
   caption?: string;
 }) => {
   const [ended, setEnded] = useState(false);
+  const src = useAsset(video);
   const videoHeight = caption !== undefined ? "h-[420px]" : "h-[600px]";
   const promptSize = prompt.length <= 30 ? "text-[77px]" : "text-[58px]";
 
@@ -22,7 +23,7 @@ export const VideoBody = ({
         <video
           autoPlay
           controls={false}
-          src={asset(video)}
+          src={src}
           className={classNames(
             videoHeight,
             "max-w-[1100px] transition-opacity",

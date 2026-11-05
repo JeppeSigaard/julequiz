@@ -1,15 +1,16 @@
 import { useState } from "react";
-import { asset } from "../asset";
+import { useAsset } from "../mediaCache";
 import { PillButton } from "../components/decor";
 import { mediaFrame } from "./Standard";
 
 export const PosterBody = ({ prompt, cropped }: { prompt: string; cropped: string }) => {
   const [revealed, setRevealed] = useState(false);
+  const src = useAsset(cropped);
 
   return revealed ? (
     <div className="p-4">
       <img
-        src={asset(cropped)}
+        src={src}
         alt={prompt}
         className={`h-[520px] w-auto -rotate-1 ${mediaFrame}`}
       />
@@ -27,8 +28,11 @@ export const PosterBody = ({ prompt, cropped }: { prompt: string; cropped: strin
   );
 };
 
-export const PosterAnswer = ({ prompt, full }: { prompt: string; full: string }) => (
-  <div className="p-4">
-    <img src={asset(full)} alt={prompt} className={`max-h-[520px] w-auto ${mediaFrame}`} />
-  </div>
-);
+export const PosterAnswer = ({ prompt, full }: { prompt: string; full: string }) => {
+  const src = useAsset(full);
+  return (
+    <div className="p-4">
+      <img src={src} alt={prompt} className={`max-h-[520px] w-auto ${mediaFrame}`} />
+    </div>
+  );
+};
