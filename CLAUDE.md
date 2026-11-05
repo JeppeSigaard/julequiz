@@ -12,7 +12,7 @@ og commit-beskeder er også på dansk, identifikatorer og filnavne på engelsk.
 
 | Kommando        | Gør                                                                   |
 | --------------- | --------------------------------------------------------------------- |
-| `npm run dev`   | Waku-devserver med hot reload (port 3000)                             |
+| `npm run dev`   | Waku-devserver med hot reload (http://localhost:3000/julequiz/)        |
 | `npm run check` | `tsc --noEmit` + `waku build`; skal passere, før noget meldes færdigt |
 | `npm run build` | produktionsbuild til `dist/` (statisk genereret)                      |
 | `npm start`     | serverer det byggede `dist/`                                          |
@@ -51,8 +51,9 @@ et lille spil (`FoxChickenGrain`, `WordPuzzle`, `GuessThatCat`, `MusicBox` i `sr
 
 ### Medier
 
-Billeder og video ligger i `public/images/` og `public/video/` og refereres med absolut sti
-(`/images/…`). Lyd importeres som moduler fra `src/audio/` (musik) og `src/sfx/` (effekter);
+Billeder og video ligger i `public/images/` og `public/video/` og refereres gennem
+`asset("/images/…")` fra `src/asset.ts`, fordi quizzen kører under basestien `/julequiz/` på GitHub
+Pages. Lyd importeres som moduler fra `src/audio/` (musik) og `src/sfx/` (effekter);
 `src/env.d.ts` erklærer `*.mp3`.
 
 ## Arbejdsgang
@@ -60,3 +61,4 @@ Billeder og video ligger i `public/images/` og `public/video/` og refereres med 
 `.claude/` indeholder skills og kommandoer: `/plan`, `/branch`, `/review`, `/pr`, `/land`,
 `/initiative`, `/execute` og `/issue`, med developer- og reviewer-agenter. Fælles regler for kode
 og git står i `.claude/skills/_shared/`. Commit aldrig direkte på `main`.
+Hvert push til `main` udgives til GitHub Pages af `.github/workflows/deploy.yml`.
