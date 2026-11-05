@@ -104,7 +104,7 @@ ikke; en pakke uden `practice/` har ingen prøverunde.
   ikke `inline` fra `@theme`.
 - Fonte: `font-display` (Mountains of Christmas) til overskrifter og tal, `font-body` (Nunito) til
   resten. Animationer: `animate-twinkle` (pærerne i `Garland`), `animate-glow` (lågens glød),
-  `animate-sway` (lågerne vugger i pærernes 2,4 s-takt med forskudt fase, mens musikken spiller;
+  `animate-sway` (de lukkede låger vugger i pærernes 2,4 s-takt med forskudt fase, mens musikken spiller;
   animationen kører altid, og `sway` skruer kun det registrerede `--sway`-udsving op og ned) og
   `animate-flicker` (guirlanden er dæmpet med `brightness(0.3) saturate(0.4)` og titlen og snirklen
   med `brightness(0.65) saturate(0.7)`, indtil quizzen startes, og de blinker én gang op, når den
