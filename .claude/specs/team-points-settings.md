@@ -1,6 +1,6 @@
 # Justér holdenes point fra indstillingsmenuen
 
-> Status: in progress — claude/exciting-cray-jb9wsd
+> Status: merged — e707e3c
 
 ## Goal
 
