@@ -74,7 +74,9 @@ i `public/quizzes/<navn>/{audio,images,video}` og refereres som `/quizzes/<navn>
 (fri JSX som `FoxChickenGrain`, `GuessThatCat`). `toQuestion` i `src/questionTypes/index.tsx` laver
 dem til `Question` (`body`/`answer`/`setVolume`/`skip`) med renderere i `src/questionTypes/`;
 dørindholdets størrelsestrin (fx `textSize`, `mediaFrame` i `Standard.tsx`) bor i rendererne.
-`backgroundVolume` dæmper baggrundsmusikken, mens lågen er åben, og `skip` gør lågen uvælgelig. Alle
+`backgroundVolume` dæmper baggrundsmusikken, mens lågen er åben (uanset det skærer `useMuffle` i
+`src/muffle.ts` diskanten af den med et lavpasfilter, mens en låge, et prøvespørgsmål eller
+indstillingsmenuen er åben), og `skip` gør lågen uvælgelig. Alle
 lågers og prøvespørgsmåls billeder, video og lyd (`Question.preload`: rå stier fra begge sider,
 udledt i `toQuestion`; en `custom`-låge angiver selv alle sine medier med `preload`) og lågens
 lydeffekter hentes som blobs ved start af `preloadMedia` i `src/mediaCache.ts`, mens footeren viser
