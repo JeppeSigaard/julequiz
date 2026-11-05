@@ -1,6 +1,6 @@
 # Pack-tema: sne, titelskrift og farver pr. pack
 
-> Status: in progress — quiz-packs-pack-theme
+> Status: merged — c005bba
 
 Branch `quiz-packs-pack-theme`, base `claude/vibrant-euler-3tsdtn` (diff mod `origin/claude/vibrant-euler-3tsdtn`, aldrig `main`). Afhænger af `pack-loading` (merged).
 

@@ -13,3 +13,5 @@
 - bølge 2 færdig.
 - pack-loading: flettet i PR #10 (e3e2415) efter 1 review + 1 minor-fix.
 - bølge 3 færdig.
+- pack-theme: flettet i PR #11 (c005bba) efter 1 review + 1 minor-fix (CLAUDE.md).
+- bølge 4 færdig; integrationstjek startet.
