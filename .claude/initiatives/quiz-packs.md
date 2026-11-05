@@ -249,8 +249,10 @@ export type Quiz = {
 
 ### pack-theme
 
-> **Annulleret** — opgaven er overtaget af initiativet `redesign` (`.claude/initiatives/redesign.md`),
-> hvis `foundation`-opgave leverer farver pr. pack. Snow og titleFont udgår. Start den ikke.
+> **Erstattet** — opgaven blev kørt og flettet i integrationsgrenen (PR #11), men det samme var
+> overtaget af initiativet `redesign` (`.claude/initiatives/redesign.md`), hvis `foundation` leverer
+> farver pr. pack. Ved landingen på main blev redesignets løsning beholdt; snow og titleFont udgik.
+> Det samme gælder quiz-packs' senere integration-fix (PR #14).
 
 - **Branch**: `quiz-packs-pack-theme`
 - **Depends on**: pack-loading
@@ -274,7 +276,7 @@ export type Quiz = {
 - **Wave 1**: dynamic-board, question-types
 - **Wave 2**: interactive-types
 - **Wave 3**: pack-loading
-- **Wave 4**: pack-theme — annulleret, overtaget af `redesign`
+- **Wave 4**: pack-theme — kørt (#11), men erstattet af `redesign` ved landingen på main
 
 ## Integration check
 
