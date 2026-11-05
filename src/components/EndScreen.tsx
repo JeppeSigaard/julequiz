@@ -18,7 +18,7 @@ export const EndScreen: FC<{
         <button
           key={team}
           type="button"
-          className={`relative z-20 cursor-pointer text-snow text-shadow-2xl ${team === 1 ? "text-left" : "text-right"}`}
+          className={`relative z-20 cursor-pointer text-snow text-shadow-[0_4px_24px_rgb(0_0_0/0.6)] ${team === 1 ? "text-left" : "text-right"}`}
           onClick={() => onConsolation(team)}
         >
           <span className="block uppercase font-extrabold text-[72px]">{teamNames[team - 1]}</span>

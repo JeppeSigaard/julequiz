@@ -10,11 +10,12 @@ const STITCH = {
 
 export const Paper: FC<{
   stitch?: "accent" | "team-1" | "team-2" | "highlight";
+  stitchSize?: string;
   className?: string;
   children: ReactNode;
-}> = ({ stitch = "accent", className, children }) => (
+}> = ({ stitch = "accent", stitchSize = "inset-[10px] rounded-[12px] border-2", className, children }) => (
   <div className={`relative bg-paper shadow-paper-edge rounded-[19px] text-ink ${className ?? ""}`}>
-    <div aria-hidden="true" className={`absolute inset-[10px] rounded-[12px] border-2 border-dashed ${STITCH[stitch]}`} />
+    <div aria-hidden="true" className={`absolute border-dashed ${stitchSize} ${STITCH[stitch]}`} />
     {children}
   </div>
 );
@@ -34,9 +35,9 @@ export const KeyCap: FC<{ tone?: "on-light" | "on-dark"; children: ReactNode }> 
 );
 
 const PILL = {
-  "team-1": "bg-team-1 text-team-1-ink shadow-pill-team-1",
-  "team-2": "bg-team-2 text-team-2-ink shadow-pill-team-2",
-  dark: "bg-ink text-snow shadow-pill-dark",
+  "team-1": "bg-team-1 text-team-1-ink text-[34px] shadow-pill-team-1",
+  "team-2": "bg-team-2 text-team-2-ink text-[34px] shadow-pill-team-2",
+  dark: "bg-ink text-snow text-[34px] shadow-pill-dark",
   neutral: "bg-ink/10 text-ink-soft text-[26px]",
 };
 
@@ -45,7 +46,7 @@ export const PillButton: FC<
 > = ({ variant, keyHint, className, children, ...rest }) => (
   <button
     {...rest}
-    className={`cursor-pointer flex items-center justify-center gap-4 rounded-full px-9 py-5 text-[34px] font-black min-w-[276px] ${PILL[variant]} ${className ?? ""}`}
+    className={`cursor-pointer flex items-center justify-center gap-4 rounded-full px-9 py-5 font-black min-w-[276px] ${PILL[variant]} ${className ?? ""}`}
   >
     {children}
     {keyHint !== undefined && (
@@ -62,6 +63,8 @@ const PLAQUE = {
     name: "text-[26px]",
     points: "text-[70px]",
     unit: "text-[22px]",
+    meta: "text-[17px]",
+    stitch: "inset-[10px] rounded-[12px] border-2",
   },
   end: {
     width: "w-[440px]",
@@ -69,7 +72,8 @@ const PLAQUE = {
     badge: "",
     name: "text-[36px]",
     points: "text-[158px]",
-    unit: "text-[24px]",
+    meta: "text-[24px]",
+    stitch: "inset-[12px] rounded-[18px] border-[3px]",
   },
 };
 
@@ -102,7 +106,7 @@ export const TeamPlaque: FC<{
   const t = PLAQUE_TEAM[team];
   const stitch = team === 1 ? "team-1" : "team-2";
   const unit = (
-    <span className={`font-body font-extrabold text-ink-soft ${s.unit}`}>point</span>
+    <span className={`font-body font-extrabold text-ink-soft ${PLAQUE.board.unit}`}>point</span>
   );
   return (
     <button
@@ -113,7 +117,7 @@ export const TeamPlaque: FC<{
     >
       <span aria-hidden="true" className="absolute left-12 -top-[72px] h-[77px] w-[2px] bg-paper-edge" />
       <span aria-hidden="true" className="absolute right-12 -top-[72px] h-[77px] w-[2px] bg-paper-edge" />
-      <Paper stitch={stitch} className={`flex items-center text-left ${s.paper} ${size === "board" ? t.row : "flex-col"}`}>
+      <Paper stitch={stitch} stitchSize={s.stitch} className={`flex items-center text-left ${s.paper} ${size === "board" ? t.row : "flex-col"}`}>
         {size === "board" && (
           <span
             aria-hidden="true"
@@ -127,7 +131,7 @@ export const TeamPlaque: FC<{
           <span className={`font-display font-bold leading-[0.95] ${s.points}`}>
             <AnimatedNumber value={points} /> {size === "board" && unit}
           </span>
-          <span className="text-[17px] font-bold text-ink-soft">
+          <span className={`font-bold text-ink-soft ${s.meta}`}>
             {size === "board" ? `${doors} låger · +${consolation} trøst` : `point · ${doors} låger`}
           </span>
         </span>

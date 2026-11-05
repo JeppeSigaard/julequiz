@@ -234,7 +234,7 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
                       {quiz.title}
                     </button>
                   </h1>
-                  <dl className="absolute transition-all duration-3000 flex justify-between z-20 left-0 right-0 top-6 text-shadow-none">
+                  <dl className="absolute flex justify-between z-20 left-0 right-0 top-6">
                     <button
                       className="text-left text-snow"
                       onClick={() => handleConsolation(1)}

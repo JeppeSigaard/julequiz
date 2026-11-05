@@ -24,20 +24,20 @@ virker, ses kun ved at åbne den i browseren.
 ## Stack
 
 Waku 0.27 (React Server Components) med React 19 og React Compiler (Babel-plugin i
-`waku.config.ts`), Tailwind 4 via Vite-plugin, `motion` til animationer, `use-sound` til lyd. Fonte: Mountains of Christmas
-(`font-display`) og Nunito 400–900 (`font-body`); DM Sans er droppet.
+`waku.config.ts`), Tailwind 4 via Vite-plugin, `motion` til animationer, `use-sound` til lyd.
+Fonte: Mountains of Christmas (`font-display`) og Nunito 400–900 (`font-body`); DM Sans er droppet.
 `tsconfig.json` har `strict`, `noUncheckedIndexedAccess` og `exactOptionalPropertyTypes`.
 `src/pages.gen.ts` genereres af Waku og redigeres ikke i hånden.
 
 ## Arkitektur
 
-- `src/pages/_layout.tsx` er en serverkomponent (fonte, favicon, `styles.css`, wrapper med `font-body`). Alt andet med
-  tilstand, lyd eller browser-API'er er `"use client"`.
+- `src/pages/_layout.tsx` er en serverkomponent (fonte, favicon, `styles.css`, wrapper med
+  `font-body`). Alt andet med tilstand, lyd eller browser-API'er er `"use client"`.
 - `src/pages/index.tsx` vælger quiz-packen efter mount ud fra `?quiz=<pack>` (ellers `DEFAULT_QUIZ`
   i `src/config.ts`), fordi siden prerenderes uden URL'en; indtil da vises en tom `night`-baggrund.
   Et ukendt navn viser en liste over packs som `?quiz=`-links. `QuizBoard` er hele quizzen for én
-  pack: lågegitteret, holdenes point, baggrundsmusik og sneen, alt inde i `Stage`. Ved afslutning vises `EndScreen`
-  (fyrværkeri og de to score) i stedet for overskrift og gitter.
+  pack: lågegitteret, holdenes point, baggrundsmusik og sneen, alt inde i `Stage`. Ved afslutning
+  vises `EndScreen` (fyrværkeri og de to score) i stedet for overskrift og gitter.
   Rækkefølgen blandes ved mount, hvis packen har `shuffle`; kun `QuestionCard`-prop'en får
   gitterpladsen, mens `Question.id` gemmes af `quizState.ts` (nøgle `julequiz-state-v2:<pack>`, én
   pr. pack) og skal være stabil.
