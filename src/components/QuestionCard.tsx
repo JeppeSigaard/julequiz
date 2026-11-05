@@ -135,17 +135,12 @@ export const QuestionCard: FunctionComponent<{
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="absolute inset-y-0 left-0 w-[min(40%,76cqmin)] origin-left rounded-l-[19px] bg-paper-edge shadow-[6px_0_14px_rgb(0_0_0/0.45)]"
         />
-        <div className="absolute inset-y-0 left-[min(40%,76cqmin)] right-0 flex items-center justify-center gap-[8cqmin] px-[4cqmin]">
+        <div className="absolute inset-y-0 left-[min(40%,76cqmin)] right-0 flex items-center justify-center px-[4cqmin]">
           <span
             aria-hidden="true"
             className={`flex size-[36cqmin] flex-none items-center justify-center rounded-full font-display text-[22cqmin] font-bold leading-none ${opened.rosette}`}
           >
             {opened.mark}
-          </span>
-          <span className="flex min-w-0 flex-col leading-tight">
-            <span className="truncate text-[10cqmin] font-extrabold uppercase tracking-[0.1em] text-mist">
-              {doorWord} {number}
-            </span>
           </span>
         </div>
       </div>
