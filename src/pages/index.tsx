@@ -267,7 +267,7 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
             color="white"
             radius={[1, 2.5]}
             opacity={[0.15, 0.5]}
-            snowflakeCount={60}
+            snowflakeCount={90}
           />
         )}
         {isFinished ? (
@@ -280,9 +280,10 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
           />
         ) : (
           <>
-            <Garland />
+            <Garland lit={started} />
             <div className="absolute inset-0 flex flex-col gap-[22px] px-[58px] pt-[84px] pb-[26px]">
               <BoardHeader
+                lit={started}
                 title={quiz.title}
                 doorCount={doorCount}
                 teamNames={teamNames}

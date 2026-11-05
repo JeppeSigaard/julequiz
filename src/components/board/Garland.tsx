@@ -18,8 +18,12 @@ const BULBS = Array.from({ length: Math.floor(WIDTH / SPACING) }, (_, k) => {
   return { x, y: wireY(x), color: BULB_COLORS[k % BULB_COLORS.length]!, delay: (k % 4) * 0.6 };
 });
 
-export const Garland: FC = () => (
-  <div aria-hidden="true" className="absolute top-0 left-0 w-full h-[108px] pointer-events-none">
+export const Garland: FC<{ lit: boolean }> = ({ lit }) => (
+  // Dæmpningen ligger på det yderste lag, fordi twinkle ejer pærernes egen filter
+  <div
+    aria-hidden="true"
+    className={`absolute top-0 left-0 w-full h-[108px] pointer-events-none ${lit ? "animate-flicker" : "[filter:brightness(0.3)_saturate(0.4)]"}`}
+  >
     <svg width={WIDTH} height={108} viewBox={`0 0 ${WIDTH} 108`} className="absolute left-0 top-0">
       <path d={WIRE_PATH} fill="none" strokeWidth={3.6} className="stroke-mist/30" />
     </svg>

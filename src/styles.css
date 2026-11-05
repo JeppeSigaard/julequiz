@@ -58,6 +58,7 @@
   --animate-twinkle: twinkle 2.4s ease-in-out infinite;
   --animate-glow: glow 2s ease-in-out infinite alternate;
   --animate-sway: sway 2.4s ease-in-out infinite;
+  --animate-flicker: flicker 1.1s linear;
 
   @keyframes twinkle {
     0%,
@@ -77,6 +78,22 @@
     }
     50% {
       rotate: calc(var(--sway) * -1);
+    }
+  }
+  @keyframes flicker {
+    0%,
+    12%,
+    26%,
+    45%,
+    56% {
+      filter: brightness(0.3) saturate(0.4);
+    }
+    8%,
+    22%,
+    50%,
+    62%,
+    100% {
+      filter: brightness(1) saturate(1);
     }
   }
   @keyframes glow {
