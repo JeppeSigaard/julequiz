@@ -1,6 +1,6 @@
 # Redesign: lågegitteret (board)
 
-> Status: in progress — redesign-board
+> Status: merged — 69a61a0
 
 Task `board` of the initiative `.claude/initiatives/redesign.md` (wave 2). Branch `redesign-board`, branched from and PR-targeting `claude/sweet-mendel-p0gtn1` (never `main`).
 
