@@ -5,15 +5,12 @@ import useSound from "use-sound";
 
 import { PillButton } from "./decor";
 
-type State = "idle" | "playing" | "stopped" | "revealed";
+type State = "idle" | "playing" | "stopped";
 
 export const MusicBox: FunctionComponent<{
   track: string;
-  song: string;
-  artist: string;
   start: number;
   stop: number;
-  answerStart: number;
 }> = (props) => {
   const [state, setState] = useState<State>("idle");
   const [hintCount, setHintCount] = useState(0);
@@ -32,12 +29,6 @@ export const MusicBox: FunctionComponent<{
     play({ playbackRate: 1 });
     sound?.seek(props.start);
     setState("playing");
-  };
-
-  const handleReveal = () => {
-    play({ playbackRate: 1 });
-    sound?.seek(props.answerStart);
-    setState("revealed");
   };
 
   // Seek to start position once sound is loaded (for first play)
@@ -72,7 +63,12 @@ export const MusicBox: FunctionComponent<{
   return (
     <div className="flex flex-col items-center gap-4">
       {state === "idle" && (
-        <PillButton variant="team-1" onClick={handlePlay}>
+        <PillButton
+          variant="team-1"
+          onClick={handlePlay}
+          disabled={!sound}
+          className="disabled:cursor-wait disabled:opacity-50"
+        >
           <span className="material-symbols-outlined text-[44px]">
             play_arrow
           </span>
@@ -90,30 +86,40 @@ export const MusicBox: FunctionComponent<{
       )}
 
       {state === "stopped" && (
-        <div className="flex gap-6">
-          <PillButton variant="team-1" onClick={handlePlay}>
-            <span className="material-symbols-outlined text-[44px]">
-              play_arrow
-            </span>
-            Spil lidt mere
-          </PillButton>
-          <PillButton variant="team-2" onClick={handleReveal}>
-            <span className="material-symbols-outlined text-[44px]">
-              visibility
-            </span>
-            Vis svar
-          </PillButton>
-        </div>
+        <PillButton variant="team-1" onClick={handlePlay}>
+          <span className="material-symbols-outlined text-[44px]">
+            play_arrow
+          </span>
+          Spil lidt mere
+        </PillButton>
       )}
+    </div>
+  );
+};
 
-      {state === "revealed" && (
-        <div className="flex flex-col items-center gap-4 text-center">
-          <div className="font-display text-[96px] text-accent-deep leading-none">
-            {props.song}
-          </div>
-          <div className="text-[43px] font-bold text-ink">{props.artist}</div>
-        </div>
-      )}
+export const MusicAnswer: FunctionComponent<{
+  track: string;
+  song: string;
+  artist: string;
+  answerStart: number;
+}> = (props) => {
+  const [play, { stop, sound }] = useSound(props.track, {
+    interrupt: true,
+  });
+
+  useEffect(() => {
+    if (!sound) return;
+    play({ playbackRate: 1 });
+    sound.seek(props.answerStart);
+    return () => stop();
+  }, [sound, play, stop, props.answerStart]);
+
+  return (
+    <div className="flex flex-col items-center gap-4 text-center">
+      <div className="font-display text-[96px] text-accent-deep leading-none">
+        {props.song}
+      </div>
+      <div className="text-[43px] font-bold text-ink">{props.artist}</div>
     </div>
   );
 };
