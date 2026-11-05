@@ -129,8 +129,9 @@ const HomePage: FunctionComponent = () => {
   useEffect(() => {
     const saved = loadQuizState();
     if (saved) {
-      const restored = saved.questionIds
-        .map((id) => QUESTIONS.find((q) => q.id === id)!);
+      const restored = saved.questionIds.map(
+        (id) => QUESTIONS.find((q) => q.id === id)!
+      );
       setQuestions(restored);
       setTeam1Cards(saved.team1Cards);
       setTeam2Cards(saved.team2Cards);
@@ -145,7 +146,7 @@ const HomePage: FunctionComponent = () => {
 
   useEffect(() => {
     // Uden denne port skriver første commit standardværdier, og StrictModes
-    // andet load-kørsel ville så læse dem i stedet for den gemte quiz.
+    // anden load-kørsel ville så læse dem i stedet for den gemte quiz.
     if (!isLoaded) return;
     saveQuizState({
       questionIds: questions.map((q) => q.id),
