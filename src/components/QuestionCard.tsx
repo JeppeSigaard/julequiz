@@ -106,17 +106,17 @@ export const QuestionCard: FunctionComponent<{
     <div className={wrapper} style={style}>
       <div
         aria-label={`${doorWord} ${number}: ${teamName ?? "Ingen"}`}
-        className="absolute inset-0 rounded-[19px] bg-night shadow-[inset_0_6px_16px_rgb(0_0_0/0.7)] ring-1 ring-paper/10"
+        className="absolute inset-0 rounded-[19px] bg-night shadow-[inset_0_6px_16px_rgb(0_0_0/0.7)] ring-1 ring-paper/10 [perspective:350cqmin]"
       >
+        {/* Bredde og perspektiv følger lågens mindste side, så bladet ikke svulmer op i brede celler. */}
         <motion.div
           aria-hidden="true"
           initial={{ rotateY: 0 }}
           animate={{ rotateY: -62 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
-          style={{ transformPerspective: 500 }}
-          className="absolute inset-y-0 left-0 w-[40%] origin-left rounded-l-[19px] bg-paper-edge shadow-[6px_0_14px_rgb(0_0_0/0.45)]"
+          className="absolute inset-y-0 left-0 w-[min(40%,76cqmin)] origin-left rounded-l-[19px] bg-paper-edge shadow-[6px_0_14px_rgb(0_0_0/0.45)]"
         />
-        <div className="absolute inset-y-0 left-[40%] right-0 flex items-center justify-center gap-[8cqmin] px-[4cqmin]">
+        <div className="absolute inset-y-0 left-[min(40%,76cqmin)] right-0 flex items-center justify-center gap-[8cqmin] px-[4cqmin]">
           <span
             aria-hidden="true"
             className={`flex size-[36cqmin] flex-none items-center justify-center rounded-full font-display text-[22cqmin] font-bold leading-none ${opened.rosette}`}

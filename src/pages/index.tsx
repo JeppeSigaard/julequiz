@@ -72,7 +72,6 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
   const pickQuestion = (index: number, question: Question) => () => {
     setActiveQuestionIndex(index);
     if (question.setVolume && bgsound) {
-      console.log(bgsound);
       bgsound.volume(question.setVolume);
     }
   };
