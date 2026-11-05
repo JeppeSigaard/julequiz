@@ -53,7 +53,8 @@ og `exactOptionalPropertyTypes`. `src/pages.gen.ts` genereres af Waku og rediger
 - `src/components/QuestionScreen.tsx` er den åbne låge: et papirkort med bånd, kristtorn og
   sløret mørk baggrund. Tastatur: Enter/mellemrum viser svaret, 1/2 giver lågen til et hold, q/x til
   ingen, Escape lukker eller går tilbage til spørgsmålet. `m` åbner indstillinger (`SettingsMenu`,
-  Escape lukker), når ingen låge er åben; `ResetQuizSetting` nulstiller pakkens gemte quiz.
+  Escape lukker), når ingen låge er åben; `p` starter prøverunden (også "Start prøverunde" i
+  indstillingerne); `ResetQuizSetting` nulstiller pakkens gemte quiz.
 
 ### Quiz-pakker
 
@@ -71,6 +72,10 @@ dørindholdets størrelsestrin (fx `textSize`, `mediaFrame` i `Standard.tsx`) bo
 `backgroundVolume` dæmper baggrundsmusikken, mens lågen er åben, og `skip` gør lågen uvælgelig. En
 ny type skal tilføjes i `QuestionSpec` og i `toQuestion` (switchen har ingen default med vilje).
 Kopiér den nærmeste eksisterende låge frem for at opfinde en ny form.
+
+Pakkens prøvespørgsmål ligger i `src/quizzes/<navn>/practice/*.tsx` (samme `QuestionSpec`-form,
+filrækkefølge). De åbnes i samme lågekort med `Prøve <n>` som bånd, giver aldrig point og gemmes
+ikke; en pakke uden `practice/` har ingen prøverunde.
 
 ### Farver og stil
 

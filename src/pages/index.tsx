@@ -13,6 +13,7 @@ import { Footer } from "../components/board/Footer";
 import { Stage } from "../components/Stage";
 import { EndScreen } from "../components/EndScreen";
 import { SettingsMenu } from "../components/SettingsMenu";
+import { PracticeSetting } from "../components/PracticeSetting";
 import { ResetQuizSetting } from "../components/ResetQuizSetting";
 import { loadQuizState, saveQuizState } from "../quizState";
 
@@ -47,6 +48,7 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
   const [activeQuestionIndex, setActiveQuestionIndex] = useState<number | null>(
     null
   );
+  const [practiceIndex, setPracticeIndex] = useState<number | null>(null);
   const [team1Cards, setTeam1Cards] = useState<number[]>([]);
   const [team2Cards, setTeam2Cards] = useState<number[]>([]);
   const [noTeamCards, setNoTeamCards] = useState<number[]>([]);
@@ -71,6 +73,23 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
 
   const pickQuestion = (index: number, question: Question) => () => {
     setActiveQuestionIndex(index);
+    if (question.setVolume && bgsound) {
+      bgsound.volume(question.setVolume);
+    }
+  };
+
+  const endPractice = () => {
+    setPracticeIndex(null);
+    bgsound?.volume(1);
+  };
+
+  const startPractice = (index: number) => {
+    const question = quiz.practice[index];
+    if (!question) {
+      endPractice();
+      return;
+    }
+    setPracticeIndex(index);
     if (question.setVolume && bgsound) {
       bgsound.volume(question.setVolume);
     }
@@ -122,6 +141,8 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
   };
   const activeQuestion =
     activeQuestionIndex !== null ? questions[activeQuestionIndex] : undefined;
+  const practiceQuestion =
+    practiceIndex !== null ? quiz.practice[practiceIndex] : undefined;
 
   useEffect(() => {
     if (isFinished) {
@@ -191,9 +212,18 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
       if (event.repeat) return;
       if (
         (event.key === "m" || event.key === "M") &&
-        activeQuestionIndex === null
+        activeQuestionIndex === null &&
+        practiceIndex === null
       ) {
         setSettingsOpen((open) => !open);
+      }
+      if (
+        (event.key === "p" || event.key === "P") &&
+        activeQuestionIndex === null &&
+        practiceIndex === null &&
+        !settingsOpen
+      ) {
+        startPractice(0);
       }
       if (event.key === "Escape" && settingsOpen) {
         setSettingsOpen(false);
@@ -203,7 +233,7 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [activeQuestionIndex, settingsOpen]);
+  }, [activeQuestionIndex, practiceIndex, settingsOpen]);
 
   return (
     <>
@@ -279,7 +309,7 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
                         key={question.id}
                         number={index + 1}
                         doorWord={quiz.doorWord}
-                        status={status}
+                                    status={status}
                         {...(teamName !== undefined ? { teamName } : {})}
                         glow={
                           tickGroup(index, columns) === (tick ? 1 : 0) &&
@@ -303,18 +333,36 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
         {activeQuestion && (
           <QuestionScreen
             question={activeQuestion}
-            questionIndex={activeQuestionIndex!}
+            title={`${quiz.doorWord} ${activeQuestionIndex! + 1}`}
             onClose={() => {
               setActiveQuestionIndex(null);
               bgsound?.volume(1);
             }}
             onAnswer={handleAnswer}
-            doorWord={quiz.doorWord}
             teamNames={quiz.teamNames}
+          />
+        )}
+        {practiceQuestion && (
+          <QuestionScreen
+            // Ny instans pr. spørgsmål, så hasAnswered nulstilles.
+            key={practiceQuestion.id}
+            question={practiceQuestion}
+            title={`Prøve ${practiceIndex! + 1}`}
+            teamNames={quiz.teamNames}
+            onAnswer={() => startPractice(practiceIndex! + 1)}
+            onClose={endPractice}
           />
         )}
         {settingsOpen && (
           <SettingsMenu onClose={() => setSettingsOpen(false)}>
+            {quiz.practice.length > 0 && (
+              <PracticeSetting
+                onStart={() => {
+                  setSettingsOpen(false);
+                  startPractice(0);
+                }}
+              />
+            )}
             <ResetQuizSetting pack={quiz.name} />
           </SettingsMenu>
         )}
