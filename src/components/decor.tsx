@@ -150,7 +150,7 @@ export const TeamPlaque: FC<{
             <AnimatedNumber value={points} /> {size === "board" && unit}
           </span>
           <span className={`font-bold text-ink-soft ${s.meta}`}>
-            {size === "board" ? `${doors} låger · +${consolation} trøst` : `point · ${doors} låger`}
+            {size === "board" ? `${doors} låger · ${consolation < 0 ? "−" : "+"}${Math.abs(consolation)} trøst` : `point · ${doors} låger`}
           </span>
         </span>
       </Paper>

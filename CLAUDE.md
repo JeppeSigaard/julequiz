@@ -47,7 +47,8 @@ og `exactOptionalPropertyTypes`. `src/pages.gen.ts` genereres af Waku og rediger
   kun nummer, status og visningsprops.
 - Board-delene (`Garland`, `BoardHeader`, `Footer`) ligger i `src/components/board/`.
 - Point udledes, ikke lagres: antal vundne låger × `Quiz.pointsPerQuestion` plus trøstepoint (+5 pr.
-  klik på et holdnavn). Staten gemmes i `localStorage` pr. pakke (`src/quizState.ts`, format `v2`).
+  klik på et holdnavn, og kan justeres op og ned, også under 0, fra indstillingsmenuen). Staten
+  gemmes i `localStorage` pr. pakke (`src/quizState.ts`, format `v2`).
   Når alle låger, der ikke er `skip`, er besvaret, vises `EndScreen` i stedet for header og gitter:
   den har sin egen `Snowfall` og `Fireworks`, kroner lederen, viser "Uafgjort!" ved lige point, og
   plaketterne giver stadig +5 ved klik. Samtidig skiftes baggrundsmusikken til `music.finale`.
@@ -56,7 +57,8 @@ og `exactOptionalPropertyTypes`. `src/pages.gen.ts` genereres af Waku og rediger
   ingen, Escape lukker eller går tilbage til spørgsmålet. `m` åbner indstillinger (`SettingsMenu`,
   Escape lukker), når ingen låge er åben; `TeamNamesSetting` ændrer holdnavnene (gemt pr. pakke
   under sin egen nøgle i `src/quizState.ts`, så de overlever nulstilling; et tomt felt falder
-  tilbage til `Quiz.teamNames`), og `ResetQuizSetting` nulstiller pakkens gemte quiz.
+  tilbage til `Quiz.teamNames`), `TeamPointsSetting` justerer holdenes trøstepoint med
+  ±5/±`pointsPerQuestion`, og `ResetQuizSetting` nulstiller pakkens gemte quiz.
 
 ### Quiz-pakker
 

@@ -10,14 +10,15 @@ export function AnimatedNumber({
   duration = 1200,
 }: AnimatedNumberProps) {
   const [displayValue, setDisplayValue] = useState(value);
-  const previousValue = useRef(value);
+  // Den viste værdi, opdateret i hver frame, så en ny animation starter hvor den forrige nåede til
+  const shownValue = useRef(value);
 
   useEffect(() => {
-    const startValue = previousValue.current;
+    const startValue = shownValue.current;
     const endValue = value;
-    const startTime = performance.now();
-
     if (startValue === endValue) return;
+    const startTime = performance.now();
+    let frameId = 0;
 
     const animate = (currentTime: number) => {
       const elapsed = currentTime - startTime;
@@ -26,18 +27,19 @@ export function AnimatedNumber({
       // Ease-out cubic for smooth deceleration
       const eased = 1 - Math.pow(1 - progress, 3);
 
-      const current = startValue + (endValue - startValue) * eased;
-      setDisplayValue(Math.round(current));
+      const current = Math.round(startValue + (endValue - startValue) * eased);
+      shownValue.current = current;
+      setDisplayValue(current);
 
       if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        previousValue.current = endValue;
+        frameId = requestAnimationFrame(animate);
       }
     };
 
-    requestAnimationFrame(animate);
+    frameId = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(frameId);
   }, [value, duration]);
 
-  return <span>{displayValue}</span>;
+  return <span>{displayValue < 0 ? `−${-displayValue}` : displayValue}</span>;
 }
