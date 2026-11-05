@@ -18,6 +18,13 @@
   initial-value: 0deg;
 }
 
+/* Keyframes animerer dette tal i stedet for rotate: Chrome kører en rotate-animation på compositoren med var(--sway) fastfrosset fra start, så lågerne ikke ville følge med, når --sway skrues op. */
+@property --sway-swing {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
 /* inline, så var(--quiz-*) først opløses på det element, der bruger farven (Stage sætter dem) */
 @theme inline {
   --color-night: color-mix(in oklab, var(--quiz-background) 60%, black);
@@ -74,10 +81,10 @@
   @keyframes sway {
     0%,
     100% {
-      rotate: var(--sway);
+      --sway-swing: 1;
     }
     50% {
-      rotate: calc(var(--sway) * -1);
+      --sway-swing: -1;
     }
   }
   @keyframes glow {

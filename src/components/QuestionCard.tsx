@@ -75,6 +75,7 @@ export const QuestionCard: FunctionComponent<{
   const style = {
     transform: `rotate(${tilt}deg)`,
     "--sway": `${swayAmount}deg`,
+    rotate: "calc(var(--sway) * var(--sway-swing))",
     animationDelay: `${SWAY_PHASES[(number - 1) % SWAY_PHASES.length]! * 0.6}s`,
   } as CSSProperties;
 
