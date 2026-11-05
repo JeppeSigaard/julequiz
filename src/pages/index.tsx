@@ -262,14 +262,6 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
   return (
     <>
       <Stage colors={quiz.colors}>
-        {started && (
-          <Snowfall
-            color="white"
-            radius={[1, 2.5]}
-            opacity={[0.15, 0.5]}
-            snowflakeCount={90}
-          />
-        )}
         {isFinished ? (
           <EndScreen
             teamNames={teamNames}
@@ -356,6 +348,16 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
                 onOpenSettings={() => setSettingsOpen(true)}
               />
             </div>
+            {/* Sneen ligger over brættet, men under pointpladerne (z-31), lågen (z-40) og indstillingerne (z-50). */}
+            {started && (
+              <Snowfall
+                color="white"
+                radius={[1, 2.5]}
+                opacity={[0.15, 0.5]}
+                snowflakeCount={90}
+                style={{ zIndex: 30 }}
+              />
+            )}
           </>
         )}
         {activeQuestion && (

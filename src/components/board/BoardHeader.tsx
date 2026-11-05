@@ -25,7 +25,8 @@ export const BoardHeader: FC<{
   const light = lit ? "animate-flicker" : "[filter:brightness(0.65)_saturate(0.7)]";
   return (
     <div className="flex h-[214px] flex-none items-start justify-between">
-      <div className="mt-[10px]">
+      {/* Over sneen (z-30) i index.tsx. */}
+      <div className="relative z-[31] mt-[10px]">
         <TeamPlaque
           team={1}
           size="board"
@@ -63,7 +64,8 @@ export const BoardHeader: FC<{
           />
         </svg>
       </div>
-      <div className="mt-[10px]">
+      {/* Over sneen (z-30) i index.tsx. */}
+      <div className="relative z-[31] mt-[10px]">
         <TeamPlaque
           team={2}
           size="board"
