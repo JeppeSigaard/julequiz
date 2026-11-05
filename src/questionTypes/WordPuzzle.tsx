@@ -13,7 +13,7 @@ export const WordPuzzleBody = ({ hint, word }: { hint: string; word: string }) =
         word={word}
         onCorrectGuess={() => playDingSFX()}
         onIncorrectGuess={() => playWrongSFX()}
-        className="text-7xl text-green-900"
+        className="text-7xl text-(--color-doorDone)"
       />
     </>
   );

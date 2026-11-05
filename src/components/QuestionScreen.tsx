@@ -81,10 +81,10 @@ export const QuestionScreen: FunctionComponent<{
         scale: { type: "spring", visualDuration: 0.4, bounce: 0.5 },
       }}
     >
-      <div className="aspect-video bg-green-200 w-full rounded-2xl p-10 shadow-2xl relative flex flex-col">
+      <div className="aspect-video bg-(--color-screen) text-(--color-text) w-full rounded-2xl p-10 shadow-2xl relative flex flex-col">
         <header className="relative">
           <hgroup className="text-center">
-            <h2 className="text-6xl font-bold font-['Mountains_of_Christmas',Serif] mb-6">
+            <h2 className="text-6xl font-bold font-(family-name:--font-title) mb-6">
               {props.doorWord} {props.questionIndex + 1}
             </h2>
           </hgroup>

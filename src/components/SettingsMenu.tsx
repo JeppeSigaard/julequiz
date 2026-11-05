@@ -12,11 +12,11 @@ export const SettingsMenu: FunctionComponent<{
       onClick={() => props.onClose()}
     >
       <div
-        className="bg-green-200 rounded-2xl shadow-2xl p-10 max-w-xl w-full relative"
+        className="bg-(--color-screen) text-(--color-text) rounded-2xl shadow-2xl p-10 max-w-xl w-full relative"
         onClick={(event) => event.stopPropagation()}
       >
         <header className="relative mb-8">
-          <h2 className="text-5xl font-bold font-['Mountains_of_Christmas',Serif] text-center">
+          <h2 className="text-5xl font-bold font-(family-name:--font-title) text-center">
             Indstillinger
           </h2>
           <button

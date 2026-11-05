@@ -29,4 +29,15 @@ export type Quiz = {
   shuffle: boolean;
   pointsPerQuestion: number;
   music: { background: string; finale: string };
+  snow: boolean;
+  titleFont: "Mountains of Christmas" | "Nunito" | "DM Sans";
+  colors: {
+    page: string;
+    board: string;
+    door: string;
+    doorHighlight: string;
+    doorDone: string;
+    screen: string;
+    text: string;
+  };
 };

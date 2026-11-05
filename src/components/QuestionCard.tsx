@@ -24,10 +24,10 @@ export const QuestionCard: FunctionComponent<{
       className={classNames(
         "transition-colors duration-500 rounded-xl aspect-video font-extrabold text-6xl",
         props.active && props.contrast
-          ? "bg-red-400 hover:bg-red-300 cursor-pointer text-white shadow-lg"
+          ? "bg-(--color-doorHighlight) hover:bg-[color-mix(in_oklab,var(--color-doorHighlight),white_30%)] cursor-pointer text-white shadow-lg"
           : props.active
-          ? "bg-red-500 hover:bg-red-400 cursor-pointer text-white shadow-lg"
-          : "bg-green-800 cursor-not-allowed text-green-700"
+          ? "bg-(--color-door) hover:bg-(--color-doorHighlight) cursor-pointer text-white shadow-lg"
+          : "bg-(--color-doorDone) cursor-not-allowed text-(--color-board)"
       )}
       onClick={handleClick}
     >
