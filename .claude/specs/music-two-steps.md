@@ -52,7 +52,14 @@ artist, starts the answer clip, and brings up the team buttons in one go.
      "Spil lidt mere" button; remove its now single-child wrapper `<div className="flex gap-6">`.
    - On the idle Start `PillButton` add `disabled={!sound}` and
      `className="disabled:cursor-wait disabled:opacity-50"`.
-   - Leave `handlePlay`, the seek effect, the interval effect and the unmount effect unchanged.
+   - Delete the "Seek to start position once sound is loaded (for first play)" effect and its
+     comment: Start is disabled until `sound` exists, so `handlePlay` always seeks itself.
+   - Remove the unused `useMemo` from the `react` import.
+   - In the interval effect, also stop when the track has ended: change the condition to
+     `if (currentTime >= currentStop || !sound.playing())`. Once the hint clip grows past the end of
+     the mp3, Howler ends it and resets the position to 0, so `currentTime` never reaches
+     `currentStop` and the player hangs on "Afspiller...".
+   - Leave `handlePlay` and the unmount effect unchanged.
 2. **`src/components/MusicBox.tsx` — add `MusicAnswer`** in the same file, exported:
    - Props `{ track: string; song: string; artist: string; answerStart: number }`.
    - `const [play, { stop, sound }] = useSound(props.track, { interrupt: true });`
@@ -93,8 +100,8 @@ artist, starts the answer clip, and brings up the team buttons in one go.
   is accurate for music doors, and the footer is shared by every question type.
 - **Do not build Tailwind classes dynamically or use palette classes** (`gray-`, `red-`…); only the
   literal token classes already in the file.
-- Comments: none are needed in this change; the old English "Seek to start position…" comment stays
-  untouched. Do not add comments describing what the code does.
+- Comments: none are needed in this change (the "Seek to start position…" comment goes with its
+  effect). Do not add comments describing what the code does.
 
 ## Verification
 
@@ -104,6 +111,7 @@ No tests (the repo has none, and this is a small UI change). `npm run check` mus
 - Door opens: vinyl-stop plays; "MUSIKQUIZ!" with a Start button under it; footer shows "Vis svaret".
   Start is briefly dimmed until the track loads.
 - Start → "Afspiller..." → clip stops → "Spil lidt mere" (only that button) → plays 3× longer.
+  Pressing it until the clip outgrows the song ends on "Spil lidt mere", not a stuck "Afspiller...".
 - "Vis svaret" (click or Enter), also mid-clip: the clip stops, song and artist show, the track plays
   from `answerStart`, and the three team buttons appear. 1/2/Q award as before.
 - Escape on the answer: sound stops, the first screen returns with Start.

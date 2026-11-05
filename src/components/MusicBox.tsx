@@ -1,6 +1,6 @@
 "use client";
 
-import { FunctionComponent, useState, useEffect, useMemo } from "react";
+import { FunctionComponent, useState, useEffect } from "react";
 import useSound from "use-sound";
 
 import { PillButton } from "./decor";
@@ -31,19 +31,12 @@ export const MusicBox: FunctionComponent<{
     setState("playing");
   };
 
-  // Seek to start position once sound is loaded (for first play)
-  useEffect(() => {
-    if (state === "playing" && sound) {
-      sound.seek(props.start);
-    }
-  }, [sound, state, props.start]);
-
   useEffect(() => {
     if (state !== "playing" || !sound) return;
 
     const checkTime = setInterval(() => {
       const currentTime = sound.seek() as number;
-      if (currentTime >= currentStop) {
+      if (currentTime >= currentStop || !sound.playing()) {
         stop();
         setState("stopped");
         setHintCount((c) => c + 1);
