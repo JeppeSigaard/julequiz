@@ -1,6 +1,6 @@
 # Sidemetadata: titel, beskrivelse, ikoner og delingsbillede
 
-> Status: in progress — claude/brave-ramanujan-pidlf9
+> Status: merged — 7c85f62
 
 ## Goal
 
