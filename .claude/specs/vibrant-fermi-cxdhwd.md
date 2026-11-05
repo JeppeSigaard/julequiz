@@ -1,6 +1,6 @@
 # Synligt vug på lågerne
 
-> Status: in progress — claude/vibrant-fermi-cxdhwd
+> Status: merged — 1939ece
 
 ## Goal
 
