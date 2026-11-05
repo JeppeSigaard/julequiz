@@ -45,7 +45,7 @@ export const WordPuzzle: FunctionComponent<{
   return (
     <div
       className={classNames(
-        "flex gap-6 justify-center items-end relative",
+        "flex flex-wrap gap-4 justify-center items-center relative",
         isShaking && "animate-shake"
       )}
       style={{
@@ -62,7 +62,7 @@ export const WordPuzzle: FunctionComponent<{
       {wrongChar && (
         <div
           className={classNames(
-            "absolute py-1 px-5 z-20 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-white bg-red-700 font-bold opacity-75 shadow-2xl pointer-events-none flex items-center justify-center rounded-xl",
+            "absolute py-1 px-5 z-20 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-paper bg-accent font-bold opacity-75 shadow-2xl pointer-events-none flex items-center justify-center rounded-xl",
             props.className ?? "text-6xl"
           )}
         >
@@ -81,19 +81,19 @@ export const WordPuzzle: FunctionComponent<{
           <div
             key={index}
             className={classNames(
-              "flex flex-col items-center justify-end font-bold font-mono",
-              props.className ?? "text-6xl text-white"
+              "relative flex items-center justify-center rounded-[14px] size-[1.5em] bg-paper-lit shadow-[0_5px_0_color-mix(in_oklab,var(--quiz-paper)_80%,black)]",
+              props.className ?? "text-6xl"
             )}
           >
+            {/* Bogstavsfarven sættes her, så className ikke kan overstyre den */}
             <span
               className={classNames(
-                "transition-opacity duration-300",
+                "font-body font-black text-ink transition-opacity duration-300",
                 isRevealed ? "opacity-100" : "opacity-0"
               )}
             >
               {char.toUpperCase()}
             </span>
-            <span className="absolute top-3">_</span>
           </div>
         );
       })}

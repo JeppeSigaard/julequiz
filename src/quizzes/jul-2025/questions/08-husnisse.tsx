@@ -11,16 +11,16 @@ const Answer: FunctionComponent = () => {
 
   return (
     <>
-      <p className="text-6xl">Gerda</p>
-      {a1 && <p className="text-6xl font-extrabold">Og hun er lige bag jer!</p>}
-      {a2 && <p className="text-4xl">jk</p>}
+      <p className="font-display text-[96px] text-accent-deep">Gerda</p>
+      {a1 && <p className="text-[58px] font-black text-ink">Og hun er lige bag jer!</p>}
+      {a2 && <p className="text-[43px] text-ink-soft">jk</p>}
     </>
   );
 };
 
 const question: QuestionSpec = {
   type: "custom",
-  body: <p className="text-6xl">Hvad hedder husnissen på Halfdansvej?</p>,
+  body: <p className="text-[58px] font-bold text-ink">Hvad hedder husnissen på Halfdansvej?</p>,
   answer: <Answer />,
 };
 
