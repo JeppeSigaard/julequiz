@@ -1,17 +1,8 @@
-import { type Question } from "../types";
-import { asset } from "../asset";
-export const Question10: Question = {
-  id: "10",
-  body: (
-    <p className="text-4xl">
-      Hvilken konserveret grøntsag skal tyske børn finde på juletræet for at få
-      en gave?
-    </p>
-  ),
-  answer: (
-    <>
-      <img src={asset("/images/pickle.jpg")} className="mx-auto w-150" />
-      <p className="text-6xl font-extrabold">En syltet agurk</p>
-    </>
-  ),
+import { type QuestionSpec } from "../types";
+export const Question10: QuestionSpec = {
+  type: "standard",
+  question: {
+    text: "Hvilken konserveret grøntsag skal tyske børn finde på juletræet for at få en gave?",
+  },
+  answer: { image: "/images/pickle.jpg", text: "En syltet agurk" },
 };

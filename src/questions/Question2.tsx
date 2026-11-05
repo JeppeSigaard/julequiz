@@ -1,9 +1,9 @@
 import { FoxChickenGrain } from "../components/FoxChickenGrain";
-import { type Question } from "../types";
+import { type QuestionSpec } from "../types";
 
-export const Question2: Question = {
-  id: "2",
-  setVolume: 0.5,
+export const Question2: QuestionSpec = {
+  type: "custom",
+  backgroundVolume: 0.5,
   body: (
     <>
       <h2 className="text-6xl mb-10 font-extrabold">Fox chicken grain-off!</h2>

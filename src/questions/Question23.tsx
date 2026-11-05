@@ -1,5 +1,5 @@
 import { MusicBox } from "../components/MusicBox";
-import { type Question } from "../types";
+import { type QuestionSpec } from "../types";
 
 import vinylStop from "../sfx/vinyl-stop.mp3";
 
@@ -12,9 +12,9 @@ const Body = () => {
   );
 };
 
-export const Question23: Question = {
-  id: "23",
-  setVolume: 0.05,
+export const Question23: QuestionSpec = {
+  type: "custom",
+  backgroundVolume: 0.05,
   body: <Body />,
   answer: <MusicBox index={0} />,
 };
