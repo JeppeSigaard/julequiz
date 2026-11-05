@@ -1,6 +1,6 @@
 "use client";
 
-import { FunctionComponent, useEffect, useRef, useState } from "react";
+import { CSSProperties, FunctionComponent, useEffect, useRef, useState } from "react";
 import { DEFAULT_QUIZ } from "../config";
 import { QUIZZES, type LoadedQuiz } from "../quizzes";
 import { asset } from "../asset";
@@ -17,7 +17,7 @@ import useSound from "use-sound";
 
 import dingSFX from "../sfx/ding.mp3";
 import classNames from "classnames";
-import { Question } from "../types";
+import { Question, Quiz } from "../types";
 
 // Fisher-Yates shuffle algorithm to randomize questions
 function shuffleQuestions<T>(array: T[]): T[] {
@@ -37,6 +37,26 @@ function gridColumns(count: number): number {
 
 function tickGroup(index: number, columns: number): 0 | 1 {
   return (Math.floor(index / columns) + (index % columns)) % 2 === 0 ? 0 : 1;
+}
+
+const TITLE_FONT_FAMILIES: Record<Quiz["titleFont"], string> = {
+  "Mountains of Christmas": "'Mountains of Christmas', serif",
+  Nunito: "'Nunito', sans-serif",
+  "DM Sans": "'DM Sans', sans-serif",
+};
+
+// Variablerne læses af bg-(--color-…)-klasserne i flere komponenter.
+function themeStyle(quiz: Quiz): CSSProperties {
+  return {
+    "--color-page": quiz.colors.page,
+    "--color-board": quiz.colors.board,
+    "--color-door": quiz.colors.door,
+    "--color-doorHighlight": quiz.colors.doorHighlight,
+    "--color-doorDone": quiz.colors.doorDone,
+    "--color-screen": quiz.colors.screen,
+    "--color-text": quiz.colors.text,
+    "--font-title": TITLE_FONT_FAMILIES[quiz.titleFont],
+  } as CSSProperties;
 }
 
 const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
@@ -195,15 +215,15 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
   }, [activeQuestionIndex, settingsOpen]);
 
   return (
-    <>
-      {started && <Snowfall />}
+    <div style={themeStyle(quiz)}>
+      {started && quiz.snow && <Snowfall />}
       {isFinished && <Fireworks autostart className="absolute inset-0" />}
-      <div className="p-6 bg-green-950 h-screen overflow-hidden flex items-center justify-center">
-        <div className="aspect-video bg-green-700 w-full rounded-lg p-6">
+      <div className="p-6 bg-(--color-page) h-screen overflow-hidden flex items-center justify-center">
+        <div className="aspect-video bg-(--color-board) w-full rounded-lg p-6">
           <header className="text-center relative flex justify-center mb-12">
             <h1>
               <button
-                className="relative z-40 cursor-pointer text-center font-['Mountains_of_Christmas',Serif] text-white text-7xl font-bold py-6 px-10 rounded-2xl bg-green-800/60 hover:bg-green-800 transition-colors inline-block"
+                className="relative z-40 cursor-pointer text-center font-(family-name:--font-title) text-white text-7xl font-bold py-6 px-10 rounded-2xl bg-(--color-doorDone)/60 hover:bg-(--color-doorDone) transition-colors inline-block"
                 onClick={() => {
                   if (started) {
                     stopQuiz();
@@ -311,7 +331,7 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
           <ResetQuizSetting pack={quiz.name} />
         </SettingsMenu>
       )}
-    </>
+    </div>
   );
 };
 
