@@ -20,6 +20,7 @@ export const SettingsMenu: FunctionComponent<{
             Indstillinger
           </h2>
           <button
+            autoFocus
             className="cursor-pointer absolute top-0 right-0 text-xl"
             onClick={() => props.onClose()}
           >

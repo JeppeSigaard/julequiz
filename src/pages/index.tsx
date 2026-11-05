@@ -130,8 +130,7 @@ const HomePage: FunctionComponent = () => {
     const saved = loadQuizState();
     if (saved) {
       const restored = saved.questionIds
-        .map((id) => QUESTIONS.find((q) => q.id === id))
-        .filter((q): q is Question => q !== undefined);
+        .map((id) => QUESTIONS.find((q) => q.id === id)!);
       setQuestions(restored);
       setTeam1Cards(saved.team1Cards);
       setTeam2Cards(saved.team2Cards);
@@ -145,8 +144,8 @@ const HomePage: FunctionComponent = () => {
   }, []);
 
   useEffect(() => {
-    // Uden denne port overskriver første commit den gemte quiz med
-    // standardværdier, før load-effekten (også i StrictMode) har nået at læse den.
+    // Uden denne port skriver første commit standardværdier, og StrictModes
+    // andet load-kørsel ville så læse dem i stedet for den gemte quiz.
     if (!isLoaded) return;
     saveQuizState({
       questionIds: questions.map((q) => q.id),
@@ -169,6 +168,7 @@ const HomePage: FunctionComponent = () => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.ctrlKey || event.metaKey || event.altKey) return;
+      if (event.repeat) return;
       if (
         (event.key === "m" || event.key === "M") &&
         activeQuestionIndex === null

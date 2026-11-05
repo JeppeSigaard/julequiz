@@ -39,10 +39,10 @@ export function loadQuizState(): SavedQuizState | null {
       return null;
     }
     const knownIds = new Set(QUESTIONS.map((q) => q.id));
-    const seenIds = new Set<string>(questionIds as string[]);
+    const seenIds = new Set<string>(questionIds);
     if (
       seenIds.size !== QUESTIONS.length ||
-      !(questionIds as string[]).every((id) => knownIds.has(id))
+      !questionIds.every((id) => knownIds.has(id))
     ) {
       return null;
     }
@@ -60,7 +60,7 @@ export function loadQuizState(): SavedQuizState | null {
     }
 
     return {
-      questionIds: questionIds as string[],
+      questionIds,
       team1Cards,
       team2Cards,
       noTeamCards,
@@ -75,15 +75,11 @@ export function loadQuizState(): SavedQuizState | null {
 export function saveQuizState(state: SavedQuizState): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch {
-    // privat tilstand eller fuld kvote
-  }
+  } catch {}
 }
 
 export function clearQuizState(): void {
   try {
     localStorage.removeItem(STORAGE_KEY);
-  } catch {
-    // privat tilstand
-  }
+  } catch {}
 }
