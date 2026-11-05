@@ -6,8 +6,6 @@ export const BoardHeader: FC<{
   doorCount: number;
   teamNames: readonly [string, string];
   points: readonly [number, number];
-  doors: readonly [number, number];
-  consolation: readonly [number, number];
   onConsolation: (team: 1 | 2) => void;
   onTitleClick: () => void;
   lit: boolean;
@@ -16,8 +14,6 @@ export const BoardHeader: FC<{
   doorCount,
   teamNames,
   points,
-  doors,
-  consolation,
   onConsolation,
   onTitleClick,
   lit,
@@ -32,8 +28,6 @@ export const BoardHeader: FC<{
           size="board"
           name={teamNames[0]}
           points={points[0]}
-          doors={doors[0]}
-          consolation={consolation[0]}
           onClick={() => onConsolation(1)}
         />
       </div>
@@ -71,8 +65,6 @@ export const BoardHeader: FC<{
           size="board"
           name={teamNames[1]}
           points={points[1]}
-          doors={doors[1]}
-          consolation={consolation[1]}
           onClick={() => onConsolation(2)}
         />
       </div>

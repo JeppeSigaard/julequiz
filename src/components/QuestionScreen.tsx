@@ -13,7 +13,10 @@ import swooshSFX from "../sfx/swoosh2.mp3";
 
 export const QuestionScreen: FunctionComponent<{
   question: Question;
+  /** Dialogens tilgængelige navn, fx "Låge 3". */
   title: string;
+  /** Tekst på båndet øverst (prøverunden); en almindelig låge har intet bånd. */
+  ribbon?: string;
   teamNames: [string, string];
   onClose: () => void;
   onAnswer: (team?: number) => void;
@@ -94,7 +97,7 @@ export const QuestionScreen: FunctionComponent<{
         <div
           role="dialog"
           aria-label={props.title}
-          className="relative flex h-[912px] w-[1656px] flex-col items-center rounded-[36px] bg-paper text-ink px-[84px] pb-[53px] shadow-[0_12px_0_color-mix(in_oklab,var(--quiz-paper)_80%,black),0_48px_96px_rgb(0_0_0/0.6)]"
+          className={`relative flex h-[912px] w-[1656px] flex-col items-center rounded-[36px] bg-paper text-ink px-[84px] pb-[53px] ${props.ribbon === undefined ? "pt-[53px]" : ""} shadow-[0_12px_0_color-mix(in_oklab,var(--quiz-paper)_80%,black),0_48px_96px_rgb(0_0_0/0.6)]`}
           style={{
             backgroundImage:
               "radial-gradient(color-mix(in oklab, var(--quiz-accent) 6%, transparent) 1.8px, transparent 1.9px)",
@@ -135,19 +138,21 @@ export const QuestionScreen: FunctionComponent<{
           >
             <span className="material-symbols-outlined text-[32px]">close</span>
           </button>
-          <div className="relative -mt-0.5 flex items-start">
-            <div
-              aria-hidden="true"
-              className="mt-[22px] -mr-[17px] h-[77px] w-[55px] bg-accent-deep [clip-path:polygon(0_0,100%_0,100%_100%,0_100%,34%_50%)]"
-            />
-            <h2 className="relative rounded-b-[22px] bg-accent px-[67px] pt-3 pb-[17px] font-display text-[79px] font-bold leading-none text-paper-lit shadow-[0_7px_0_color-mix(in_oklab,var(--quiz-accent)_72%,black)]">
-              {props.title}
-            </h2>
-            <div
-              aria-hidden="true"
-              className="mt-[22px] -ml-[17px] h-[77px] w-[55px] bg-accent-deep [clip-path:polygon(0_0,100%_0,66%_50%,100%_100%,0_100%)]"
-            />
-          </div>
+          {props.ribbon !== undefined && (
+            <div className="relative -mt-0.5 flex items-start">
+              <div
+                aria-hidden="true"
+                className="mt-[22px] -mr-[17px] h-[77px] w-[55px] bg-accent-deep [clip-path:polygon(0_0,100%_0,100%_100%,0_100%,34%_50%)]"
+              />
+              <h2 className="relative rounded-b-[22px] bg-accent px-[67px] pt-3 pb-[17px] font-display text-[79px] font-bold leading-none text-paper-lit shadow-[0_7px_0_color-mix(in_oklab,var(--quiz-accent)_72%,black)]">
+                {props.ribbon}
+              </h2>
+              <div
+                aria-hidden="true"
+                className="mt-[22px] -ml-[17px] h-[77px] w-[55px] bg-accent-deep [clip-path:polygon(0_0,100%_0,66%_50%,100%_100%,0_100%)]"
+              />
+            </div>
+          )}
           <main className="flex min-h-0 w-[1200px] grow flex-col items-center justify-center gap-[26px] text-center">
             {/* Nøgle, så samme komponenttype på begge sider ikke beholder de frosne URL'er */}
             <Fragment key={hasAnswered ? "answer" : "body"}>
@@ -160,24 +165,18 @@ export const QuestionScreen: FunctionComponent<{
                 <PillButton
                   variant="team-1"
                   keyHint="1"
+                  aria-label={props.teamNames[0]}
                   onClick={onAnswer(1)}
-                >
-                  {props.teamNames[0]}
-                </PillButton>
-                <PillButton
-                  variant="neutral"
-                  keyHint="Q"
-                  onClick={onAnswer()}
-                >
+                />
+                <PillButton variant="neutral" keyHint="Q" onClick={onAnswer()}>
                   Ingen fik den
                 </PillButton>
                 <PillButton
                   variant="team-2"
                   keyHint="2"
+                  aria-label={props.teamNames[1]}
                   onClick={onAnswer(2)}
-                >
-                  {props.teamNames[1]}
-                </PillButton>
+                />
               </>
             ) : (
               <PillButton

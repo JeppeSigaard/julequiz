@@ -63,7 +63,6 @@ const PLAQUE = {
     name: { size: 26, minSize: 16, width: 219 },
     points: "text-[70px]",
     unit: "text-[22px]",
-    meta: "text-[17px]",
     stitch: "inset-[10px] rounded-[12px] border-2",
   },
   end: {
@@ -109,12 +108,12 @@ export const TeamPlaque: FC<{
   team: 1 | 2;
   name: string;
   points: number;
-  doors: number;
-  consolation: number;
+  /** Vundne låger; vises kun på slutskærmen. */
+  doors?: number;
   size: "board" | "end";
   onClick: () => void;
   children?: ReactNode;
-}> = ({ team, name, points, doors, consolation, size, onClick, children }) => {
+}> = ({ team, name, points, doors, size, onClick, children }) => {
   const s = PLAQUE[size];
   const t = PLAQUE_TEAM[team];
   const stitch = team === 1 ? "team-1" : "team-2";
@@ -149,9 +148,9 @@ export const TeamPlaque: FC<{
           <span className={`font-display font-bold leading-[0.95] ${s.points}`}>
             <AnimatedNumber value={points} /> {size === "board" && unit}
           </span>
-          <span className={`font-bold text-ink-soft ${s.meta}`}>
-            {size === "board" ? `${doors} låger · ${consolation < 0 ? "−" : "+"}${Math.abs(consolation)} trøst` : `point · ${doors} låger`}
-          </span>
+          {size === "end" && (
+            <span className={`font-bold text-ink-soft ${PLAQUE.end.meta}`}>point · {doors} låger</span>
+          )}
         </span>
       </Paper>
       {children}
