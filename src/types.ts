@@ -29,4 +29,13 @@ export type Quiz = {
   shuffle: boolean;
   pointsPerQuestion: number;
   music: { background: string; finale: string };
+  colors: {
+    background: string;
+    paper: string;
+    ink: string;
+    accent: string;
+    highlight: string;
+    team1: string;
+    team2: string;
+  };
 };

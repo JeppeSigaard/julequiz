@@ -5,10 +5,11 @@ import { DEFAULT_QUIZ } from "../config";
 import { QUIZZES, type LoadedQuiz } from "../quizzes";
 import { asset } from "../asset";
 import Snowfall from "react-snowfall";
-import { Fireworks } from "@fireworks-js/react";
 import { QuestionCard } from "../components/QuestionCard";
 import { QuestionScreen } from "../components/QuestionScreen";
 import { AnimatedNumber } from "../components/AnimatedNumber";
+import { Stage } from "../components/Stage";
+import { EndScreen } from "../components/EndScreen";
 import { SettingsMenu } from "../components/SettingsMenu";
 import { ResetQuizSetting } from "../components/ResetQuizSetting";
 import { loadQuizState, saveQuizState } from "../quizState";
@@ -16,7 +17,6 @@ import { loadQuizState, saveQuizState } from "../quizState";
 import useSound from "use-sound";
 
 import dingSFX from "../sfx/ding.mp3";
-import classNames from "classnames";
 import { Question } from "../types";
 
 // Fisher-Yates shuffle algorithm to randomize questions
@@ -109,6 +109,15 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
   const isFinished =
     questions.some((q) => !q.skip) &&
     questions.every((q, i) => q.skip || allAnswered.includes(i));
+  const team1Points =
+    team1Cards.length * quiz.pointsPerQuestion + team1ConsolationPoints;
+  const team2Points =
+    team2Cards.length * quiz.pointsPerQuestion + team2ConsolationPoints;
+  const handleConsolation = (team: 1 | 2) => {
+    ding();
+    if (team === 1) setTeam1ConsolationPoints((current) => current + 5);
+    else setTeam2ConsolationPoints((current) => current + 5);
+  };
   const activeQuestion =
     activeQuestionIndex !== null ? questions[activeQuestionIndex] : undefined;
 
@@ -196,121 +205,105 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
 
   return (
     <>
-      {started && <Snowfall />}
-      {isFinished && <Fireworks autostart className="absolute inset-0" />}
-      <div className="p-6 bg-green-950 h-screen overflow-hidden flex items-center justify-center">
-        <div className="aspect-video bg-green-700 w-full rounded-lg p-6">
-          <header className="text-center relative flex justify-center mb-12">
-            <h1>
-              <button
-                className="relative z-40 cursor-pointer text-center font-['Mountains_of_Christmas',Serif] text-white text-7xl font-bold py-6 px-10 rounded-2xl bg-green-800/60 hover:bg-green-800 transition-colors inline-block"
-                onClick={() => {
-                  if (started) {
-                    stopQuiz();
-                    return;
-                  }
-                  startQuiz();
-                }}
-              >
-                {quiz.title}
-              </button>
-            </h1>
-            <dl
-              className={classNames(
-                "absolute transition-all duration-3000 flex justify-between z-20",
-                isFinished
-                  ? "scale-200 left-[30%] right-[30%] top-100 text-shadow-2xl"
-                  : "left-0 right-0 top-6 text-shadow-none"
-              )}
-            >
-              <button
-                className="text-left text-white"
-                onClick={() => {
-                  ding();
-                  setTeam1ConsolationPoints((current) => current + 5);
-                }}
-              >
-                <dt className="uppercase font-extrabold text-4xl">
-                  {quiz.teamNames[0]}
-                </dt>
-                <dd className="font-bold text-3xl">
-                  <AnimatedNumber
-                    value={
-                      team1Cards.length * quiz.pointsPerQuestion +
-                      team1ConsolationPoints
-                    }
-                  />{" "}
-                  point
-                </dd>
-              </button>
-              <button
-                className="text-right text-white"
-                onClick={() => {
-                  ding();
-                  setTeam2ConsolationPoints((current) => current + 5);
-                }}
-              >
-                <dt className="uppercase font-extrabold text-4xl">
-                  {quiz.teamNames[1]}
-                </dt>
-                <dd className="font-bold text-3xl">
-                  <AnimatedNumber
-                    value={
-                      team2Cards.length * quiz.pointsPerQuestion +
-                      team2ConsolationPoints
-                    }
-                  />{" "}
-                  point
-                </dd>
-              </button>
-            </dl>
-          </header>
-          <main
-            className={classNames(
-              "grid gap-4",
-              isFinished ? "opacity-25" : ""
-            )}
-            style={{
-              gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
-            }}
-          >
-            {questions.map((question, index) => (
-              <QuestionCard
-                number={index + 1}
-                contrast={
-                  tickGroup(index, columns) === (tick ? 1 : 0) &&
-                  started &&
-                  !isFinished &&
-                  activeQuestionIndex === null &&
-                  !question.skip
-                }
-                key={question.id}
-                question={{ ...question, id: String(index + 1) }}
-                onClick={pickQuestion(index, question)}
-                active={!allAnswered.includes(index) && !question.skip}
+      <Stage colors={quiz.colors}>
+        {started && <Snowfall />}
+        <div className="p-6 bg-night h-full overflow-hidden flex items-center justify-center">
+          <div className="aspect-video bg-felt w-full rounded-lg p-6">
+            {isFinished ? (
+              <EndScreen
+                teamNames={quiz.teamNames}
+                points={[team1Points, team2Points]}
+                doors={[team1Cards.length, team2Cards.length]}
+                consolation={[team1ConsolationPoints, team2ConsolationPoints]}
+                onConsolation={handleConsolation}
               />
-            ))}
-          </main>
+            ) : (
+              <>
+                <header className="text-center relative flex justify-center mb-12">
+                  <h1>
+                    <button
+                      className="relative z-40 cursor-pointer text-center font-display text-snow text-7xl font-bold py-6 px-10 rounded-2xl bg-felt-deep/60 hover:bg-felt-deep transition-colors inline-block"
+                      onClick={() => {
+                        if (started) {
+                          stopQuiz();
+                          return;
+                        }
+                        startQuiz();
+                      }}
+                    >
+                      {quiz.title}
+                    </button>
+                  </h1>
+                  <dl className="absolute flex justify-between z-20 left-0 right-0 top-6">
+                    <button
+                      className="text-left text-snow"
+                      onClick={() => handleConsolation(1)}
+                    >
+                      <dt className="uppercase font-extrabold text-4xl">
+                        {quiz.teamNames[0]}
+                      </dt>
+                      <dd className="font-bold text-3xl">
+                        <AnimatedNumber value={team1Points} /> point
+                      </dd>
+                    </button>
+                    <button
+                      className="text-right text-snow"
+                      onClick={() => handleConsolation(2)}
+                    >
+                      <dt className="uppercase font-extrabold text-4xl">
+                        {quiz.teamNames[1]}
+                      </dt>
+                      <dd className="font-bold text-3xl">
+                        <AnimatedNumber value={team2Points} /> point
+                      </dd>
+                    </button>
+                  </dl>
+                </header>
+                <main
+                  className="grid gap-4"
+                  style={{
+                    gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
+                  }}
+                >
+                  {questions.map((question, index) => (
+                    <QuestionCard
+                      number={index + 1}
+                      contrast={
+                        tickGroup(index, columns) === (tick ? 1 : 0) &&
+                        started &&
+                        activeQuestionIndex === null &&
+                        !question.skip
+                      }
+                      key={question.id}
+                      question={{ ...question, id: String(index + 1) }}
+                      onClick={pickQuestion(index, question)}
+                      active={!allAnswered.includes(index) && !question.skip}
+                    />
+                  ))}
+                </main>
+              </>
+            )}
+          </div>
         </div>
-      </div>
-      {activeQuestion && (
-        <QuestionScreen
-          question={activeQuestion}
-          questionIndex={activeQuestionIndex!}
-          onClose={() => {
-            setActiveQuestionIndex(null);
-            bgsound?.volume(1);
-          }}
-          onAnswer={handleAnswer}
-          doorWord={quiz.doorWord}
-          teamNames={quiz.teamNames}
-        />
-      )}
-      {settingsOpen && (
-        <SettingsMenu onClose={() => setSettingsOpen(false)}>
-          <ResetQuizSetting pack={quiz.name} />
-        </SettingsMenu>
-      )}
+        {activeQuestion && (
+          <QuestionScreen
+            question={activeQuestion}
+            questionIndex={activeQuestionIndex!}
+            onClose={() => {
+              setActiveQuestionIndex(null);
+              bgsound?.volume(1);
+            }}
+            onAnswer={handleAnswer}
+            doorWord={quiz.doorWord}
+            teamNames={quiz.teamNames}
+          />
+        )}
+        {settingsOpen && (
+          <SettingsMenu onClose={() => setSettingsOpen(false)}>
+            <ResetQuizSetting pack={quiz.name} />
+          </SettingsMenu>
+        )}
+      </Stage>
     </>
   );
 };
@@ -325,18 +318,18 @@ const HomePage: FunctionComponent = () => {
   }, []);
 
   // Siden prerenderes uden URL'en, så før packen er kendt må HTML'en ikke afhænge af den.
-  if (packName === null) return <div className="bg-green-950 h-screen" />;
+  if (packName === null) return <div className="bg-night h-screen" />;
 
   const quiz = QUIZZES.get(packName);
   if (!quiz) {
     return (
-      <div className="min-h-screen bg-white text-black p-10">
+      <div className="min-h-screen bg-paper text-ink p-10">
         <h1 className="text-4xl font-bold mb-4">Ukendt quiz: {packName}</h1>
         <p className="mb-2">Vælg en quiz:</p>
         <ul className="list-disc pl-6">
           {[...QUIZZES.keys()].map((name) => (
             <li key={name}>
-              <a className="text-blue-700 underline" href={`?quiz=${name}`}>
+              <a className="text-accent underline" href={`?quiz=${name}`}>
                 {name}
               </a>
             </li>

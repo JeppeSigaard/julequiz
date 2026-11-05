@@ -25,17 +25,19 @@ virker, ses kun ved at åbne den i browseren.
 
 Waku 0.27 (React Server Components) med React 19 og React Compiler (Babel-plugin i
 `waku.config.ts`), Tailwind 4 via Vite-plugin, `motion` til animationer, `use-sound` til lyd.
+Fonte: Mountains of Christmas (`font-display`) og Nunito 400–900 (`font-body`); DM Sans er droppet.
 `tsconfig.json` har `strict`, `noUncheckedIndexedAccess` og `exactOptionalPropertyTypes`.
 `src/pages.gen.ts` genereres af Waku og redigeres ikke i hånden.
 
 ## Arkitektur
 
-- `src/pages/_layout.tsx` er en serverkomponent (fonte, favicon, `styles.css`). Alt andet med
-  tilstand, lyd eller browser-API'er er `"use client"`.
+- `src/pages/_layout.tsx` er en serverkomponent (fonte, favicon, `styles.css`, wrapper med
+  `font-body`). Alt andet med tilstand, lyd eller browser-API'er er `"use client"`.
 - `src/pages/index.tsx` vælger quiz-packen efter mount ud fra `?quiz=<pack>` (ellers `DEFAULT_QUIZ`
-  i `src/config.ts`), fordi siden prerenderes uden URL'en; indtil da vises en tom grøn baggrund.
+  i `src/config.ts`), fordi siden prerenderes uden URL'en; indtil da vises en tom `night`-baggrund.
   Et ukendt navn viser en liste over packs som `?quiz=`-links. `QuizBoard` er hele quizzen for én
-  pack: lågegitteret, holdenes point, baggrundsmusik, sneen og fyrværkeriet ved afslutning.
+  pack: lågegitteret, holdenes point, baggrundsmusik og sneen, alt inde i `Stage`. Ved afslutning
+  vises `EndScreen` (fyrværkeri og de to score) i stedet for overskrift og gitter.
   Rækkefølgen blandes ved mount, hvis packen har `shuffle`; kun `QuestionCard`-prop'en får
   gitterpladsen, mens `Question.id` gemmes af `quizState.ts` (nøgle `julequiz-state-v2:<pack>`, én
   pr. pack) og skal være stabil.
@@ -46,6 +48,25 @@ Waku 0.27 (React Server Components) med React 19 og React Compiler (Babel-plugin
 - `src/components/QuestionScreen.tsx` er den åbne låge. Tastatur: Enter/mellemrum viser svaret,
   1/2 giver lågen til et hold, q/x til ingen, Escape lukker eller går tilbage til spørgsmålet.
   Lågeord og holdnavne får den som props (`doorWord`, `teamNames`) fra packen.
+
+### Tema og scene
+
+- `src/components/Stage.tsx` er en fast scene på 1920×1080, skaleret med `transform: scale()` til
+  vinduet og letterboxet i `night`. Layout skrives i px/Tailwind-størrelser mod 1920×1080, aldrig
+  `vw`/`vh` inde i scenen. Scenen er transformeret, så `position: fixed` er relativt til scenen
+  (åben låge, indstillinger, sne og fyrværkeri bliver derfor inde i den). Skalaen startes på 1 og
+  sættes i en effekt, fordi siden prerenderes.
+- `Quiz.colors` (`src/types.ts`) har syv basefarver (`background paper ink accent highlight team1
+  team2`). `Stage` sætter dem som `--quiz-*` på sit yderste element; `:root` i `src/styles.css`
+  har jul-2025's værdier som standard. Alle andre farver er tokens afledt med `color-mix()` i
+  `@theme inline` (`night`, `felt`, `paper`, `ink`, `snow`, `accent`, `team-1`, `team-2` med
+  `-deep`/`-ink`-varianter m.fl.). `@theme` skal være `inline`, ellers opløses `var(--quiz-*)`
+  kun på `:root`, og packens farver virker ikke. Brug kun token-klasser, aldrig hex eller
+  `green-*`/`red-*`.
+- `src/components/decor.tsx` har `Paper`, `KeyCap`, `PillButton` og `TeamPlaque`. Pack-theme
+  (`snow`/`titleFont`) er indlemmet her og findes ikke som pack-felter.
+- `src/components/EndScreen.tsx` er slutskærmen: `index.tsx` renderer den i stedet for overskrift
+  og gitter, når alle låger er besvaret.
 
 ### Spørgsmål
 
