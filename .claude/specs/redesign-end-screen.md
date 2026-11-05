@@ -1,6 +1,6 @@
 # Slutskærm (end screen)
 
-> Status: in progress — redesign-end-screen
+> Status: merged — d74b179
 > Branch: `redesign-end-screen` (base `claude/sweet-mendel-p0gtn1`, PR targets it, never `main`)
 
 ## Goal
