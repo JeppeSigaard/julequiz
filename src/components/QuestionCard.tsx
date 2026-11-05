@@ -69,7 +69,7 @@ export const QuestionCard: FunctionComponent<{
   const tilt = (((number - 1) * 37) % 7 - 3) * 0.45;
   // Typen skaleres med lågens størrelse (container-enheder), så den virker for ethvert antal låger; kræver en definit størrelse.
   // Animationen kører altid fra mount, så den holder takt med Garland; musikken skruer kun udsvinget op og ned.
-  const swayAmount = sway && status !== "skip" ? 0.9 + ((number * 5) % 3) * 0.3 : 0;
+  const swayAmount = sway && status !== "skip" ? 2 + ((number * 5) % 3) * 0.25 : 0;
   const wrapper =
     "relative h-full w-full origin-top animate-sway transition-[--sway] duration-1000 [container-type:size]";
   const style = {
