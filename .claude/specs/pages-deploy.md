@@ -1,6 +1,6 @@
 # Deploy til GitHub Pages
 
-> Status: in progress — pages-deploy
+> Status: merged — 4ec201b
 
 ## Goal
 
