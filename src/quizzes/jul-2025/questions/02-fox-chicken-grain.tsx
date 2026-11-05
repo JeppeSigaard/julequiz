@@ -6,7 +6,7 @@ const question: QuestionSpec = {
   backgroundVolume: 0.5,
   body: (
     <>
-      <h2 className="font-display text-[58px] text-ink mb-8">Fox chicken grain-off!</h2>
+      <h2 className="font-display text-[58px] text-ink leading-none">Fox chicken grain-off!</h2>
       <div className="flex gap-[60px]">
         <FoxChickenGrain />
         <FoxChickenGrain />

@@ -203,7 +203,7 @@ export function FoxChickenGrain() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="relative w-[520px] h-[480px] rounded-[24px] overflow-hidden">
+      <div className="relative w-[520px] h-[560px] rounded-[24px] overflow-hidden">
         {/* Game over overlay */}
         {isGameOver && (
           <div className="absolute inset-0 bg-felt-deep/90 z-20 flex items-center justify-center">
@@ -228,12 +228,13 @@ export function FoxChickenGrain() {
         </div>
 
         {/* River */}
-        <div className="absolute top-[30%] bottom-[30%] left-0 right-0 bg-mist/40">
+        <div className="absolute top-[30%] bottom-[30%] left-0 right-0 bg-felt-deep">
+          <div className="absolute inset-0 bg-mist/40" />
           <div className="absolute inset-x-0 top-1/2 h-10 -translate-y-1/2 bg-mist/20" />
           {renderBoat()}
           {message && !isGameOver && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <span className="text-snow text-center text-[26px] font-bold bg-felt-deep/80 px-5 py-2 rounded-xl">
+              <span className="text-snow text-center text-[26px] leading-tight font-bold bg-felt-deep/80 px-5 py-2 rounded-xl">
                 {message}
               </span>
             </div>

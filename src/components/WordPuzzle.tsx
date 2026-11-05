@@ -45,7 +45,7 @@ export const WordPuzzle: FunctionComponent<{
   return (
     <div
       className={classNames(
-        "flex flex-wrap gap-4 justify-center items-center relative",
+        "flex flex-wrap gap-x-8 gap-y-4 justify-center items-center relative",
         isShaking && "animate-shake"
       )}
       style={{
@@ -69,31 +69,32 @@ export const WordPuzzle: FunctionComponent<{
           {wrongChar}
         </div>
       )}
-      {props.word.split("").map((char, index) => {
-        const isSpace = char === " ";
-        const isRevealed = revealedChars.has(char.toUpperCase());
-
-        if (isSpace) {
-          return <div key={index} className="w-8" />;
-        }
-
+      {props.word.split(" ").map((word, wordIndex, words) => {
+        const offset = words.slice(0, wordIndex).join(" ").length + (wordIndex > 0 ? 1 : 0);
         return (
-          <div
-            key={index}
-            className={classNames(
-              "relative flex items-center justify-center rounded-[14px] size-[1.5em] bg-paper-lit shadow-[0_5px_0_color-mix(in_oklab,var(--quiz-paper)_80%,black)]",
-              props.className ?? "text-6xl"
-            )}
-          >
-            {/* Bogstavsfarven sættes her, så className ikke kan overstyre den */}
-            <span
-              className={classNames(
-                "font-body font-black text-ink transition-opacity duration-300",
-                isRevealed ? "opacity-100" : "opacity-0"
-              )}
-            >
-              {char.toUpperCase()}
-            </span>
+          <div key={offset} className="flex gap-4">
+            {word.split("").map((char, charIndex) => {
+              const isRevealed = revealedChars.has(char.toUpperCase());
+              return (
+                <div
+                  key={charIndex}
+                  className={classNames(
+                    "relative flex items-center justify-center rounded-[14px] size-[1.5em] bg-paper-lit shadow-[0_5px_0_color-mix(in_oklab,var(--quiz-paper)_80%,black)]",
+                    props.className ?? "text-6xl"
+                  )}
+                >
+                  {/* Bogstavsfarven sættes her, så className ikke kan overstyre den */}
+                  <span
+                    className={classNames(
+                      "font-body font-black text-ink transition-opacity duration-300",
+                      isRevealed ? "opacity-100" : "opacity-0"
+                    )}
+                  >
+                    {char.toUpperCase()}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         );
       })}
