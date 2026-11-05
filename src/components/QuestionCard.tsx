@@ -106,7 +106,7 @@ export const QuestionCard: FunctionComponent<{
     <div className={wrapper} style={style}>
       <div
         aria-label={`${doorWord} ${number}: ${teamName ?? "Ingen"}`}
-        className="absolute inset-0 rounded-[19px] bg-night shadow-[inset_0_6px_16px_rgb(0_0_0/0.7)] ring-1 ring-paper/10 [perspective:350cqmin]"
+        className="absolute inset-0 rounded-[19px] bg-night shadow-[inset_0_6px_16px_rgb(0_0_0/0.7)] ring-1 ring-paper/10 [perspective:350cqmin] [perspective-origin:left]"
       >
         {/* Bredde og perspektiv følger lågens mindste side, så bladet ikke svulmer op i brede celler. */}
         <motion.div
