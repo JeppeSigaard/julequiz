@@ -19,7 +19,7 @@ export const TeamPointsSetting: FunctionComponent<{
   step: number;
   onAdjust: (team: 1 | 2, amount: number) => void;
 }> = (props) => {
-  const amounts = [-props.step, -5, 5, props.step];
+  const amounts = [...new Set([-props.step, -5, 5, props.step])];
 
   return (
     <div className="flex flex-col gap-[18px]">

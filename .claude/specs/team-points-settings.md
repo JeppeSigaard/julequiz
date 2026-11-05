@@ -124,6 +124,34 @@ gemt format og pointberegning er uændrede.
 - Kommentarer skal tilføre noget: kun en ikke-oplagt begrænsning eller et hvorfor. Denne ændring
   behøver ingen kommentarer.
 
+## Review-rettelser (runde 2, godkendt af brugeren)
+
+Fire fund fra review af 26c7c20. Ret dem oven på den eksisterende commit.
+
+1. **`src/components/AnimatedNumber.tsx`: en afbrudt animation lander på den gamle værdi
+   (blocker).** I dag starter hver animation fra `previousValue.current`, som først opdateres, når
+   en animation er færdig. Effekten har heller ingen cleanup. +100 og så −100 inden for 1,2 s gør
+   derfor følgende: anden kørsel ser start 0 og slut 0 og returnerer tidligt, mens første animation
+   kører videre og lander på 100.
+   - Ret: hold den viste værdi i en ref, som opdateres i hver frame. Start hver animation fra den
+     ref. Gem id'et fra `requestAnimationFrame` og returnér en cleanup, der kalder
+     `cancelAnimationFrame`.
+   - Drop den tidlige `return` ved start === slut, eller lad den stå efter at den gamle animation er
+     annulleret. Pointen er, at en ny værdi altid stopper den igangværende animation.
+   - Behold props (`value`, `duration`), easing og varighed.
+2. **`src/components/AnimatedNumber.tsx`: minus i pointtallet (minor).** Negative værdier vises
+   med U+2212, fx `−105`, ligesom trøstelinjen. Formatér kun i render, så værdien forbliver et tal.
+   `AnimatedNumber` bruges kun i `TeamPlaque` (`decor.tsx:132`).
+3. **`src/components/TeamPointsSetting.tsx`: dobbelte beløb (minor).** Ved
+   `pointsPerQuestion: 5` giver `[-step, -5, 5, step]` to ens knapper og dublerede React-keys.
+   Ret: fjern dubletter med `[...new Set([-step, -5, 5, step])]`, og behold `key={amount}`.
+4. **`CLAUDE.md` (minor).**
+   - Linje ~48: trøstepoint er "+5 pr. klik på et holdnavn, og kan justeres op og ned, også under
+     0, fra indstillingsmenuen".
+   - Linje ~56: nævn `TeamPointsSetting`, som justerer holdenes trøstepoint med
+     ±5/±`pointsPerQuestion`, ved siden af `ResetQuizSetting`.
+   - Hold samme stil og linjebredde som resten af filen.
+
 ## Verification
 
 Ingen tests (projektet har ingen, og logikken er en simpel addition). Kør `npm run check`, som
