@@ -22,7 +22,7 @@ export const SettingsMenu: FunctionComponent<{
           <div className="relative flex flex-col items-center">
             <div className="-mt-0.5 flex items-start">
               <div aria-hidden="true" className="mt-[16px] -mr-[13px] h-[58px] w-[42px] bg-accent-deep [clip-path:polygon(0_0,100%_0,100%_100%,0_100%,34%_50%)]" />
-              <h2 className="rounded-b-[18px] bg-accent px-[50px] pt-2 pb-[13px] font-display text-[60px] font-bold leading-none text-paper-lit shadow-[0_5px_0_color-mix(in_oklab,var(--quiz-accent)_72%,black)]">
+              <h2 className="relative rounded-b-[18px] bg-accent px-[50px] pt-2 pb-[13px] font-display text-[60px] font-bold leading-none text-paper-lit shadow-[0_5px_0_color-mix(in_oklab,var(--quiz-accent)_72%,black)]">
                 Indstillinger
               </h2>
               <div aria-hidden="true" className="mt-[16px] -ml-[13px] h-[58px] w-[42px] bg-accent-deep [clip-path:polygon(0_0,100%_0,66%_50%,100%_100%,0_100%)]" />
