@@ -1,7 +1,7 @@
-import { FoxChickenGrain } from "../components/FoxChickenGrain";
-import { type QuestionSpec } from "../types";
+import { FoxChickenGrain } from "../../../components/FoxChickenGrain";
+import { type QuestionSpec } from "../../../types";
 
-export const Question2: QuestionSpec = {
+const question: QuestionSpec = {
   type: "custom",
   backgroundVolume: 0.5,
   body: (
@@ -21,3 +21,5 @@ export const Question2: QuestionSpec = {
     </p>
   ),
 };
+
+export default question;

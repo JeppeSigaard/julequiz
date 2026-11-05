@@ -2,7 +2,6 @@
 
 import { FunctionComponent, useEffect, useState } from "react";
 import { type Question } from "../types";
-import { TEAM_NAMES } from "../config";
 import * as motion from "motion/react-client";
 import useSound from "use-sound";
 
@@ -13,6 +12,8 @@ import swooshSFX from "../sfx/swoosh2.mp3";
 export const QuestionScreen: FunctionComponent<{
   question: Question;
   questionIndex: number;
+  doorWord: string;
+  teamNames: [string, string];
   onClose: () => void;
   onAnswer: (team?: number) => void;
 }> = (props) => {
@@ -84,7 +85,7 @@ export const QuestionScreen: FunctionComponent<{
         <header className="relative">
           <hgroup className="text-center">
             <h2 className="text-6xl font-bold font-['Mountains_of_Christmas',Serif] mb-6">
-              Låge {props.questionIndex + 1}
+              {props.doorWord} {props.questionIndex + 1}
             </h2>
           </hgroup>
           {!hasAnswered && (
@@ -113,7 +114,7 @@ export const QuestionScreen: FunctionComponent<{
                   className="font-bold cursor-pointer text-lg"
                   onClick={onAnswer(1)}
                 >
-                  {TEAM_NAMES[0]}
+                  {props.teamNames[0]}
                 </button>
                 <button
                   className="font-bold cursor-pointer text-lg"
@@ -125,7 +126,7 @@ export const QuestionScreen: FunctionComponent<{
                   className="font-bold cursor-pointer text-lg"
                   onClick={onAnswer(2)}
                 >
-                  {TEAM_NAMES[1]}
+                  {props.teamNames[1]}
                 </button>
               </>
             </nav>

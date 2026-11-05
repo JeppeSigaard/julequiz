@@ -1,5 +1,5 @@
 import { FunctionComponent, useEffect, useState } from "react";
-import { type QuestionSpec } from "../types";
+import { type QuestionSpec } from "../../../types";
 
 const Answer: FunctionComponent = () => {
   const [a1, setA1] = useState(false);
@@ -18,8 +18,10 @@ const Answer: FunctionComponent = () => {
   );
 };
 
-export const Question8: QuestionSpec = {
+const question: QuestionSpec = {
   type: "custom",
   body: <p className="text-6xl">Hvad hedder husnissen på Halfdansvej?</p>,
   answer: <Answer />,
 };
+
+export default question;

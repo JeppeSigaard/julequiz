@@ -1,8 +1,9 @@
 "use client";
 
 import { FunctionComponent, useEffect, useRef, useState } from "react";
-import { POINTS_PER_QUESTION, TEAM_NAMES } from "../config";
-import { QUESTIONS } from "../questions";
+import { DEFAULT_QUIZ } from "../config";
+import { QUIZZES, type LoadedQuiz } from "../quizzes";
+import { asset } from "../asset";
 import Snowfall from "react-snowfall";
 import { Fireworks } from "@fireworks-js/react";
 import { QuestionCard } from "../components/QuestionCard";
@@ -14,8 +15,6 @@ import { loadQuizState, saveQuizState } from "../quizState";
 
 import useSound from "use-sound";
 
-import bgmusic from "../audio/waiting-music-116216.mp3";
-import lightningRoundMusic from "../audio/lightning-round.mp3";
 import dingSFX from "../sfx/ding.mp3";
 import classNames from "classnames";
 import { Question } from "../types";
@@ -40,9 +39,9 @@ function tickGroup(index: number, columns: number): 0 | 1 {
   return (Math.floor(index / columns) + (index % columns)) % 2 === 0 ? 0 : 1;
 }
 
-const HomePage: FunctionComponent = () => {
+const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const [questions, setQuestions] = useState<Question[]>(QUESTIONS);
+  const [questions, setQuestions] = useState<Question[]>(quiz.questions);
   const [activeQuestionIndex, setActiveQuestionIndex] = useState<number | null>(
     null
   );
@@ -56,13 +55,13 @@ const HomePage: FunctionComponent = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [ding] = useSound(dingSFX);
   const [playBgMusic, { stop: stopBgMusic, sound: bgsound }] = useSound(
-    bgmusic,
+    asset(quiz.music.background),
     {
       loop: true,
     }
   );
   const [playLightingRoundMusic, { stop: stopLightningRoundMusic }] = useSound(
-    lightningRoundMusic,
+    asset(quiz.music.finale),
     {
       loop: true,
     }
@@ -134,10 +133,10 @@ const HomePage: FunctionComponent = () => {
   }, [started]);
 
   useEffect(() => {
-    const saved = loadQuizState();
+    const saved = loadQuizState(quiz.name, quiz.questions);
     if (saved) {
       const restored = saved.questionIds.map(
-        (id) => QUESTIONS.find((q) => q.id === id)!
+        (id) => quiz.questions.find((q) => q.id === id)!
       );
       setQuestions(restored);
       setTeam1Cards(saved.team1Cards);
@@ -146,7 +145,9 @@ const HomePage: FunctionComponent = () => {
       setTeam1ConsolationPoints(saved.team1ConsolationPoints);
       setTeam2ConsolationPoints(saved.team2ConsolationPoints);
     } else {
-      setQuestions(shuffleQuestions(QUESTIONS));
+      setQuestions(
+        quiz.shuffle ? shuffleQuestions(quiz.questions) : quiz.questions
+      );
     }
     setIsLoaded(true);
   }, []);
@@ -155,7 +156,7 @@ const HomePage: FunctionComponent = () => {
     // Uden denne port skriver første commit standardværdier, og StrictModes
     // anden load-kørsel ville så læse dem i stedet for den gemte quiz.
     if (!isLoaded) return;
-    saveQuizState({
+    saveQuizState(quiz.name, {
       questionIds: questions.map((q) => q.id),
       team1Cards,
       team2Cards,
@@ -211,7 +212,7 @@ const HomePage: FunctionComponent = () => {
                   startQuiz();
                 }}
               >
-                den store julequiz
+                {quiz.title}
               </button>
             </h1>
             <dl
@@ -230,12 +231,12 @@ const HomePage: FunctionComponent = () => {
                 }}
               >
                 <dt className="uppercase font-extrabold text-4xl">
-                  {TEAM_NAMES[0]}
+                  {quiz.teamNames[0]}
                 </dt>
                 <dd className="font-bold text-3xl">
                   <AnimatedNumber
                     value={
-                      team1Cards.length * POINTS_PER_QUESTION +
+                      team1Cards.length * quiz.pointsPerQuestion +
                       team1ConsolationPoints
                     }
                   />{" "}
@@ -250,12 +251,12 @@ const HomePage: FunctionComponent = () => {
                 }}
               >
                 <dt className="uppercase font-extrabold text-4xl">
-                  {TEAM_NAMES[1]}
+                  {quiz.teamNames[1]}
                 </dt>
                 <dd className="font-bold text-3xl">
                   <AnimatedNumber
                     value={
-                      team2Cards.length * POINTS_PER_QUESTION +
+                      team2Cards.length * quiz.pointsPerQuestion +
                       team2ConsolationPoints
                     }
                   />{" "}
@@ -301,15 +302,51 @@ const HomePage: FunctionComponent = () => {
             bgsound?.volume(1);
           }}
           onAnswer={handleAnswer}
+          doorWord={quiz.doorWord}
+          teamNames={quiz.teamNames}
         />
       )}
       {settingsOpen && (
         <SettingsMenu onClose={() => setSettingsOpen(false)}>
-          <ResetQuizSetting />
+          <ResetQuizSetting pack={quiz.name} />
         </SettingsMenu>
       )}
     </>
   );
+};
+
+const HomePage: FunctionComponent = () => {
+  const [packName, setPackName] = useState<string | null>(null);
+
+  useEffect(() => {
+    setPackName(
+      new URLSearchParams(window.location.search).get("quiz") ?? DEFAULT_QUIZ
+    );
+  }, []);
+
+  // Siden prerenderes uden URL'en, så før packen er kendt må HTML'en ikke afhænge af den.
+  if (packName === null) return <div className="bg-green-950 h-screen" />;
+
+  const quiz = QUIZZES.get(packName);
+  if (!quiz) {
+    return (
+      <div className="min-h-screen bg-white text-black p-10">
+        <h1 className="text-4xl font-bold mb-4">Ukendt quiz: {packName}</h1>
+        <p className="mb-2">Vælg en quiz:</p>
+        <ul className="list-disc pl-6">
+          {[...QUIZZES.keys()].map((name) => (
+            <li key={name}>
+              <a className="text-blue-700 underline" href={`?quiz=${name}`}>
+                {name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
+  return <QuizBoard key={packName} quiz={quiz} />;
 };
 
 export default HomePage;

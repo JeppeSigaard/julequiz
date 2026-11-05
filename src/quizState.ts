@@ -1,4 +1,4 @@
-import { QUESTIONS } from "./questions";
+import type { Question } from "./types";
 
 // Kortene er gitterpositioner, så questionIds skal altid gemmes sammen med dem.
 export type SavedQuizState = {
@@ -10,21 +10,24 @@ export type SavedQuizState = {
   team2ConsolationPoints: number;
 };
 
-const STORAGE_KEY = "julequiz-state-v1";
+const storageKey = (pack: string) => `julequiz-state-v2:${pack}`;
 
-function isCardArray(value: unknown): value is number[] {
+function isCardArray(value: unknown, count: number): value is number[] {
   return (
     Array.isArray(value) &&
     value.every(
       (item) =>
-        Number.isInteger(item) && item >= 0 && item < QUESTIONS.length
+        Number.isInteger(item) && item >= 0 && item < count
     )
   );
 }
 
-export function loadQuizState(): SavedQuizState | null {
+export function loadQuizState(
+  pack: string,
+  questions: Question[]
+): SavedQuizState | null {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(storageKey(pack));
     if (raw === null) return null;
     const data: unknown = JSON.parse(raw);
     if (typeof data !== "object" || data === null) return null;
@@ -33,15 +36,15 @@ export function loadQuizState(): SavedQuizState | null {
     const { questionIds } = state;
     if (
       !Array.isArray(questionIds) ||
-      questionIds.length !== QUESTIONS.length ||
+      questionIds.length !== questions.length ||
       !questionIds.every((id) => typeof id === "string")
     ) {
       return null;
     }
-    const knownIds = new Set(QUESTIONS.map((q) => q.id));
+    const knownIds = new Set(questions.map((q) => q.id));
     const seenIds = new Set<string>(questionIds);
     if (
-      seenIds.size !== QUESTIONS.length ||
+      seenIds.size !== questions.length ||
       !questionIds.every((id) => knownIds.has(id))
     ) {
       return null;
@@ -50,9 +53,9 @@ export function loadQuizState(): SavedQuizState | null {
     const { team1Cards, team2Cards, noTeamCards } = state;
     const { team1ConsolationPoints, team2ConsolationPoints } = state;
     if (
-      !isCardArray(team1Cards) ||
-      !isCardArray(team2Cards) ||
-      !isCardArray(noTeamCards) ||
+      !isCardArray(team1Cards, questions.length) ||
+      !isCardArray(team2Cards, questions.length) ||
+      !isCardArray(noTeamCards, questions.length) ||
       typeof team1ConsolationPoints !== "number" ||
       typeof team2ConsolationPoints !== "number"
     ) {
@@ -72,14 +75,14 @@ export function loadQuizState(): SavedQuizState | null {
   }
 }
 
-export function saveQuizState(state: SavedQuizState): void {
+export function saveQuizState(pack: string, state: SavedQuizState): void {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    localStorage.setItem(storageKey(pack), JSON.stringify(state));
   } catch {}
 }
 
-export function clearQuizState(): void {
+export function clearQuizState(pack: string): void {
   try {
-    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(storageKey(pack));
   } catch {}
 }
