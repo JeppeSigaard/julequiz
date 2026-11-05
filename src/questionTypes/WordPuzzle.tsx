@@ -8,17 +8,21 @@ export const WordPuzzleBody = ({ hint, word }: { hint: string; word: string }) =
   const [playWrongSFX] = useSound(wrongSFX);
   return (
     <>
-      <p className="text-4xl mb-10">{hint}</p>
+      <p className="mb-10 text-[41px] text-ink-soft">{hint}</p>
       <WordPuzzle
         word={word}
         onCorrectGuess={() => playDingSFX()}
         onIncorrectGuess={() => playWrongSFX()}
-        className="text-7xl text-green-900"
+        className="text-7xl text-ink"
       />
     </>
   );
 };
 
+const answerSize = (word: string) => (word.length <= 12 ? "text-[156px]" : "text-[110px]");
+
 export const WordPuzzleAnswer = ({ word }: { word: string }) => (
-  <p className="font-bold text-9xl">{word}</p>
+  <p className={`${answerSize(word)} font-display font-bold leading-[0.9] text-accent-deep`}>
+    {word}
+  </p>
 );
