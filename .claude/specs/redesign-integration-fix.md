@@ -1,6 +1,6 @@
 # Redesign: integrationsrettelse
 
-> Status: in progress — redesign-integration-fix
+> Status: merged — b56332a
 
 ## Goal
 
