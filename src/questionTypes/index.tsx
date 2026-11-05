@@ -2,7 +2,7 @@ import { type Question, type QuestionSpec, type Slide } from "../types";
 import { asset } from "../asset";
 import { MusicAnswer } from "../components/MusicBox";
 import { MusicBody } from "./Music";
-import { PosterAnswer } from "./PosterReveal";
+import { PosterAnswer, PosterBody } from "./PosterReveal";
 import { SlideView } from "./Standard";
 import { VideoBody } from "./Video";
 import { WordPuzzleAnswer, WordPuzzleBody } from "./WordPuzzle";
@@ -52,12 +52,8 @@ export const toQuestion = (spec: QuestionSpec, id: string): Question => {
     case "posterReveal":
       return {
         id,
-        body: (
-          <p className="max-w-300 text-center font-display text-[110px] font-bold leading-none text-ink">
-            {spec.prompt}
-          </p>
-        ),
-        answer: <PosterAnswer prompt={spec.prompt} cropped={spec.cropped} full={spec.full} />,
+        body: <PosterBody prompt={spec.prompt} cropped={spec.cropped} />,
+        answer: <PosterAnswer prompt={spec.prompt} full={spec.full} />,
         preload: [spec.cropped, spec.full].map(asset),
         ...common,
       };
