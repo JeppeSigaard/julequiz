@@ -28,6 +28,11 @@ import useSound from "use-sound";
 
 import dingSFX from "../sfx/ding.mp3";
 import wrongSFX from "../sfx/wrong2.mp3";
+import answerSFX from "../sfx/efek.mp3";
+import swooshSFX from "../sfx/swoosh2.mp3";
+import vinylStopSFX from "../sfx/vinyl-stop.mp3";
+import yoshiSFX from "../sfx/yoshi-tongue.mp3";
+import { preloadMedia } from "../mediaCache";
 import { Question } from "../types";
 
 // Fisher-Yates shuffle algorithm to randomize questions
@@ -71,6 +76,25 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [ding] = useSound(dingSFX);
   const [playWrong] = useSound(wrongSFX);
+  const [media, setMedia] = useState({ done: 0, total: 0 });
+
+  useEffect(() => {
+    let active = true;
+    const urls = [
+      answerSFX,
+      wrongSFX,
+      swooshSFX,
+      vinylStopSFX,
+      yoshiSFX,
+      ...[...quiz.practice, ...quiz.questions].flatMap((q) => q.preload.map(asset)),
+    ];
+    void preloadMedia(urls, (done, total) => {
+      if (active) setMedia({ done, total });
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
   const [playBgMusic, { stop: stopBgMusic, sound: bgsound }] = useSound(
     asset(quiz.music.background),
     {
@@ -345,6 +369,7 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
               <Footer
                 opened={allAnswered.length}
                 total={doorCount}
+                media={media}
                 onOpenSettings={() => setSettingsOpen(true)}
               />
             </div>
