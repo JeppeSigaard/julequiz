@@ -51,10 +51,11 @@ et lille spil (`FoxChickenGrain`, `WordPuzzle`, `GuessThatCat`, `MusicBox` i `sr
 
 ### Medier
 
-Billeder, video og lyd ligger i `public/images/`, `public/video/` og `public/audio/` og refereres gennem
-`asset("/images/…")` fra `src/asset.ts`, fordi quizzen kører under basestien `/julequiz/` på GitHub
-Pages. Lyd importeres som moduler fra `src/audio/` (musik) og `src/sfx/` (effekter);
-`src/env.d.ts` erklærer `*.mp3`.
+Billeder, video og lyd ligger i `public/images/`, `public/video/` og `public/audio/` (sidstnævnte til
+lyd, der afspilles direkte med `<audio>`) og refereres gennem `asset("/images/…")` fra
+`src/asset.ts`, fordi quizzen kører under basestien `/julequiz/` på GitHub Pages. Musik og
+lydeffekter, som koden bruger, importeres i stedet som moduler fra `src/audio/` (musik) og
+`src/sfx/` (effekter); `src/env.d.ts` erklærer `*.mp3`.
 
 ## Arbejdsgang
 
