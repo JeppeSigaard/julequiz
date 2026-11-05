@@ -16,7 +16,7 @@ filnavne på engelsk.
 | `npm run dev`   | Waku-devserver med hot reload (http://localhost:3000/julequiz/)       |
 | `npm run check` | `tsc --noEmit` + `waku build`; skal passere, før noget meldes færdigt |
 | `npm run build` | produktionsbuild til `dist/` (statisk genereret)                      |
-| `npm start`     | serverer det byggede `dist/` (http://localhost:3000/julequiz/)        |
+| `npm start`     | serverer det byggede `dist/` (http://localhost:8080/julequiz/)        |
 
 Der er ingen linter og ingen tests. `check` beviser kun, at det typechecker og bygger: om en låge
 virker, ses kun ved at åbne den i browseren.
@@ -30,9 +30,9 @@ og `exactOptionalPropertyTypes`. `src/pages.gen.ts` genereres af Waku og rediger
 
 ## Arkitektur
 
-- `src/pages/_layout.tsx` er en serverkomponent (fonte, `<title>`, meta/OG-tags, ikoner, `styles.css`); `_root.tsx` sætter kun
-  `<html lang="da">` og bevarer Waku's `ErrorBoundary`. Alt andet med
-  tilstand, lyd eller browser-API'er er `"use client"`.
+- `src/pages/_layout.tsx` er en serverkomponent (fonte, `<title>`, meta/OG-tags, ikoner,
+  `styles.css`); `_root.tsx` sætter kun `<html lang="da">` og bevarer Waku's `ErrorBoundary`. Alt
+  andet med tilstand, lyd eller browser-API'er er `"use client"`.
 - `src/components/Stage.tsx` er en fast 1920×1080-scene, skaleret til vinduet med `scale()`. Al
   layout bruger derfor px (`cqmin` kun inde i en `[container-type:size]`, som `QuestionCard`),
   aldrig `vw`/`vh`, og `fixed` inde i scenen er scene-relativ.
@@ -103,7 +103,8 @@ Kopiér den nærmeste eksisterende låge frem for at opfinde en ny form.
 Billeder, video og lyd til en pakke ligger i `public/quizzes/<navn>/…`. Specs og `quiz.ts` giver
 den almindelige sti `/quizzes/<navn>/…`; renderere og komponenter kører den gennem `asset()` fra
 `src/asset.ts` præcis én gang, fordi quizzen kører under basestien `/julequiz/` på GitHub Pages
-(`public/images/` rummer kun ikoner og delingsbilledet; kilden er `icon.svg`). Kun håndskrevet JSX i en `custom`-låge kalder selv `asset()`.
+(`public/images/` rummer kun ikoner og delingsbilledet; kilden er `icon.svg`). Kun håndskrevet JSX
+i en `custom`-låge kalder selv `asset()`.
 Lydeffekter, som koden bruger, importeres som moduler fra `src/sfx/`; `src/env.d.ts` erklærer
 `*.mp3`, og de importerede URL'er går aldrig gennem `asset()`. Pakkens musik angives som sti i
 `quiz.ts`.

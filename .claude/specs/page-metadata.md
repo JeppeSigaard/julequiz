@@ -91,7 +91,7 @@ capitalize the jul-2025 pack's title, which is the big heading on the board.
 4. **`public/site.webmanifest`** (JSON), with paths relative to the manifest so the base path
    stays in one place:
    `name` "Den Store Julequiz", `short_name` "Julequiz", `description` (the decided text),
-   `lang` "da", `start_url` "./", `scope` "./", `display` "fullscreen", `background_color` and
+   `lang` "da", `start_url` "./", `scope` "./", `display` "standalone", `background_color` and
    `theme_color` "#0e2c22", `icons`: `images/icon-192.png` (192x192, image/png) and
    `images/icon-512.png` (512x512, image/png).
 
