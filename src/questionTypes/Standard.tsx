@@ -1,4 +1,4 @@
-import { asset } from "../asset";
+import { useAsset } from "../mediaCache";
 import { type Slide } from "../types";
 
 export const textSize = (text: string) =>
@@ -13,6 +13,9 @@ export const mediaFrame =
   "rounded-lg border-8 border-paper-lit object-contain shadow-[0_8px_0_color-mix(in_oklab,var(--quiz-paper)_80%,black)]";
 
 export const SlideView = ({ slide }: { slide: Slide }) => {
+  const video = useAsset(slide.video);
+  const image = useAsset(slide.image);
+  const audio = useAsset(slide.audio);
   const imageCap =
     slide.text !== undefined || slide.note !== undefined
       ? "max-h-[360px]"
@@ -22,7 +25,7 @@ export const SlideView = ({ slide }: { slide: Slide }) => {
       {slide.video !== undefined && (
         // Ingen tilt på video: den afspilles, og en skæv afspilning ser forkert ud.
         <video
-          src={asset(slide.video)}
+          src={video}
           autoPlay
           className={`mx-auto max-h-[480px] max-w-[1000px] ${mediaFrame}`}
         />
@@ -30,12 +33,12 @@ export const SlideView = ({ slide }: { slide: Slide }) => {
       {slide.image !== undefined && (
         <div className="p-4">
           <img
-            src={asset(slide.image)}
+            src={image}
             className={`mx-auto ${imageCap} max-w-[1000px] -rotate-1 ${mediaFrame}`}
           />
         </div>
       )}
-      {slide.audio !== undefined && <audio src={asset(slide.audio)} autoPlay />}
+      {slide.audio !== undefined && <audio src={audio} autoPlay />}
       {slide.text !== undefined && (
         <p
           className={`${textSize(slide.text)} max-w-300 font-body font-extrabold leading-tight text-ink`}

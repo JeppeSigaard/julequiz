@@ -1,11 +1,12 @@
 import type { FC } from "react";
 import { KeyCap } from "../decor";
 
-export const Footer: FC<{ opened: number; total: number; onOpenSettings: () => void }> = ({
-  opened,
-  total,
-  onOpenSettings,
-}) => (
+export const Footer: FC<{
+  opened: number;
+  total: number;
+  media: { done: number; total: number };
+  onOpenSettings: () => void;
+}> = ({ opened, total, media, onOpenSettings }) => (
   <footer className="flex flex-none items-center justify-between text-[18px] font-bold text-mist">
     <div className="flex items-center gap-[16px]">
       <span>
@@ -18,6 +19,11 @@ export const Footer: FC<{ opened: number; total: number; onOpenSettings: () => v
         />
       </div>
     </div>
+    {media.total > 0 && (
+      <span>
+        {media.done < media.total ? `Henter medier ${media.done} af ${media.total}` : "Medier klar"}
+      </span>
+    )}
     <button
       type="button"
       // Fokus fjernes, så mellemrum/Enter senere ikke genåbner menuen via knappen

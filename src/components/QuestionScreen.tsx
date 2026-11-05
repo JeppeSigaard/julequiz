@@ -5,7 +5,7 @@ import { type Question } from "../types";
 import * as motion from "motion/react-client";
 import useSound from "use-sound";
 import { PillButton } from "./decor";
-import { MediaPreload } from "./MediaPreload";
+import { useCachedUrl } from "../mediaCache";
 
 import answerSFX from "../sfx/efek.mp3";
 import wrongSFX from "../sfx/wrong2.mp3";
@@ -19,9 +19,12 @@ export const QuestionScreen: FunctionComponent<{
   onAnswer: (team?: number) => void;
 }> = (props) => {
   const [hasAnswered, setHasAnswered] = useState(false);
-  const [playAnswerSFX] = useSound(answerSFX);
-  const [playWrongSFX] = useSound(wrongSFX);
-  const [playSwooshSFX] = useSound(swooshSFX);
+  const answerUrl = useCachedUrl(answerSFX);
+  const wrongUrl = useCachedUrl(wrongSFX);
+  const swooshUrl = useCachedUrl(swooshSFX);
+  const [playAnswerSFX] = useSound(answerUrl, { format: ["mp3"] });
+  const [playWrongSFX] = useSound(wrongUrl, { format: ["mp3"] });
+  const [playSwooshSFX] = useSound(swooshUrl, { format: ["mp3"] });
 
   const onRevealAnswer = () => {
     playSwooshSFX();
@@ -74,7 +77,6 @@ export const QuestionScreen: FunctionComponent<{
 
   return (
     <>
-      <MediaPreload urls={props.question.preload} />
       {/* Sløret er søskende til fjeder-wrapperen, så det ikke skalerer op fra 0 sammen med kortet */}
       <div
         aria-hidden="true"

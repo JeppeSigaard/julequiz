@@ -75,8 +75,12 @@ i `public/quizzes/<navn>/{audio,images,video}` og refereres som `/quizzes/<navn>
 dem til `Question` (`body`/`answer`/`setVolume`/`skip`) med renderere i `src/questionTypes/`;
 dørindholdets størrelsestrin (fx `textSize`, `mediaFrame` i `Standard.tsx`) bor i rendererne.
 `backgroundVolume` dæmper baggrundsmusikken, mens lågen er åben, og `skip` gør lågen uvælgelig.
-Svarets billeder, video og lyd (`Question.preload`, udledt i `toQuestion`) forudindlæses skjult af
-`MediaPreload`, mens lågen er åben; en `custom`-låge angiver dem selv med `preload`. En
+Alle lågers og prøvespørgsmåls billeder, video og lyd
+(`Question.preload`: rå stier fra begge sider, udledt i `toQuestion`; en `custom`-låge angiver
+selv alle sine medier med `preload`) og lågens lydeffekter hentes som blobs ved start af
+`preloadMedia` i `src/mediaCache.ts`, mens footeren viser fremskridtet. Renderere opløser stier
+med `useAsset` (lydeffekter med `useCachedUrl`) én gang pr. montering, og `useSound` skal have
+`format`, fordi en `blob:`-URL ingen filendelse har. En
 ny type skal tilføjes i `QuestionSpec` og i `toQuestion` (switchen har ingen default med vilje).
 Kopiér den nærmeste eksisterende låge frem for at opfinde en ny form.
 
@@ -113,10 +117,10 @@ ikke; en pakke uden `practice/` har ingen prøverunde.
 ### Medier
 
 Billeder, video og lyd til en pakke ligger i `public/quizzes/<navn>/…`. Specs og `quiz.ts` giver
-den almindelige sti `/quizzes/<navn>/…`; renderere og komponenter kører den gennem `asset()` fra
-`src/asset.ts` præcis én gang, fordi quizzen kører under basestien `/julequiz/` på GitHub Pages
-(`public/images/` rummer kun ikoner og delingsbilledet; kilden er `icon.svg`). Kun håndskrevet JSX
-i en `custom`-låge kalder selv `asset()`.
+den almindelige sti `/quizzes/<navn>/…`; renderere og komponenter kører den gennem `useAsset()` fra
+`src/mediaCache.ts`, som kalder `asset()` fra `src/asset.ts` præcis én gang, fordi quizzen kører under basestien `/julequiz/` på GitHub Pages
+(`public/images/` rummer kun ikoner og delingsbilledet; kilden er `icon.svg`). Kun håndskrevne komponenter
+til en `custom`-låge kalder selv `cachedUrl(asset(…))`.
 Lydeffekter, som koden bruger, importeres som moduler fra `src/sfx/`; `src/env.d.ts` erklærer
 `*.mp3`, og de importerede URL'er går aldrig gennem `asset()`. Pakkens musik angives som sti i
 `quiz.ts`.

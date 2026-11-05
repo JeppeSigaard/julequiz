@@ -4,6 +4,7 @@ import { FunctionComponent, useState, useEffect } from "react";
 import useSound from "use-sound";
 
 import { PillButton } from "./decor";
+import { fileExtension, useAsset } from "../mediaCache";
 
 type State = "idle" | "playing" | "stopped";
 
@@ -15,7 +16,10 @@ export const MusicBox: FunctionComponent<{
   const [state, setState] = useState<State>("idle");
   const [hintCount, setHintCount] = useState(0);
 
-  const [play, { stop, sound }] = useSound(props.track, {
+  const src = useAsset(props.track);
+  const [play, { stop, sound }] = useSound(src, {
+    // En blob-URL har ingen filendelse, så Howler skal have formatet oplyst.
+    format: [fileExtension(props.track)],
     interrupt: true,
     onend: () => {
       setState("stopped");
@@ -100,7 +104,9 @@ export const MusicAnswer: FunctionComponent<{
   artist: string;
   answerStart: number;
 }> = (props) => {
-  const [play, { stop, sound }] = useSound(props.track, {
+  const src = useAsset(props.track);
+  const [play, { stop, sound }] = useSound(src, {
+    format: [fileExtension(props.track)],
     interrupt: true,
   });
 

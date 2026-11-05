@@ -1,5 +1,4 @@
 import { type Question, type QuestionSpec, type Slide } from "../types";
-import { asset } from "../asset";
 import { MusicAnswer } from "../components/MusicBox";
 import { MusicBody } from "./Music";
 import { PosterAnswer, PosterBody } from "./PosterReveal";
@@ -23,7 +22,7 @@ export const toQuestion = (spec: QuestionSpec, id: string): Question => {
         id,
         body: <SlideView slide={spec.question} />,
         answer: <SlideView slide={spec.answer} />,
-        preload: slideMedia(spec.answer).map(asset),
+        preload: [...slideMedia(spec.question), ...slideMedia(spec.answer)],
         ...common,
       };
     case "wordPuzzle":
@@ -37,16 +36,16 @@ export const toQuestion = (spec: QuestionSpec, id: string): Question => {
     case "music":
       return {
         id,
-        body: <MusicBody track={asset(spec.track)} start={spec.start} stop={spec.stop} />,
+        body: <MusicBody track={spec.track} start={spec.start} stop={spec.stop} />,
         answer: (
           <MusicAnswer
-            track={asset(spec.track)}
+            track={spec.track}
             song={spec.song}
             artist={spec.artist}
             answerStart={spec.answerStart}
           />
         ),
-        preload: [asset(spec.track)],
+        preload: [spec.track],
         ...common,
       };
     case "posterReveal":
@@ -54,7 +53,7 @@ export const toQuestion = (spec: QuestionSpec, id: string): Question => {
         id,
         body: <PosterBody prompt={spec.prompt} cropped={spec.cropped} />,
         answer: <PosterAnswer prompt={spec.prompt} full={spec.full} />,
-        preload: [spec.cropped, spec.full].map(asset),
+        preload: [spec.cropped, spec.full],
         ...common,
       };
     case "video":
@@ -68,7 +67,7 @@ export const toQuestion = (spec: QuestionSpec, id: string): Question => {
           />
         ),
         answer: <SlideView slide={spec.answer} />,
-        preload: slideMedia(spec.answer).map(asset),
+        preload: [spec.video, ...slideMedia(spec.answer)],
         ...common,
       };
     case "custom":
@@ -76,7 +75,7 @@ export const toQuestion = (spec: QuestionSpec, id: string): Question => {
         id,
         body: spec.body,
         answer: spec.answer,
-        preload: (spec.preload ?? []).map(asset),
+        preload: spec.preload ?? [],
         ...common,
       };
   }
