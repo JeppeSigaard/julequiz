@@ -24,8 +24,8 @@ const initialState: GameState = {
 };
 
 const SAIL_SECONDS = 0.9;
-// Åens højde (216 px) minus bådens højde (96 px)
-const SAIL_DISTANCE = 120;
+// Åens højde (216 px) minus bådens højde (88 px)
+const SAIL_DISTANCE = 128;
 
 interface RiverBoardProps {
   locked: boolean;
@@ -44,15 +44,6 @@ function RiverBoard({ locked, highlighted, moves, onCross, onWin }: RiverBoardPr
     next: GameState;
     cargo: Item | null;
   } | null>(null);
-
-  useEffect(() => {
-    if (arrival === null) return;
-    const timer = setTimeout(
-      () => land(arrival.next, arrival.cargo),
-      SAIL_SECONDS * 1000
-    );
-    return () => clearTimeout(timer);
-  }, [arrival]);
 
   useEffect(() => {
     if (!isGameOver) return;
@@ -146,7 +137,6 @@ function RiverBoard({ locked, highlighted, moves, onCross, onWin }: RiverBoardPr
     setArrival(null);
     setState(next);
 
-    // Check for game over after the boat leaves
     if (checkGameOver(next)) {
       setIsGameOver(true);
       if (next.chicken === next.fox && next.chicken !== next.boat) {
@@ -174,6 +164,15 @@ function RiverBoard({ locked, highlighted, moves, onCross, onWin }: RiverBoardPr
     );
   };
 
+  useEffect(() => {
+    if (arrival === null) return;
+    const timer = setTimeout(
+      () => land(arrival.next, arrival.cargo),
+      SAIL_SECONDS * 1000
+    );
+    return () => clearTimeout(timer);
+  }, [arrival]);
+
   const renderItem = (item: Item, side: Side) => {
     const itemSide = state[item];
     const isOnBoat = state.boatCargo === item;
@@ -186,8 +185,13 @@ function RiverBoard({ locked, highlighted, moves, onCross, onWin }: RiverBoardPr
       chicken: "🐔",
       grain: "🌾",
     };
+    const itemTitles: Record<Item, string> = {
+      fox: "Ræven",
+      chicken: "Hønen",
+      grain: "Kornet",
+    };
 
-    const canInteract = state.boat === side;
+    const canInteract = arrival === null && state.boat === side;
 
     return (
       <button
@@ -198,7 +202,7 @@ function RiverBoard({ locked, highlighted, moves, onCross, onWin }: RiverBoardPr
             ? "hover:scale-110 hover:bg-snow/20 cursor-pointer"
             : "opacity-50 cursor-not-allowed"
         }`}
-        title={item.charAt(0).toUpperCase() + item.slice(1)}
+        title={itemTitles[item]}
       >
         {icons[item]}
       </button>
@@ -218,7 +222,7 @@ function RiverBoard({ locked, highlighted, moves, onCross, onWin }: RiverBoardPr
       <div className="absolute inset-x-0 top-0 flex justify-center">
         <motion.button
           onClick={handleBoatClick}
-          className="h-[96px] flex items-center cursor-pointer hover:scale-105"
+          className="h-[88px] flex items-center cursor-pointer hover:scale-105"
           title="Sejl over"
           initial={false}
           animate={{

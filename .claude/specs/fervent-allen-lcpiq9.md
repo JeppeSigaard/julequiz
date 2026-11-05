@@ -71,8 +71,8 @@ nulstiller begge, og båden skal synligt sejle over åen i stedet for at hoppe.
    `{ locked: boolean; highlighted: boolean; moves: number; onCross: () => void; onWin: () => void }`.
 2. Fast geometri i `RiverBoard`: brættet `h-[540px]` (bredde 520 uændret). Top-bred `h-[162px]`,
    bund-bred `h-[162px]`, åen `top-[162px] bottom-[162px]` (216 px). Erstat procent-klasserne.
-   Tilføj modul-konstanter `const SAIL_SECONDS = 0.9;` og `const SAIL_DISTANCE = 120;`
-   (216 px å − 96 px båd).
+   Tilføj modul-konstanter `const SAIL_SECONDS = 0.9;` og `const SAIL_DISTANCE = 128;`
+   (216 px å − 88 px båd).
 3. Overfart i to faser. Tilføj state `arrival: { next: GameState; cargo: Item | null } | null`
    (startværdi `null`).
    - `handleBoatClick`: returnér straks, hvis `locked || isWon || isGameOver || arrival !== null`.
@@ -89,7 +89,7 @@ nulstiller begge, og båden skal synligt sejle over åen i stedet for at hoppe.
 4. `handleItemClick`: returnér straks, hvis `locked || isWon || arrival !== null`
    (resten uændret).
 5. Båden: wrap den i `<div className="absolute inset-x-0 top-0 flex justify-center">` og gør selve
-   knappen til `motion.button` med fast `h-[96px] flex items-center`, `cursor-pointer
+   knappen til `motion.button` med fast `h-[88px] flex items-center`, `cursor-pointer
    hover:scale-105`, uden `absolute`/`top-0`/`bottom-0`/`left-1/2`/`-translate-x-1/2`/
    `transition-all`. Props:
    `initial={false}`,
@@ -149,7 +149,7 @@ nulstiller begge, og båden skal synligt sejle over åen i stedet for at hoppe.
 - **`exactOptionalPropertyTypes`:** send aldrig `undefined` til en valgfri prop; udelad den.
 - **Ret ikke `decor.tsx` for at få knappen mindre.** `PillButton` er fælles; brug den som den er.
 - Kommentarer skal tilføje værdi: kun en ikke-indlysende begrænsning eller et hvorfor. Én dansk
-  linje er berettiget ved `SAIL_DISTANCE` (afhænger af åens 216 px og bådens 96 px). Behold de
+  linje er berettiget ved `SAIL_DISTANCE` (afhænger af åens 216 px og bådens 88 px). Behold de
   eksisterende kommentarer i filen. Alt andet behøver ingen.
 
 ## Verification
