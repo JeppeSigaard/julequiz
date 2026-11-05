@@ -319,6 +319,7 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
               <Footer
                 opened={allAnswered.length}
                 total={doorCount}
+                onOpenSettings={() => setSettingsOpen(true)}
               />
             </div>
           </>
