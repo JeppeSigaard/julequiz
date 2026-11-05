@@ -98,13 +98,16 @@ ikke; en pakke uden `practice/` har ingen prøverunde.
   og følger ikke pakkens farver. Skriv `color-mix(in oklab, var(--quiz-accent) 72%, black)`. Fjern
   ikke `inline` fra `@theme`.
 - Fonte: `font-display` (Mountains of Christmas) til overskrifter og tal, `font-body` (Nunito) til
-  resten. Animationer: `animate-twinkle` (pærerne i `Garland`), `animate-glow` (lågens glød) og
+  resten. Animationer: `animate-twinkle` (pærerne i `Garland`), `animate-glow` (lågens glød),
   `animate-sway` (lågerne vugger i pærernes 2,4 s-takt med forskudt fase, mens musikken spiller;
-  animationen kører altid, og `sway` skruer kun det registrerede `--sway`-udsving op og ned).
-  `@keyframes sway` animerer det registrerede tal `--sway-swing`, og wrapperen ganger det på
-  `--sway`: brug aldrig `var()` i keyframes for `rotate`/`transform`/`opacity`, for Chrome kører
-  dem på compositoren med variablens værdi fra animationens start. Bevægelse ud over de tre
-  animationer og lågens åbning (`motion`) er ikke ønsket.
+  animationen kører altid, og `sway` skruer kun det registrerede `--sway`-udsving op og ned) og
+  `animate-flicker` (guirlanden er dæmpet med `brightness(0.3) saturate(0.4)` og titlen og snirklen
+  med `brightness(0.65) saturate(0.7)`, indtil quizzen startes, og de blinker én gang op, når den
+  startes; stop slukker dem uden blink). `@keyframes sway` animerer det registrerede tal
+  `--sway-swing`, og wrapperen ganger det på `--sway`: brug aldrig `var()` i keyframes for
+  `rotate`/`transform`/`opacity`, for Chrome kører dem på compositoren med variablens værdi fra
+  animationens start. Bevægelse ud over de fire animationer og lågens åbning (`motion`) er ikke
+  ønsket.
 - `src/components/decor.tsx` har de fælles primitiver: `Paper` (stiplet søm, valgfri `stitchSize`),
   `KeyCap`, `PillButton` (`team-1`/`team-2`/`neutral`/`dark`, valgfri `keyHint`) og `TeamPlaque`
   (`board`/`end`, bruger `AnimatedNumber`). Kendte grænser: `Paper` har fast radius og skygge,

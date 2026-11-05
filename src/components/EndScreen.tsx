@@ -46,7 +46,7 @@ export const EndScreen: FC<{
         color="white"
         radius={[1, 2.5]}
         opacity={[0.15, 0.5]}
-        snowflakeCount={60}
+        snowflakeCount={90}
       />
 
       <div aria-hidden className="absolute inset-0 z-10">
