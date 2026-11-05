@@ -1,6 +1,6 @@
 # Quiz packs: pack loading
 
-> Status: in progress — quiz-packs-pack-loading
+> Status: merged — e3e2415
 
 Branch `quiz-packs-pack-loading`, PR target `claude/vibrant-euler-3tsdtn` (NOT `main`: every push to `main` deploys to GitHub Pages). Diff against `origin/claude/vibrant-euler-3tsdtn`.
 
