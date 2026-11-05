@@ -249,6 +249,9 @@ export type Quiz = {
 
 ### pack-theme
 
+> **Annulleret** — opgaven er overtaget af initiativet `redesign` (`.claude/initiatives/redesign.md`),
+> hvis `foundation`-opgave leverer farver pr. pack. Snow og titleFont udgår. Start den ikke.
+
 - **Branch**: `quiz-packs-pack-theme`
 - **Depends on**: pack-loading
 - **Goal**: Each pack controls snow, title font and colours.
@@ -271,7 +274,7 @@ export type Quiz = {
 - **Wave 1**: dynamic-board, question-types
 - **Wave 2**: interactive-types
 - **Wave 3**: pack-loading
-- **Wave 4**: pack-theme
+- **Wave 4**: pack-theme — annulleret, overtaget af `redesign`
 
 ## Integration check
 
