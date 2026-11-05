@@ -64,6 +64,8 @@ const PLAQUE = {
     points: "text-[70px]",
     unit: "text-[22px]",
     stitch: "inset-[10px] rounded-[12px] border-2",
+    // Plaketten sidder 94px under scenens top; snorene går op over kanten og klippes af scenen.
+    string: "-top-[130px] h-[135px]",
   },
   end: {
     width: "w-[440px]",
@@ -73,6 +75,7 @@ const PLAQUE = {
     points: "text-[158px]",
     meta: "text-[24px]",
     stitch: "inset-[12px] rounded-[18px] border-[3px]",
+    string: "-top-[72px] h-[77px]",
   },
 };
 
@@ -127,8 +130,8 @@ export const TeamPlaque: FC<{
       onClick={onClick}
       className={`relative cursor-pointer ${s.width} ${t.rotate}`}
     >
-      <span aria-hidden="true" className="absolute left-12 -top-[72px] h-[77px] w-[2px] bg-paper-edge" />
-      <span aria-hidden="true" className="absolute right-12 -top-[72px] h-[77px] w-[2px] bg-paper-edge" />
+      <span aria-hidden="true" className={`absolute left-12 w-[2px] bg-paper-edge ${s.string}`} />
+      <span aria-hidden="true" className={`absolute right-12 w-[2px] bg-paper-edge ${s.string}`} />
       <Paper stitch={stitch} stitchSize={s.stitch} className={`flex items-center text-left ${s.paper} ${size === "board" ? t.row : "flex-col"}`}>
         {size === "board" && (
           <span
