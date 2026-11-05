@@ -1,21 +1,9 @@
 import { type QuestionSpec } from "../types";
-import { asset } from "../asset";
+
 export const Question14: QuestionSpec = {
-  type: "custom",
+  type: "video",
   backgroundVolume: 0.05,
-  body: (
-    <>
-      <video
-        autoPlay
-        controls={false}
-        src={asset("/video/viersaasode.mp4")}
-        className="w-175"
-      />
-      <p className="text-4xl mt-4">
-        Hvad hedder julekalenderen fra 1997, hvor nizzerne ikke kan sove for al
-        larmen?
-      </p>
-    </>
-  ),
-  answer: <img src={asset("/images/tunnel.png")} className="mx-auto w-225" />,
+  video: "/video/viersaasode.mp4",
+  prompt: "Hvad hedder julekalenderen fra 1997, hvor nizzerne ikke kan sove for al larmen?",
+  answer: { image: "/images/tunnel.png" },
 };

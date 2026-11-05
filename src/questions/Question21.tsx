@@ -1,20 +1,12 @@
-import { MusicBox } from "../components/MusicBox";
 import { type QuestionSpec } from "../types";
 
-import vinylStop from "../sfx/vinyl-stop.mp3";
-
-const Body = () => {
-  return (
-    <>
-      <p className="text-7xl">MUSIKQUIZ!</p>
-      <audio src={vinylStop} autoPlay />
-    </>
-  );
-};
-
 export const Question21: QuestionSpec = {
-  type: "custom",
+  type: "music",
   backgroundVolume: 0.05,
-  body: <Body />,
-  answer: <MusicBox index={1} />,
+  track: "/audio/driving-home-for-christmas.mp3",
+  song: "Driving Home for Christmas",
+  artist: "Chris Rea",
+  start: 0,
+  stop: 0.5,
+  answerStart: 22.3,
 };

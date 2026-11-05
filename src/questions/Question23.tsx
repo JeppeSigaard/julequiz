@@ -1,20 +1,12 @@
-import { MusicBox } from "../components/MusicBox";
 import { type QuestionSpec } from "../types";
 
-import vinylStop from "../sfx/vinyl-stop.mp3";
-
-const Body = () => {
-  return (
-    <>
-      <p className="text-7xl">MUSIKQUIZ!</p>
-      <audio src={vinylStop} autoPlay />
-    </>
-  );
-};
-
 export const Question23: QuestionSpec = {
-  type: "custom",
+  type: "music",
   backgroundVolume: 0.05,
-  body: <Body />,
-  answer: <MusicBox index={0} />,
+  track: "/audio/christmas-lights.mp3",
+  song: "Christmas Lights",
+  artist: "Coldplay",
+  start: 7.7,
+  stop: 8,
+  answerStart: 132.5,
 };
