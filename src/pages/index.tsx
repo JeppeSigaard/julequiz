@@ -23,6 +23,7 @@ import {
   saveQuizState,
   saveTeamNames,
 } from "../quizState";
+import { useMuffle } from "../muffle";
 
 import useSound from "use-sound";
 
@@ -106,6 +107,12 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
     {
       loop: true,
     }
+  );
+
+  // Overlayet (låge, prøvespørgsmål eller menu) lukker diskanten ude, som bag en dør.
+  useMuffle(
+    bgsound,
+    activeQuestionIndex !== null || practiceIndex !== null || settingsOpen
   );
 
   const pickQuestion = (index: number, question: Question) => () => {
