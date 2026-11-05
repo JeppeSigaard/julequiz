@@ -4,9 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Projektet
 
-Den store julequiz: en julekalender-quiz med 24 låger, vist på en storskærm og styret af en
-quizmaster med mus og tastatur. To hold dyster om point. Al tekst i quizzen er på dansk; kommentarer
-og commit-beskeder er også på dansk, identifikatorer og filnavne på engelsk.
+Den store julequiz: en julekalender-quiz med låger (antallet bestemmes af den valgte quiz-pack),
+vist på en storskærm og styret af en quizmaster med mus og tastatur. To hold dyster om point. Al
+tekst i quizzen er på dansk; kommentarer og commit-beskeder er også på dansk, identifikatorer og
+filnavne på engelsk.
 
 ## Kommandoer
 
@@ -23,39 +24,86 @@ virker, ses kun ved at åbne den i browseren.
 ## Stack
 
 Waku 0.27 (React Server Components) med React 19 og React Compiler (Babel-plugin i
-`waku.config.ts`), Tailwind 4 via Vite-plugin, `motion` til animationer, `use-sound` til lyd.
-`tsconfig.json` har `strict`, `noUncheckedIndexedAccess` og `exactOptionalPropertyTypes`.
-`src/pages.gen.ts` genereres af Waku og redigeres ikke i hånden.
+`waku.config.ts`), Tailwind 4 via Vite-plugin, `motion` til animationer, `use-sound` til lyd,
+`react-snowfall` og `@fireworks-js/react`. `tsconfig.json` har `strict`, `noUncheckedIndexedAccess`
+og `exactOptionalPropertyTypes`. `src/pages.gen.ts` genereres af Waku og redigeres ikke i hånden.
 
 ## Arkitektur
 
 - `src/pages/_layout.tsx` er en serverkomponent (fonte, favicon, `styles.css`). Alt andet med
   tilstand, lyd eller browser-API'er er `"use client"`.
-- `src/pages/index.tsx` er hele quizzen i én klientkomponent: lågegitteret, holdenes point,
-  baggrundsmusik, sneen og fyrværkeriet ved afslutning. Rækkefølgen blandes ved mount, og hver
-  låges `id` overskrives med dens plads i gitteret, så `Question.id` er kun en React-nøgle.
-- Point udledes, ikke lagres: antal vundne låger × `POINTS_PER_QUESTION` plus trøstepoint (+5 pr.
-  klik på et holdnavn). Når alle 24 låger er besvaret (hårdkodet i `index.tsx`), skiftes til
-  lynrundemusikken. `LIGHTNING_ROUND_POINTS` i `src/config.ts` læses ikke af koden.
-- `src/components/QuestionScreen.tsx` er den åbne låge. Tastatur: Enter/mellemrum viser svaret,
-  1/2 giver lågen til et hold, q/x til ingen, Escape lukker eller går tilbage til spørgsmålet.
-  Holdknapperne her skriver "Hold 1"/"Hold 2" direkte i stedet for at bruge `TEAM_NAMES`.
+- `src/components/Stage.tsx` er en fast 1920×1080-scene, skaleret til vinduet med `scale()`. Al
+  layout bruger derfor px (`cqmin` kun inde i en `[container-type:size]`, som `QuestionCard`),
+  aldrig `vw`/`vh`, og `fixed` inde i scenen er scene-relativ.
+- `src/pages/index.tsx` er to klientkomponenter. `HomePage` vælger pakken efter mount, fordi siden
+  prærenderes uden URL'en og indtil da kun viser en tom `bg-night`; `QuizBoard` er selve quizzen.
+  I `QuizBoard` omslutter `Stage` `Snowfall` (kun efter
+  titelklik), derefter enten `EndScreen` eller `Garland` + `BoardHeader` + gitter af `QuestionCard`
+  + `Footer`, så `QuestionScreen` og `SettingsMenu`. Pakken vælges med `?quiz=<navn>` (standard
+  `DEFAULT_QUIZ` i `src/config.ts`); et ukendt navn viser en liste over pakker uden `Stage`.
+  Gitterets kolonner og glødegrupper udledes af antal låger (`gridColumns`, `tickGroup`), og
+  rækkefølgen blandes ved mount, hvis `Quiz.shuffle` er sat. `QuestionCard` får ikke spørgsmålet,
+  kun nummer, status og visningsprops.
+- Board-delene (`Garland`, `BoardHeader`, `Footer`) ligger i `src/components/board/`.
+- Point udledes, ikke lagres: antal vundne låger × `Quiz.pointsPerQuestion` plus trøstepoint (+5 pr.
+  klik på et holdnavn). Staten gemmes i `localStorage` pr. pakke (`src/quizState.ts`, format `v2`).
+  Når alle låger, der ikke er `skip`, er besvaret, vises `EndScreen` i stedet for header og gitter:
+  den har sin egen `Snowfall` og `Fireworks`, kroner lederen, viser "Uafgjort!" ved lige point, og
+  plaketterne giver stadig +5 ved klik. Samtidig skiftes baggrundsmusikken til `music.finale`.
+- `src/components/QuestionScreen.tsx` er den åbne låge: et papirkort med bånd, kristtorn og
+  sløret mørk baggrund. Tastatur: Enter/mellemrum viser svaret, 1/2 giver lågen til et hold, q/x til
+  ingen, Escape lukker eller går tilbage til spørgsmålet. `m` åbner indstillinger (`SettingsMenu`,
+  Escape lukker), når ingen låge er åben; `ResetQuizSetting` nulstiller pakkens gemte quiz.
 
-### Spørgsmål
+### Quiz-pakker
 
-Hver låge er en `Question` (`src/types.ts`) i sin egen `src/questions/QuestionN.tsx`, registreret i
-`src/questions/index.ts`. `body` og `answer` er fri JSX, så en låge kan være alt fra et billede til
-et lille spil (`FoxChickenGrain`, `WordPuzzle`, `GuessThatCat`, `MusicBox` i `src/components/`).
-`setVolume` dæmper baggrundsmusikken, mens lågen er åben (til låger med egen lyd eller video), og
-`skip` gør lågen uvælgelig. Kopiér den nærmeste eksisterende låge frem for at opfinde en ny form.
+En pakke er `src/quizzes/<navn>/quiz.ts` (`Quiz` i `src/types.ts`: titel, holdnavne, `doorWord`,
+`shuffle`, `pointsPerQuestion`, `music.background`/`music.finale` og de syv `colors`) plus
+`src/quizzes/<navn>/questions/*.tsx`, hver med en `QuestionSpec` som default-eksport. Filnavnet
+bestemmer rækkefølgen før blanding og er lågens `id`. `src/quizzes/index.ts` finder pakkerne med
+`import.meta.glob`, så en ekstra mappe udgives med det samme (slet testpakker igen). Medier ligger
+i `public/quizzes/<navn>/{audio,images,video}` og refereres som `/quizzes/<navn>/…`.
+
+`QuestionSpec.type` er `standard`, `wordPuzzle`, `music`, `posterReveal`, `video` eller `custom`
+(fri JSX som `FoxChickenGrain`, `GuessThatCat`). `toQuestion` i `src/questionTypes/index.tsx` laver
+dem til `Question` (`body`/`answer`/`setVolume`/`skip`) med renderere i `src/questionTypes/`;
+dørindholdets størrelsestrin (fx `textSize`, `mediaFrame` i `Standard.tsx`) bor i rendererne.
+`backgroundVolume` dæmper baggrundsmusikken, mens lågen er åben, og `skip` gør lågen uvælgelig. En
+ny type skal tilføjes i `QuestionSpec` og i `toQuestion` (switchen har ingen default med vilje).
+Kopiér den nærmeste eksisterende låge frem for at opfinde en ny form.
+
+### Farver og stil
+
+- Pakkens `colors` (background, paper, ink, accent, highlight, team1, team2) sættes af `Stage` som
+  `--quiz-*` på det yderste element. `src/styles.css` har standardværdier på `:root` og afleder alle
+  farvetokens i `@theme inline` (bl.a. night, felt, paper, snow, mist, ink, accent, highlight,
+  team-1/2 og deres suffikser `-deep`/`-lit`/`-soft`/`-edge`/`-ink`), så en ny pakkefarve
+  omfarver alle skærme. Hold 1 er rød, Hold 2 guld.
+- Brug kun token-utilities (`bg-paper`, `text-ink-soft`, `border-accent/55` …): ingen rå hex og ingen
+  Tailwind-paletteklasser (`green-`, `red-`, `amber-`, `gray-`).
+- Faldgrube: afledte tokens må ALDRIG bruges som `var(--color-<afledt>)` i arbitrary values (fx
+  `shadow-[…var(--color-accent-deep)…]`). Pga. `inline` opløses de på `:root` mod standard-`--quiz-*`
+  og følger ikke pakkens farver. Skriv `color-mix(in oklab, var(--quiz-accent) 72%, black)`. Fjern
+  ikke `inline` fra `@theme`.
+- Fonte: `font-display` (Mountains of Christmas) til overskrifter og tal, `font-body` (Nunito) til
+  resten. Animationer: `animate-twinkle` (pærerne i `Garland`) og `animate-glow` (lågens glød);
+  bevægelse ud over det og lågens åbning (`motion`) er ikke ønsket.
+- `src/components/decor.tsx` har de fælles primitiver: `Paper` (stiplet søm, valgfri `stitchSize`),
+  `KeyCap`, `PillButton` (`team-1`/`team-2`/`neutral`/`dark`, valgfri `keyHint`) og `TeamPlaque`
+  (`board`/`end`, bruger `AnimatedNumber`). Kendte grænser: `Paper` har fast radius og skygge,
+  `PillButton` fast skriftstørrelse og min-bredde med tastehint efter teksten, og `TeamPlaque` har
+  ingen vinderring (det klarer `EndScreen` udenom). Skærmene er trimmet efter dem; ændr dem ikke
+  uden at se alle skærme igennem.
 
 ### Medier
 
-Billeder, video og lyd ligger i `public/images/`, `public/video/` og `public/audio/` (sidstnævnte
-til lyd, der afspilles direkte med `<audio>`) og refereres gennem `asset("/images/…")` fra
-`src/asset.ts`, fordi quizzen kører under basestien `/julequiz/` på GitHub Pages. Musik og
-lydeffekter, som koden bruger, importeres i stedet som moduler fra `src/audio/` (musik) og
-`src/sfx/` (effekter); `src/env.d.ts` erklærer `*.mp3`.
+Billeder, video og lyd til en pakke ligger i `public/quizzes/<navn>/…`. Specs og `quiz.ts` giver
+den almindelige sti `/quizzes/<navn>/…`; renderere og komponenter kører den gennem `asset()` fra
+`src/asset.ts` præcis én gang, fordi quizzen kører under basestien `/julequiz/` på GitHub Pages
+(`public/images/` rummer kun favicon). Kun håndskrevet JSX i en `custom`-låge kalder selv `asset()`.
+Lydeffekter, som koden bruger, importeres som moduler fra `src/sfx/`; `src/env.d.ts` erklærer
+`*.mp3`, og de importerede URL'er går aldrig gennem `asset()`. Pakkens musik angives som sti i
+`quiz.ts`.
 
 ## Arbejdsgang
 

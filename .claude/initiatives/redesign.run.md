@@ -1,0 +1,21 @@
+# Kørselslog — redesign
+
+- preflight: base = claude/sweet-mendel-p0gtn1 (integrationsgren, jf. planen); gh CLI findes ikke, PR'er oprettes og flettes via GitHub MCP; check = npm run check.
+- foundation: worktree oprettet; planlægning startet.
+- foundation: spec skrevet (10 autonome beslutninger); implementering startet.
+- foundation: implementeret (e7eb09f); review startet.
+- foundation: review 1 → 1 blocker (PillButton neutral-størrelse) + 4 minor; fixpass startet.
+- foundation: flettet i PR #12 (4cd6206) efter 2 reviews (1 blocker + 4 minor rettet; 1 minor flettet urettet). bølge 1 færdig.
+- bølge 2: worktrees oprettet for board, door-frame, door-content, end-screen, settings, minigames; samtidighed 4.
+- board, door-frame, door-content, end-screen: planlægning startet (settings, minigames i kø).
+- board, door-frame, door-content, end-screen: specs skrevet; implementering startet. end-screen: orkestratorbeslutning 'Alle låger er åbnet' uden tal.
+- board (cb83e99), door-frame (c90e63b), door-content (ba443d5), end-screen (f69fd91): implementeret; review startet.
+- door-frame: flettet i PR #13 (d11ce8d) efter 1 review + 1 minor-fix.
+- board: flettet i PR #15 (69a61a0) efter 1 review + 1 minor-fix (3 minor).
+- settings: flettet i PR #16 (630537b) efter 1 review + 1 minor-fix. end-screen: blocker (sne) rettet, review 2 startet. door-content: 1 blocker + 6 minor, fixpass startet.
+- end-screen: flettet i PR #17 (d74b179) efter 2 reviews (1 blocker + 1 minor rettet). minigames: implementeret (f640a85); review startet.
+- minigames: flettet i PR #18 (7f7a793) efter 2 reviews (2 blockers + 2 minor rettet; 2 minor flettet urettet).
+- door-content: flettet i PR #19 (43b9b98) efter 2 reviews (1 blocker + 6 minor rettet; 1 minor flettet urettet). bølge 2 færdig; base grøn.
+- polish: implementeret (2d17f69): CLAUDE.md omskrevet, integrationscheck bestået med opfølgninger (bl.a. lågeflap på brede celler); review startet.
+- polish: flettet i PR #20 (a3bacc4) efter 2 reviews (1 blocker + 5 minor rettet). bølge 3 færdig. Integrationstjek (kørt af polish på den samlede kode): alt bestået undtagen lågeflap på brede celler (3-lågers pakke) → integration-fix.
+- integration-fix: flettet i PR #21 (b56332a) efter 2 reviews (1 blocker rettet). Kørsel færdig.

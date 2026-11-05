@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<title>Lågegitteret</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@400;700&amp;family=Nunito:wght@400;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#081a14}
+a{color:#f2c14e}a:hover{color:#ffe08a}
+</style>
+</helmet>
+<div style="width: 1600px; height: 900px; position: relative; overflow: hidden; box-sizing: border-box; font-family: Nunito, sans-serif; color: #fbf3e2; background-color: #0e2c22; background-image: radial-gradient(ellipse at 50% 30%, rgba(46,110,78,0.55), rgba(8,26,20,0) 70%), repeating-linear-gradient(45deg, rgba(255,255,255,0.025) 0 2px, rgba(0,0,0,0) 2px 14px), repeating-linear-gradient(-45deg, rgba(255,255,255,0.025) 0 2px, rgba(0,0,0,0) 2px 14px);">
+
+  <sc-for list="{{flakes}}" as="f" hint-placeholder-count="40">
+    <div aria-hidden="true" style="position: absolute; left: {{f.x}}px; top: {{f.y}}px; width: {{f.s}}px; height: {{f.s}}px; border-radius: 50%; background: #ffffff; opacity: {{f.o}};"></div>
+  </sc-for>
+
+  <svg aria-hidden="true" width="1600" height="90" viewBox="0 0 1600 90" style="position: absolute; left: 0; top: 0;">
+    <path d="{{wirePath}}" fill="none" stroke="#1d3d2f" stroke-width="3"></path>
+  </svg>
+  <sc-for list="{{bulbs}}" as="b" hint-placeholder-count="24">
+    <div aria-hidden="true" style="position: absolute; left: {{b.x}}px; top: {{b.y}}px; width: 14px; height: 20px; display: flex; flex-direction: column; align-items: center;">
+      <div style="width: 8px; height: 5px; background: #6b6b5a; border-radius: 2px 2px 0 0;"></div>
+      <div style="width: 13px; height: 17px; border-radius: 50% 50% 48% 48% / 40% 40% 60% 60%; background: {{b.c}}; box-shadow: 0 0 14px 4px {{b.g}};"></div>
+    </div>
+  </sc-for>
+
+  <div style="position: absolute; inset: 0; padding: 70px 48px 22px; box-sizing: border-box; display: flex; flex-direction: column; gap: 18px;">
+
+    <header style="display: flex; align-items: flex-start; justify-content: space-between; height: 178px;">
+
+      <button type="button" aria-label="Hold 1: 640 point. Klik giver 5 trøstepoint" style="all: unset; cursor: pointer; position: relative; width: 300px; margin-top: 8px; transform: rotate(-2deg);">
+        <div aria-hidden="true" style="position: absolute; left: 40px; top: -60px; width: 2px; height: 64px; background: #c9b48f;"></div>
+        <div aria-hidden="true" style="position: absolute; right: 40px; top: -60px; width: 2px; height: 64px; background: #c9b48f;"></div>
+        <div style="position: relative; background: #f6ecd9; border-radius: 18px; padding: 14px 22px 16px; box-shadow: 0 6px 0 #cbb48c, 0 16px 30px rgba(0,0,0,0.45); color: #12372a; display: flex; align-items: center; gap: 16px;">
+          <div aria-hidden="true" style="position: absolute; inset: 7px; border: 2px dashed rgba(210,57,63,0.55); border-radius: 12px;"></div>
+          <div aria-hidden="true" style="width: 58px; height: 58px; flex: none; border-radius: 50%; background: #d2393f; color: #fff7ea; display: flex; align-items: center; justify-content: center; font-family: 'Mountains of Christmas', serif; font-weight: 700; font-size: 40px; box-shadow: inset 0 -4px 0 rgba(0,0,0,0.18);">1</div>
+          <div style="display: flex; flex-direction: column; gap: 0;">
+            <span style="font-weight: 900; font-size: 22px; letter-spacing: 0.08em; text-transform: uppercase; color: #b3262e;">Hold 1</span>
+            <span style="font-family: 'Mountains of Christmas', serif; font-weight: 700; font-size: 58px; line-height: 0.95;">640 <span style="font-family: Nunito, sans-serif; font-size: 18px; font-weight: 800; color: #5d6e5f;">point</span></span>
+            <span style="font-size: 14px; font-weight: 700; color: #5d6e5f;">6 låger · +40 trøst</span>
+          </div>
+        </div>
+      </button>
+
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 2px; margin-top: 6px;">
+        <span style="font-size: 15px; font-weight: 800; letter-spacing: 0.32em; text-transform: uppercase; color: #f2c14e;">24 låger · 2 hold · 1 vinder</span>
+        <h1 style="margin: 0;">
+          <button type="button" style="all: unset; cursor: pointer; font-family: 'Mountains of Christmas', serif; font-weight: 700; font-size: 104px; line-height: 1; color: #fbf3e2; text-shadow: 0 5px 0 #0a1f18, 0 0 40px rgba(242,193,78,0.25);">den store julequiz</button>
+        </h1>
+        <svg aria-hidden="true" width="420" height="26" viewBox="0 0 420 26">
+          <path d="M6 16 C 90 2, 160 26, 210 13 S 330 2, 414 14" fill="none" stroke="#f2c14e" stroke-width="3" stroke-linecap="round"></path>
+          <path d="M210 4 l3 7 7 1 -5 5 1 7 -6 -3 -6 3 1 -7 -5 -5 7 -1 z" fill="#f2c14e"></path>
+        </svg>
+      </div>
+
+      <button type="button" aria-label="Hold 2: 515 point. Klik giver 5 trøstepoint" style="all: unset; cursor: pointer; position: relative; width: 300px; margin-top: 8px; transform: rotate(2deg);">
+        <div aria-hidden="true" style="position: absolute; left: 40px; top: -60px; width: 2px; height: 64px; background: #c9b48f;"></div>
+        <div aria-hidden="true" style="position: absolute; right: 40px; top: -60px; width: 2px; height: 64px; background: #c9b48f;"></div>
+        <div style="position: relative; background: #f6ecd9; border-radius: 18px; padding: 14px 22px 16px; box-shadow: 0 6px 0 #cbb48c, 0 16px 30px rgba(0,0,0,0.45); color: #12372a; display: flex; flex-direction: row-reverse; align-items: center; gap: 16px; text-align: right;">
+          <div aria-hidden="true" style="position: absolute; inset: 7px; border: 2px dashed rgba(196,140,20,0.6); border-radius: 12px;"></div>
+          <div aria-hidden="true" style="width: 58px; height: 58px; flex: none; border-radius: 50%; background: #f2c14e; color: #3b2a05; display: flex; align-items: center; justify-content: center; font-family: 'Mountains of Christmas', serif; font-weight: 700; font-size: 40px; box-shadow: inset 0 -4px 0 rgba(0,0,0,0.15);">2</div>
+          <div style="display: flex; flex-direction: column; gap: 0;">
+            <span style="font-weight: 900; font-size: 22px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a5d00;">Hold 2</span>
+            <span style="font-family: 'Mountains of Christmas', serif; font-weight: 700; font-size: 58px; line-height: 0.95;"><span style="font-family: Nunito, sans-serif; font-size: 18px; font-weight: 800; color: #5d6e5f;">point</span> 515</span>
+            <span style="font-size: 14px; font-weight: 700; color: #5d6e5f;">5 låger · +15 trøst</span>
+          </div>
+        </div>
+      </button>
+    </header>
+
+    <main style="position: relative; flex-grow: 1; border-radius: 26px; background: rgba(4,18,13,0.38); padding: 22px; box-shadow: inset 0 2px 18px rgba(0,0,0,0.45);">
+      <div aria-hidden="true" style="position: absolute; inset: 8px; border: 2px dashed rgba(242,193,78,0.22); border-radius: 20px;"></div>
+      <div style="position: relative; height: 100%; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: repeat(4, minmax(0, 1fr)); gap: 18px;">
+        <sc-for list="{{doors}}" as="d" hint-placeholder-count="24">
+          <div style="position: relative; transform: rotate({{d.rot}}deg);">
+
+            <sc-if value="{{d.closed}}" hint-placeholder-val="{{true}}">
+              <button type="button" aria-label="Låge {{d.n}}" style="all: unset; cursor: pointer; position: absolute; inset: 0; box-sizing: border-box; border-radius: 16px; background: {{d.paper}}; box-shadow: {{d.shadow}}; display: flex; align-items: center; justify-content: center;">
+                <div aria-hidden="true" style="position: absolute; inset: 8px; border: 2px dashed rgba(179,38,46,0.4); border-radius: 10px;"></div>
+                <div aria-hidden="true" style="position: absolute; right: 18px; top: 50%; width: 9px; height: 9px; border-radius: 50%; background: #c99a2e; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.25);"></div>
+                <span style="font-family: 'Mountains of Christmas', serif; font-weight: 700; font-size: 70px; line-height: 1; color: #b3262e; text-shadow: 0 2px 0 rgba(255,255,255,0.7);">{{d.n}}</span>
+                <span aria-hidden="true" style="position: absolute; left: 18px; top: 14px; font-family: 'Mountains of Christmas', serif; font-size: 22px; color: {{d.doodleColor}};">{{d.doodle}}</span>
+              </button>
+            </sc-if>
+
+            <sc-if value="{{d.open}}" hint-placeholder-val="{{false}}">
+              <div aria-label="Låge {{d.n}}: {{d.label}}" style="position: absolute; inset: 0; border-radius: 16px; background: #0a1e17; box-shadow: inset 0 6px 16px rgba(0,0,0,0.7), 0 0 0 2px rgba(246,236,217,0.12); display: flex; align-items: center; justify-content: center; gap: 12px; overflow: visible;">
+                <div aria-hidden="true" style="position: absolute; left: 0; top: 0; bottom: 0; width: 40%; border-radius: 16px 6px 6px 16px; background: #e9dcc2; transform-origin: left center; transform: perspective(500px) rotateY(-62deg); box-shadow: 6px 0 14px rgba(0,0,0,0.4);"></div>
+                <div aria-hidden="true" style="width: 54px; height: 54px; border-radius: 50%; background: {{d.teamColor}}; color: {{d.teamInk}}; display: flex; align-items: center; justify-content: center; font-family: 'Mountains of Christmas', serif; font-weight: 700; font-size: 34px; box-shadow: 0 0 0 4px rgba(255,255,255,0.08), 0 0 22px {{d.teamGlow}};">{{d.mark}}</div>
+                <div style="display: flex; flex-direction: column; gap: 0;">
+                  <span style="font-size: 13px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #8fa596;">Låge {{d.n}}</span>
+                  <span style="font-size: 18px; font-weight: 900; color: {{d.labelColor}};">{{d.label}}</span>
+                </div>
+              </div>
+            </sc-if>
+
+          </div>
+        </sc-for>
+      </div>
+    </main>
+
+    <footer style="display: flex; align-items: center; justify-content: space-between; font-size: 15px; font-weight: 700; color: #8fa596;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span>12 af 24 låger åbnet</span>
+        <div aria-hidden="true" style="width: 220px; height: 8px; border-radius: 99px; background: rgba(255,255,255,0.08); overflow: hidden;">
+          <div style="width: 50%; height: 100%; background: repeating-linear-gradient(90deg, #d2393f 0 10px, #fbf3e2 10px 20px);"></div>
+        </div>
+      </div>
+      <span><span style="display: inline-block; padding: 1px 8px; border-radius: 6px; border: 1px solid rgba(143,165,150,0.5); margin-right: 6px; color: #c5d3c8;">M</span>indstillinger</span>
+    </footer>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"wonky":{"editor":"boolean","default":true},"$preview":{"width":1600,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const wonky = this.props.wonky ?? true;
+    const team1 = [2, 5, 9, 14, 17, 20];
+    const team2 = [0, 7, 11, 15, 22];
+    const none = [12];
+    const glow = [3, 10, 21];
+    const doodles = ['✶', '❄', '✷', '❅'];
+    const doodleColors = ['#c99a2e', '#4f8a6e', '#b3262e', '#4f8a6e'];
+    const doors = [];
+    for (let i = 0; i < 24; i++) {
+      const w1 = team1.includes(i), w2 = team2.includes(i), no = none.includes(i);
+      const open = w1 || w2 || no;
+      const lit = glow.includes(i);
+      doors.push({
+        n: i + 1,
+        rot: wonky ? (((i * 37) % 7) - 3) * 0.45 : 0,
+        closed: !open,
+        open: open,
+        paper: lit ? '#fff6dc' : '#f6ecd9',
+        shadow: lit
+          ? '0 0 0 3px #f2c14e, 0 0 34px rgba(242,193,78,0.75), 0 6px 0 #cbb48c'
+          : '0 6px 0 #cbb48c, 0 12px 22px rgba(0,0,0,0.4)',
+        doodle: doodles[i % 4],
+        doodleColor: doodleColors[i % 4],
+        mark: w1 ? '1' : w2 ? '2' : '–',
+        teamColor: w1 ? '#d2393f' : w2 ? '#f2c14e' : '#2a3d35',
+        teamInk: w2 ? '#3b2a05' : '#fff7ea',
+        teamGlow: w1 ? 'rgba(210,57,63,0.55)' : w2 ? 'rgba(242,193,78,0.55)' : 'rgba(0,0,0,0)',
+        label: w1 ? 'Hold 1' : w2 ? 'Hold 2' : 'Ingen',
+        labelColor: w1 ? '#ff8a8e' : w2 ? '#f2c14e' : '#8fa596'
+      });
+    }
+    const colors = [['#ff5a5f', 'rgba(255,90,95,0.55)'], ['#ffd166', 'rgba(255,209,102,0.55)'], ['#7bd389', 'rgba(123,211,137,0.5)'], ['#7cc6ff', 'rgba(124,198,255,0.5)']];
+    const wireY = (x) => 22 + 18 * Math.sin((x / 1600) * Math.PI * 4);
+    let wirePath = 'M0 ' + wireY(0).toFixed(1);
+    for (let x = 20; x <= 1600; x += 20) wirePath += ' L' + x + ' ' + wireY(x).toFixed(1);
+    const bulbs = [];
+    for (let k = 0; k < 25; k++) {
+      const x = 20 + k * 65;
+      const c = colors[k % 4];
+      bulbs.push({ x: x - 7, y: wireY(x) - 2, c: c[0], g: c[1] });
+    }
+    const flakes = [];
+    for (let k = 0; k < 46; k++) {
+      flakes.push({ x: (k * 263) % 1600, y: (k * 151 + 40) % 900, s: 2 + (k % 4), o: (0.12 + (k % 5) * 0.07).toFixed(2) });
+    }
+    return { doors, bulbs, flakes, wirePath };
+  }
+}
+</script>
+</body>
+</html>
