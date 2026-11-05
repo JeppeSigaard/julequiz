@@ -1,8 +1,8 @@
-import { type Question } from "../types";
+import { type QuestionSpec } from "../types";
 import { asset } from "../asset";
-export const Question14: Question = {
-  id: "14",
-  setVolume: 0.05,
+export const Question14: QuestionSpec = {
+  type: "custom",
+  backgroundVolume: 0.05,
   body: (
     <>
       <video

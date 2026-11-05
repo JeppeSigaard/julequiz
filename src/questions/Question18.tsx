@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { type Question } from "../types";
+import { type QuestionSpec } from "../types";
 import { asset } from "../asset";
 
 const Answer = () => {
@@ -14,8 +14,8 @@ const Answer = () => {
   );
 };
 
-export const Question18: Question = {
-  id: "18",
+export const Question18: QuestionSpec = {
+  type: "custom",
   body: <p className="text-7xl">Gæt en julefilm</p>,
   answer: <Answer />,
 };
