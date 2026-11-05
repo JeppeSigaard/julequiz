@@ -32,6 +32,14 @@ function shuffleQuestions<T>(array: T[]): T[] {
   return shuffled;
 }
 
+function gridColumns(count: number): number {
+  return Math.max(1, Math.round(Math.sqrt(count * 1.5)));
+}
+
+function tickGroup(index: number, columns: number): 0 | 1 {
+  return (Math.floor(index / columns) + (index % columns)) % 2 === 0 ? 0 : 1;
+}
+
 const HomePage: FunctionComponent = () => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const [questions, setQuestions] = useState<Question[]>(QUESTIONS);
@@ -98,7 +106,10 @@ const HomePage: FunctionComponent = () => {
   };
 
   const allAnswered = [...team1Cards, ...team2Cards, ...noTeamCards];
-  const isFinished = allAnswered.length === 24;
+  const columns = gridColumns(questions.length);
+  const isFinished =
+    questions.some((q) => !q.skip) &&
+    questions.every((q, i) => q.skip || allAnswered.includes(i));
   const activeQuestion =
     activeQuestionIndex !== null ? questions[activeQuestionIndex] : undefined;
 
@@ -111,10 +122,6 @@ const HomePage: FunctionComponent = () => {
 
   const timer = useRef<NodeJS.Timeout | null>(null);
   const [tick, setTick] = useState(false);
-  const tickQuestions = [
-    [1, 3, 5, 8, 10, 12, 13, 15, 17, 20, 22, 24],
-    [2, 4, 6, 7, 9, 11, 14, 16, 18, 19, 21, 23],
-  ];
   useEffect(() => {
     timer.current = setInterval(() => {
       setTick((current) => !current);
@@ -259,15 +266,18 @@ const HomePage: FunctionComponent = () => {
           </header>
           <main
             className={classNames(
-              "grid grid-cols-6 gap-4",
+              "grid gap-4",
               isFinished ? "opacity-25" : ""
             )}
+            style={{
+              gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
+            }}
           >
             {questions.map((question, index) => (
               <QuestionCard
                 number={index + 1}
                 contrast={
-                  !!tickQuestions[tick ? 1 : 0]?.includes(index + 1) &&
+                  tickGroup(index, columns) === (tick ? 1 : 0) &&
                   started &&
                   !isFinished &&
                   activeQuestionIndex === null &&
