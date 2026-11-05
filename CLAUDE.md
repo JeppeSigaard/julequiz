@@ -16,7 +16,7 @@ filnavne på engelsk.
 | `npm run dev`   | Waku-devserver med hot reload (http://localhost:3000/julequiz/)       |
 | `npm run check` | `tsc --noEmit` + `waku build`; skal passere, før noget meldes færdigt |
 | `npm run build` | produktionsbuild til `dist/` (statisk genereret)                      |
-| `npm start`     | serverer det byggede `dist/` (http://localhost:3000/julequiz/)        |
+| `npm start`     | serverer det byggede `dist/` (http://localhost:8080/julequiz/)        |
 
 Der er ingen linter og ingen tests. `check` beviser kun, at det typechecker og bygger: om en låge
 virker, ses kun ved at åbne den i browseren.
@@ -30,8 +30,9 @@ og `exactOptionalPropertyTypes`. `src/pages.gen.ts` genereres af Waku og rediger
 
 ## Arkitektur
 
-- `src/pages/_layout.tsx` er en serverkomponent (fonte, favicon, `styles.css`). Alt andet med
-  tilstand, lyd eller browser-API'er er `"use client"`.
+- `src/pages/_layout.tsx` er en serverkomponent (fonte, `<title>`, meta/OG-tags, ikoner,
+  `styles.css`); `_root.tsx` sætter kun `<html lang="da">` og bevarer Waku's `ErrorBoundary`. Alt
+  andet med tilstand, lyd eller browser-API'er er `"use client"`.
 - `src/components/Stage.tsx` er en fast 1920×1080-scene, skaleret til vinduet med `scale()`. Al
   layout bruger derfor px (`cqmin` kun inde i en `[container-type:size]`, som `QuestionCard`),
   aldrig `vw`/`vh`, og `fixed` inde i scenen er scene-relativ.
@@ -46,7 +47,8 @@ og `exactOptionalPropertyTypes`. `src/pages.gen.ts` genereres af Waku og rediger
   kun nummer, status og visningsprops.
 - Board-delene (`Garland`, `BoardHeader`, `Footer`) ligger i `src/components/board/`.
 - Point udledes, ikke lagres: antal vundne låger × `Quiz.pointsPerQuestion` plus trøstepoint (+5 pr.
-  klik på et holdnavn). Staten gemmes i `localStorage` pr. pakke (`src/quizState.ts`, format `v2`).
+  klik på et holdnavn, og kan justeres op og ned, også under 0, fra indstillingsmenuen). Staten
+  gemmes i `localStorage` pr. pakke (`src/quizState.ts`, format `v2`).
   Når alle låger, der ikke er `skip`, er besvaret, vises `EndScreen` i stedet for header og gitter:
   den har sin egen `Snowfall` og `Fireworks`, kroner lederen, viser "Uafgjort!" ved lige point, og
   plaketterne giver stadig +5 ved klik. Samtidig skiftes baggrundsmusikken til `music.finale`.
@@ -56,7 +58,8 @@ og `exactOptionalPropertyTypes`. `src/pages.gen.ts` genereres af Waku og rediger
   Escape lukker), når ingen låge er åben; `p` starter prøverunden (også "Start prøverunde" i
   indstillingerne); `TeamNamesSetting` ændrer holdnavnene (gemt pr. pakke under sin egen nøgle i
   `src/quizState.ts`, så de overlever nulstilling; et tomt felt falder tilbage til
-  `Quiz.teamNames`), og `ResetQuizSetting` nulstiller pakkens gemte quiz.
+  `Quiz.teamNames`), `TeamPointsSetting` justerer holdenes trøstepoint med
+  ±5/±`pointsPerQuestion`, og `ResetQuizSetting` nulstiller pakkens gemte quiz.
 
 ### Quiz-pakker
 
@@ -112,7 +115,8 @@ ikke; en pakke uden `practice/` har ingen prøverunde.
 Billeder, video og lyd til en pakke ligger i `public/quizzes/<navn>/…`. Specs og `quiz.ts` giver
 den almindelige sti `/quizzes/<navn>/…`; renderere og komponenter kører den gennem `asset()` fra
 `src/asset.ts` præcis én gang, fordi quizzen kører under basestien `/julequiz/` på GitHub Pages
-(`public/images/` rummer kun favicon). Kun håndskrevet JSX i en `custom`-låge kalder selv `asset()`.
+(`public/images/` rummer kun ikoner og delingsbilledet; kilden er `icon.svg`). Kun håndskrevet JSX
+i en `custom`-låge kalder selv `asset()`.
 Lydeffekter, som koden bruger, importeres som moduler fra `src/sfx/`; `src/env.d.ts` erklærer
 `*.mp3`, og de importerede URL'er går aldrig gennem `asset()`. Pakkens musik angives som sti i
 `quiz.ts`.

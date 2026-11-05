@@ -1,0 +1,15 @@
+{
+  "name": "Den Store Julequiz",
+  "short_name": "Julequiz",
+  "description": "Julekalender-quiz for to hold med 24 låger, musik og gåder.",
+  "lang": "da",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0e2c22",
+  "theme_color": "#0e2c22",
+  "icons": [
+    { "src": "images/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "images/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
