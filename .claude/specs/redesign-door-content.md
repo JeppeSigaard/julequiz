@@ -1,6 +1,6 @@
 # Door content restyle
 
-> Status: in progress — redesign-door-content
+> Status: merged — 43b9b98
 
 ## Goal
 
