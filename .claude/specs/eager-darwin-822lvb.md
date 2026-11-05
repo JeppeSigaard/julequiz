@@ -1,6 +1,6 @@
 # Lågerne vugger synligt, ikke kun i devtools
 
-> Status: in progress — claude/eager-darwin-822lvb
+> Status: merged — 553c5f1
 
 ## Goal
 
