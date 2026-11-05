@@ -1,6 +1,6 @@
 # Prøverunde: to prøvespørgsmål uden point
 
-> Status: in progress — claude/determined-fermi-8fwbrx
+> Status: merged — 32752dd
 
 ## Goal
 
