@@ -5,3 +5,4 @@
 - beslutning: gh CLI findes ikke i sessionen; PR'er oprettes og flettes via GitHub MCP.
 - dynamic-board: spec skrevet; implementering startet.
 - question-types: spec skrevet; implementering startet.
+- question-types: flettet i PR #7 (6c1d250) efter 1 review + 1 minor-fix.

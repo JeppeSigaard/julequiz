@@ -1,6 +1,6 @@
 # Quiz packs: spørgsmålstyperne standard og custom
 
-> Status: in progress — quiz-packs-question-types
+> Status: merged — 6c1d250
 > Branch: `quiz-packs-question-types`, base `claude/vibrant-euler-3tsdtn` (diff against `origin/claude/vibrant-euler-3tsdtn`; never `main`)
 
 ## Goal
