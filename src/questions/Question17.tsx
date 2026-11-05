@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { type Question } from "../types";
+import { asset } from "../asset";
 import classNames from "classnames";
 
 const Body = () => {
@@ -7,7 +8,7 @@ const Body = () => {
   return (
     <>
       <video
-        src="/video/nothing-short.mp4"
+        src={asset("/video/nothing-short.mp4")}
         className="w-250"
         autoPlay
         onEnded={() => setEnded(true)}
@@ -29,7 +30,7 @@ const Answer = () => {
   return (
     <>
       <video
-        src="/video/nothing.mp4"
+        src={asset("/video/nothing.mp4")}
         className="w-250"
         autoPlay
         onEnded={() => setEnded(true)}

@@ -8,6 +8,9 @@ import { Fireworks } from "@fireworks-js/react";
 import { QuestionCard } from "../components/QuestionCard";
 import { QuestionScreen } from "../components/QuestionScreen";
 import { AnimatedNumber } from "../components/AnimatedNumber";
+import { SettingsMenu } from "../components/SettingsMenu";
+import { ResetQuizSetting } from "../components/ResetQuizSetting";
+import { loadQuizState, saveQuizState } from "../quizState";
 
 import useSound from "use-sound";
 
@@ -41,6 +44,8 @@ const HomePage: FunctionComponent = () => {
   const [team1ConsolationPoints, setTeam1ConsolationPoints] = useState(0);
   const [team2ConsolationPoints, setTeam2ConsolationPoints] = useState(0);
   const [started, setStarted] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [ding] = useSound(dingSFX);
   const [playBgMusic, { stop: stopBgMusic, sound: bgsound }] = useSound(
     bgmusic,
@@ -122,8 +127,64 @@ const HomePage: FunctionComponent = () => {
   }, [started]);
 
   useEffect(() => {
-    setQuestions(shuffleQuestions(QUESTIONS));
+    const saved = loadQuizState();
+    if (saved) {
+      const restored = saved.questionIds.map(
+        (id) => QUESTIONS.find((q) => q.id === id)!
+      );
+      setQuestions(restored);
+      setTeam1Cards(saved.team1Cards);
+      setTeam2Cards(saved.team2Cards);
+      setNoTeamCards(saved.noTeamCards);
+      setTeam1ConsolationPoints(saved.team1ConsolationPoints);
+      setTeam2ConsolationPoints(saved.team2ConsolationPoints);
+    } else {
+      setQuestions(shuffleQuestions(QUESTIONS));
+    }
+    setIsLoaded(true);
   }, []);
+
+  useEffect(() => {
+    // Uden denne port skriver første commit standardværdier, og StrictModes
+    // anden load-kørsel ville så læse dem i stedet for den gemte quiz.
+    if (!isLoaded) return;
+    saveQuizState({
+      questionIds: questions.map((q) => q.id),
+      team1Cards,
+      team2Cards,
+      noTeamCards,
+      team1ConsolationPoints,
+      team2ConsolationPoints,
+    });
+  }, [
+    isLoaded,
+    questions,
+    team1Cards,
+    team2Cards,
+    noTeamCards,
+    team1ConsolationPoints,
+    team2ConsolationPoints,
+  ]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey || event.metaKey || event.altKey) return;
+      if (event.repeat) return;
+      if (
+        (event.key === "m" || event.key === "M") &&
+        activeQuestionIndex === null
+      ) {
+        setSettingsOpen((open) => !open);
+      }
+      if (event.key === "Escape" && settingsOpen) {
+        setSettingsOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [activeQuestionIndex, settingsOpen]);
 
   return (
     <>
@@ -231,6 +292,11 @@ const HomePage: FunctionComponent = () => {
           }}
           onAnswer={handleAnswer}
         />
+      )}
+      {settingsOpen && (
+        <SettingsMenu onClose={() => setSettingsOpen(false)}>
+          <ResetQuizSetting />
+        </SettingsMenu>
       )}
     </>
   );

@@ -1,4 +1,5 @@
 import { type Question } from "../types";
+import { asset } from "../asset";
 export const Question10: Question = {
   id: "10",
   body: (
@@ -9,7 +10,7 @@ export const Question10: Question = {
   ),
   answer: (
     <>
-      <img src="/images/pickle.jpg" className="mx-auto w-150" />
+      <img src={asset("/images/pickle.jpg")} className="mx-auto w-150" />
       <p className="text-6xl font-extrabold">En syltet agurk</p>
     </>
   ),

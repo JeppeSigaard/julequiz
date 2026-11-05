@@ -1,17 +1,18 @@
 import { FunctionComponent, useEffect, useRef, useState } from "react";
 
 import mmlemSFX from "../sfx/yoshi-tongue.mp3";
+import { asset } from "../asset";
 
 const IMG_SOURCES = [
-  "/images/babybox-hero.png",
-  "/images/cakey-hero2.png",
-  "/images/carlita-hero.png",
-  "/images/catrat-hero3.png",
-  "/images/djcatnip-hero2.png",
-  "/images/kittyfairy-hero.png",
-  "/images/mercat-hero3.png",
-  "/images/pandy-hero2.png",
-  "/images/pillowcat-hero.png",
+  asset("/images/babybox-hero.png"),
+  asset("/images/cakey-hero2.png"),
+  asset("/images/carlita-hero.png"),
+  asset("/images/catrat-hero3.png"),
+  asset("/images/djcatnip-hero2.png"),
+  asset("/images/kittyfairy-hero.png"),
+  asset("/images/mercat-hero3.png"),
+  asset("/images/pandy-hero2.png"),
+  asset("/images/pillowcat-hero.png"),
 ];
 
 const getCatimgSrc = () => {

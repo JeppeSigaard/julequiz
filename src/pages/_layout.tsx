@@ -2,13 +2,15 @@ import "../styles.css";
 
 import type { ReactNode } from "react";
 
+import { asset } from "../asset";
+
 type RootLayoutProps = { children: ReactNode };
 
 export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <div className="font-['Nunito']">
       <meta name="description" content="Julequiz" />
-      <link rel="icon" type="image/png" href="/images/favicon.png" />
+      <link rel="icon" type="image/png" href={asset("/images/favicon.png")} />
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
       <link

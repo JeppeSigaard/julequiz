@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { type Question } from "../types";
+import { asset } from "../asset";
 
 const Answer = () => {
   const [reveal, setReveal] = useState(false);
 
   return reveal ? (
-    <img src="/images/poster-1.webp" alt="Film" className="w-125" />
+    <img src={asset("/images/poster-1.webp")} alt="Film" className="w-125" />
   ) : (
     <button onClick={() => setReveal(true)} className="cursor-pointer">
-      <img src="/images/poster-1-crop.webp" alt="Film" className="w-150" />
+      <img src={asset("/images/poster-1-crop.webp")} alt="Film" className="w-150" />
     </button>
   );
 };

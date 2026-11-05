@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { type Question } from "../types";
+import { asset } from "../asset";
 import classNames from "classnames";
 
 const Body = () => {
@@ -11,7 +12,7 @@ const Body = () => {
       <p className="text-4xl">Hjemmevideo</p>
       <video
         ref={videoRef}
-        src="/video/trille.mov"
+        src={asset("/video/trille.mov")}
         autoPlay
         className={classNames("w-90 relative", done && "opacity-25")}
         onEnded={() => setDone(true)}
@@ -38,7 +39,7 @@ export const Question15: Question = {
     <>
       <div className="text-7xl font-bold">Valdes Jul</div>
       <div className="text-4xl">Christopher</div>
-      <audio src="/audio/Valdes Jul.mp3#t=00:00:50" autoPlay />,
+      <audio src={asset("/audio/Valdes Jul.mp3#t=00:00:50")} autoPlay />
     </>
   ),
 };
