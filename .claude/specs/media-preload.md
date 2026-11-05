@@ -1,6 +1,6 @@
 # Forudindlæs svarets medier
 
-> Status: in progress — claude/great-galileo-zogw7j
+> Status: merged — 0ce56fe
 
 ## Goal
 
