@@ -1,6 +1,6 @@
 # Redesign: polish
 
-> Status: in progress — redesign-polish
+> Status: merged — a3bacc4
 
 Branch `redesign-polish`, base and PR target `claude/sweet-mendel-p0gtn1` (never `main`).
 
