@@ -1,6 +1,6 @@
 import { type Question, type QuestionSpec, type Slide } from "../types";
 import { asset } from "../asset";
-import { MusicBox } from "../components/MusicBox";
+import { MusicAnswer } from "../components/MusicBox";
 import { MusicBody } from "./Music";
 import { PosterAnswer } from "./PosterReveal";
 import { SlideView } from "./Standard";
@@ -37,14 +37,12 @@ export const toQuestion = (spec: QuestionSpec, id: string): Question => {
     case "music":
       return {
         id,
-        body: <MusicBody />,
+        body: <MusicBody track={asset(spec.track)} start={spec.start} stop={spec.stop} />,
         answer: (
-          <MusicBox
+          <MusicAnswer
             track={asset(spec.track)}
             song={spec.song}
             artist={spec.artist}
-            start={spec.start}
-            stop={spec.stop}
             answerStart={spec.answerStart}
           />
         ),
