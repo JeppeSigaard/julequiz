@@ -1,6 +1,6 @@
 # Redesign: door-frame
 
-> Status: in progress — redesign-door-frame
+> Status: merged — d11ce8d
 
 Branch `redesign-door-frame`, branched from and PR-targeting `claude/sweet-mendel-p0gtn1` (the initiative's integration branch, NOT `main`: every push to `main` deploys to GitHub Pages). Diff against `origin/claude/sweet-mendel-p0gtn1`. Master plan: `.claude/initiatives/redesign.md` (settled; restated below). Wave 1 (`foundation`) is merged.
 
