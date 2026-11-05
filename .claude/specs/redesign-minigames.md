@@ -1,6 +1,6 @@
 # Redesign: minigames
 
-> Status: in progress — redesign-minigames
+> Status: merged — 7f7a793
 > Branch: `redesign-minigames` (base `claude/sweet-mendel-p0gtn1`, PR targets it, never `main`)
 
 ## Goal
