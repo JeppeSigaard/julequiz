@@ -19,9 +19,9 @@ export const Footer: FC<{
         />
       </div>
     </div>
-    {media.total > 0 && (
+    {media.done < media.total && (
       <span>
-        {media.done < media.total ? `Henter medier ${media.done} af ${media.total}` : "Medier klar"}
+        Henter medier {media.done} af {media.total}
       </span>
     )}
     <button
