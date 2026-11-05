@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git ls-remote:*)",
+      "Bash(git push origin --delete:*)",
+      "Bash(git branch -d:*)"
+    ]
+  }
+}

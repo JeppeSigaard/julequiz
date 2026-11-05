@@ -68,11 +68,12 @@ chose:
 ## 5. Merge
 
 ```
-gh pr merge <number> --merge --delete-branch
+gh pr merge <number> --merge
 ```
 
-`--delete-branch` removes the remote branch and the local one, when the local
-branch is not checked out anywhere.
+Leave out `--delete-branch`: it fails on a branch a worktree still holds, and the
+MCP merge tool has no such option anyway. Step 9 deletes the branch once the
+worktree is gone and the base is pulled.
 
 If the merge is refused because the base moved, run `gh pr update-branch`, wait
 for checks again, and retry once. Report a second refusal rather than forcing it.
@@ -126,7 +127,29 @@ git pull
 Only when the main checkout is clean. If it holds uncommitted work, skip this
 and say so. Parallel sessions share that checkout, so never discard its state.
 
-## 9. Report
+## 9. Delete the branch
+
+Only now, with the worktree removed and the base pulled, so git can see that the
+branch is merged:
+
+```
+git ls-remote --exit-code --heads origin <branch> && git push origin --delete <branch>
+git branch -d <branch>
+```
+
+The remote may already be gone — the repo can delete head branches on merge — so
+`ls-remote` skips the push when there is nothing to delete.
+
+Use `-d`, never `-D`. `-d` refuses a branch whose commits are not in the base,
+which is exactly the case where deleting would lose work. A squash or rebase
+merge makes it refuse too, because the original commits never reach the base:
+then report the refusal and leave the branch for the user, rather than forcing it.
+
+These two commands are allowed in `.claude/settings.json`. Run each as its own
+command — chained with anything destructive, such as `git reset --hard`, the
+whole command is judged as destructive and refused.
+
+## 10. Report
 
 Four lines at most: the merge commit sha, the PR URL, what you deleted (branch,
 worktree), and the spec status you wrote.
