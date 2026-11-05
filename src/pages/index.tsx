@@ -7,7 +7,9 @@ import { asset } from "../asset";
 import Snowfall from "react-snowfall";
 import { QuestionCard } from "../components/QuestionCard";
 import { QuestionScreen } from "../components/QuestionScreen";
-import { AnimatedNumber } from "../components/AnimatedNumber";
+import { Garland } from "../components/board/Garland";
+import { BoardHeader } from "../components/board/BoardHeader";
+import { Footer } from "../components/board/Footer";
 import { Stage } from "../components/Stage";
 import { EndScreen } from "../components/EndScreen";
 import { SettingsMenu } from "../components/SettingsMenu";
@@ -206,85 +208,98 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
   return (
     <>
       <Stage colors={quiz.colors}>
-        {started && <Snowfall />}
-        <div className="p-6 bg-night h-full overflow-hidden flex items-center justify-center">
-          <div className="aspect-video bg-felt w-full rounded-lg p-6">
-            {isFinished ? (
-              <EndScreen
+        {started && (
+          <Snowfall
+            color="white"
+            radius={[1, 2.5]}
+            opacity={[0.15, 0.5]}
+            snowflakeCount={60}
+          />
+        )}
+        {isFinished ? (
+          <EndScreen
+            teamNames={quiz.teamNames}
+            points={[team1Points, team2Points]}
+            doors={[team1Cards.length, team2Cards.length]}
+            consolation={[team1ConsolationPoints, team2ConsolationPoints]}
+            onConsolation={handleConsolation}
+          />
+        ) : (
+          <>
+            <Garland />
+            <div className="absolute inset-0 flex flex-col gap-[22px] px-[58px] pt-[84px] pb-[26px]">
+              <BoardHeader
+                title={quiz.title}
+                doorCount={questions.filter((q) => !q.skip).length}
                 teamNames={quiz.teamNames}
                 points={[team1Points, team2Points]}
                 doors={[team1Cards.length, team2Cards.length]}
                 consolation={[team1ConsolationPoints, team2ConsolationPoints]}
                 onConsolation={handleConsolation}
+                onTitleClick={() => {
+                  if (started) {
+                    stopQuiz();
+                    return;
+                  }
+                  startQuiz();
+                }}
               />
-            ) : (
-              <>
-                <header className="text-center relative flex justify-center mb-12">
-                  <h1>
-                    <button
-                      className="relative z-40 cursor-pointer text-center font-display text-snow text-7xl font-bold py-6 px-10 rounded-2xl bg-felt-deep/60 hover:bg-felt-deep transition-colors inline-block"
-                      onClick={() => {
-                        if (started) {
-                          stopQuiz();
-                          return;
-                        }
-                        startQuiz();
-                      }}
-                    >
-                      {quiz.title}
-                    </button>
-                  </h1>
-                  <dl className="absolute flex justify-between z-20 left-0 right-0 top-6">
-                    <button
-                      className="text-left text-snow"
-                      onClick={() => handleConsolation(1)}
-                    >
-                      <dt className="uppercase font-extrabold text-4xl">
-                        {quiz.teamNames[0]}
-                      </dt>
-                      <dd className="font-bold text-3xl">
-                        <AnimatedNumber value={team1Points} /> point
-                      </dd>
-                    </button>
-                    <button
-                      className="text-right text-snow"
-                      onClick={() => handleConsolation(2)}
-                    >
-                      <dt className="uppercase font-extrabold text-4xl">
-                        {quiz.teamNames[1]}
-                      </dt>
-                      <dd className="font-bold text-3xl">
-                        <AnimatedNumber value={team2Points} /> point
-                      </dd>
-                    </button>
-                  </dl>
-                </header>
-                <main
-                  className="grid gap-4"
+              <main className="relative flex-1 min-h-0 rounded-[31px] bg-night/50 p-[26px] shadow-[inset_0_2px_22px_rgb(0_0_0/0.45)]">
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-[10px] rounded-[24px] border-2 border-dashed border-highlight/20"
+                />
+                <div
+                  className="relative grid h-full gap-[22px]"
                   style={{
                     gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
+                    gridTemplateRows: `repeat(${Math.ceil(
+                      questions.length / columns
+                    )}, minmax(0, 1fr))`,
                   }}
                 >
-                  {questions.map((question, index) => (
-                    <QuestionCard
-                      number={index + 1}
-                      contrast={
-                        tickGroup(index, columns) === (tick ? 1 : 0) &&
-                        started &&
-                        activeQuestionIndex === null &&
-                        !question.skip
-                      }
-                      key={question.id}
-                      question={{ ...question, id: String(index + 1) }}
-                      onClick={pickQuestion(index, question)}
-                      active={!allAnswered.includes(index) && !question.skip}
-                    />
-                  ))}
-                </main>
-              </>
-            )}
-          </div>
-        </div>
+                  {questions.map((question, index) => {
+                    const status = team1Cards.includes(index)
+                      ? "team-1"
+                      : team2Cards.includes(index)
+                      ? "team-2"
+                      : noTeamCards.includes(index)
+                      ? "nobody"
+                      : question.skip
+                      ? "skip"
+                      : "closed";
+                    const teamName =
+                      status === "team-1"
+                        ? quiz.teamNames[0]
+                        : status === "team-2"
+                        ? quiz.teamNames[1]
+                        : undefined;
+                    return (
+                      <QuestionCard
+                        key={question.id}
+                        number={index + 1}
+                        doorWord={quiz.doorWord}
+                        status={status}
+                        {...(teamName !== undefined ? { teamName } : {})}
+                        glow={
+                          tickGroup(index, columns) === (tick ? 1 : 0) &&
+                          started &&
+                          activeQuestionIndex === null &&
+                          !question.skip
+                        }
+                        onClick={pickQuestion(index, question)}
+                      />
+                    );
+                  })}
+                </div>
+              </main>
+              <Footer
+                opened={allAnswered.length}
+                total={questions.filter((q) => !q.skip).length}
+              />
+            </div>
+          </>
+        )}
         {activeQuestion && (
           <QuestionScreen
             question={activeQuestion}
@@ -323,13 +338,13 @@ const HomePage: FunctionComponent = () => {
   const quiz = QUIZZES.get(packName);
   if (!quiz) {
     return (
-      <div className="min-h-screen bg-paper text-ink p-10">
-        <h1 className="text-4xl font-bold mb-4">Ukendt quiz: {packName}</h1>
+      <div className="min-h-screen bg-night text-snow font-body p-10">
+        <h1 className="font-display text-highlight text-6xl mb-4">Ukendt quiz: {packName}</h1>
         <p className="mb-2">Vælg en quiz:</p>
         <ul className="list-disc pl-6">
           {[...QUIZZES.keys()].map((name) => (
             <li key={name}>
-              <a className="text-accent underline" href={`?quiz=${name}`}>
+              <a className="text-highlight underline" href={`?quiz=${name}`}>
                 {name}
               </a>
             </li>
