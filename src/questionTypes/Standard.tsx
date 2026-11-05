@@ -14,7 +14,7 @@ export const SlideView = ({ slide }: { slide: Slide }) => (
     )}
     {slide.audio !== undefined && <audio src={asset(slide.audio)} autoPlay />}
     {slide.text !== undefined && (
-      <p className={`${textSize(slide.text)} font-extrabold`}>{slide.text}</p>
+      <p className={`${textSize(slide.text)} max-w-250 font-extrabold`}>{slide.text}</p>
     )}
     {slide.note !== undefined && <p className="text-3xl w-250 max-w-full">{slide.note}</p>}
   </div>
