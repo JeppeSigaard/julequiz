@@ -291,7 +291,6 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
             teamNames={teamNames}
             points={[team1Points, team2Points]}
             doors={[team1Cards.length, team2Cards.length]}
-            consolation={[team1ConsolationPoints, team2ConsolationPoints]}
             onConsolation={(team) => adjustConsolation(team, 5)}
           />
         ) : (
@@ -304,8 +303,6 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
                 doorCount={doorCount}
                 teamNames={teamNames}
                 points={[team1Points, team2Points]}
-                doors={[team1Cards.length, team2Cards.length]}
-                consolation={[team1ConsolationPoints, team2ConsolationPoints]}
                 onConsolation={(team) => adjustConsolation(team, 5)}
                 onTitleClick={() => {
                   if (started) {
@@ -403,6 +400,7 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
             key={practiceQuestion.id}
             question={practiceQuestion}
             title={`Prøve ${practiceIndex! + 1}`}
+            ribbon={`Prøve ${practiceIndex! + 1}`}
             teamNames={teamNames}
             onAnswer={() => startPractice(practiceIndex! + 1)}
             onClose={endPractice}

@@ -32,9 +32,8 @@ export const EndScreen: FC<{
   teamNames: [string, string];
   points: [number, number];
   doors: [number, number];
-  consolation: [number, number];
   onConsolation: (team: 1 | 2) => void;
-}> = ({ teamNames, points, doors, consolation, onConsolation }) => {
+}> = ({ teamNames, points, doors, onConsolation }) => {
   const [p1, p2] = points;
   const winner = p1 === p2 ? null : p1 > p2 ? 1 : 2;
 
@@ -79,7 +78,6 @@ export const EndScreen: FC<{
                 name={teamNames[t - 1]!}
                 points={points[t - 1]!}
                 doors={doors[t - 1]!}
-                consolation={consolation[t - 1]!}
                 size="end"
                 onClick={() => onConsolation(t)}
               >
