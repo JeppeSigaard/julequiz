@@ -53,7 +53,9 @@ og `exactOptionalPropertyTypes`. `src/pages.gen.ts` genereres af Waku og rediger
 - `src/components/QuestionScreen.tsx` er den åbne låge: et papirkort med bånd, kristtorn og
   sløret mørk baggrund. Tastatur: Enter/mellemrum viser svaret, 1/2 giver lågen til et hold, q/x til
   ingen, Escape lukker eller går tilbage til spørgsmålet. `m` åbner indstillinger (`SettingsMenu`,
-  Escape lukker), når ingen låge er åben; `ResetQuizSetting` nulstiller pakkens gemte quiz.
+  Escape lukker), når ingen låge er åben; `TeamNamesSetting` ændrer holdnavnene (gemt pr. pakke
+  under sin egen nøgle i `src/quizState.ts`, så de overlever nulstilling; et tomt felt falder
+  tilbage til `Quiz.teamNames`), og `ResetQuizSetting` nulstiller pakkens gemte quiz.
 
 ### Quiz-pakker
 
@@ -96,7 +98,8 @@ Kopiér den nærmeste eksisterende låge frem for at opfinde en ny form.
   `KeyCap`, `PillButton` (`team-1`/`team-2`/`neutral`/`dark`, valgfri `keyHint`) og `TeamPlaque`
   (`board`/`end`, bruger `AnimatedNumber`). Kendte grænser: `Paper` har fast radius og skygge,
   `PillButton` fast skriftstørrelse og min-bredde med tastehint efter teksten, og `TeamPlaque` har
-  ingen vinderring (det klarer `EndScreen` udenom). Skærmene er trimmet efter dem; ændr dem ikke
+  ingen vinderring (det klarer `EndScreen` udenom) og krymper lange holdnavne efter antal tegn
+  (`nameFontSize`), så de står på højst to linjer. Skærmene er trimmet efter dem; ændr dem ikke
   uden at se alle skærme igennem.
 
 ### Medier
