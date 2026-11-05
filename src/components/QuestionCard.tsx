@@ -22,7 +22,7 @@ export const QuestionCard: FunctionComponent<{
       disabled={!props.active}
       type="button"
       className={classNames(
-        "transition-colors duration-500 rounded-xl aspect-video font-extrabold text-6xl",
+        "transition-colors duration-500 rounded-xl aspect-video w-full max-h-full min-h-0 self-center justify-self-center font-extrabold text-6xl",
         props.active && props.contrast
           ? "bg-(--color-doorHighlight) hover:bg-[color-mix(in_oklab,var(--color-doorHighlight),white_30%)] cursor-pointer text-white shadow-lg"
           : props.active

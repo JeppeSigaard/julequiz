@@ -126,6 +126,7 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
 
   const allAnswered = [...team1Cards, ...team2Cards, ...noTeamCards];
   const columns = gridColumns(questions.length);
+  const rows = Math.ceil(questions.length / columns);
   const isFinished =
     questions.some((q) => !q.skip) &&
     questions.every((q, i) => q.skip || allAnswered.includes(i));
@@ -219,7 +220,7 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
       {started && quiz.snow && <Snowfall />}
       {isFinished && <Fireworks autostart className="absolute inset-0" />}
       <div className="p-6 bg-(--color-page) h-screen overflow-hidden flex items-center justify-center">
-        <div className="aspect-video bg-(--color-board) w-full rounded-lg p-6">
+        <div className="aspect-video bg-(--color-board) w-full rounded-lg p-6 flex flex-col">
           <header className="text-center relative flex justify-center mb-12">
             <h1>
               <button
@@ -287,11 +288,12 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
           </header>
           <main
             className={classNames(
-              "grid gap-4",
+              "grid gap-4 flex-1 min-h-0 content-start",
               isFinished ? "opacity-25" : ""
             )}
             style={{
               gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
+              gridTemplateRows: `repeat(${rows}, minmax(0, auto))`,
             }}
           >
             {questions.map((question, index) => (
