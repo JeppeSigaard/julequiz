@@ -15,7 +15,8 @@ const specsByPack = new Map<string, { id: string; spec: QuestionSpec }[]>();
 for (const [path, mod] of Object.entries(questionModules)) {
   const match = /^\.\/([^/]+)\/questions\/([^/]+)\.tsx$/.exec(path);
   if (!match) continue;
-  const [, pack, id] = match as unknown as [string, string, string];
+  const pack = match[1]!;
+  const id = match[2]!;
   const list = specsByPack.get(pack) ?? [];
   list.push({ id, spec: mod.default });
   specsByPack.set(pack, list);

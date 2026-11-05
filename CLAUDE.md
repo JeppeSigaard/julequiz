@@ -4,9 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Projektet
 
-Den store julequiz: en julekalender-quiz med låger (antallet bestemmes af den valgte quiz-pack), vist på en storskærm og styret af en
-quizmaster med mus og tastatur. To hold dyster om point. Al tekst i quizzen er på dansk; kommentarer
-og commit-beskeder er også på dansk, identifikatorer og filnavne på engelsk.
+Den store julequiz: en julekalender-quiz med låger (antallet bestemmes af den valgte quiz-pack),
+vist på en storskærm og styret af en quizmaster med mus og tastatur. To hold dyster om point. Al
+tekst i quizzen er på dansk; kommentarer og commit-beskeder er også på dansk, identifikatorer og
+filnavne på engelsk.
 
 ## Kommandoer
 
