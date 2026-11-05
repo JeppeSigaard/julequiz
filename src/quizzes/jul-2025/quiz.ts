@@ -8,7 +8,7 @@ const quiz: Quiz = {
   pointsPerQuestion: 100,
   music: {
     background: "/quizzes/jul-2025/audio/waiting-music-116216.mp3",
-    finale: "/quizzes/jul-2025/audio/lightning-round.mp3",
+    finale: "/quizzes/jul-2025/audio/christmas-disco-groove.mp3",
   },
   colors: {
     background: "#0e2c22",
