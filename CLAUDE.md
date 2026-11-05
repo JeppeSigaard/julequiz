@@ -55,10 +55,9 @@ uvælgelig. Genbrugelige spil som `MusicBox` (én sang som props), `WordPuzzle`,
 
 ### Medier
 
-Billeder, video og lyd ligger i `public/images/`, `public/video/` og `public/audio/` (sidstnævnte
-til lyd, der afspilles direkte med `<audio>`) og refereres gennem `asset("/images/…")` fra
+Billeder, video og lyd ligger i `public/images/`, `public/video/` og `public/audio/` og refereres gennem `asset("/images/…")` fra
 `src/asset.ts`, fordi quizzen kører under basestien `/julequiz/` på GitHub Pages. Quizsangene
-ligger i `public/audio/`. `src/audio/` rummer kun baggrunds- og afslutningsmusik, som importeres
+ligger i `public/audio/`. `src/audio/` rummer den baggrunds- og afslutningsmusik, der importeres
 som moduler (som lydeffekterne i `src/sfx/`); Vites typer erklærer `*.mp3`.
 
 ## Arbejdsgang
