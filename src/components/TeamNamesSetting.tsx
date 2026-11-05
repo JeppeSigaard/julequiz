@@ -13,8 +13,8 @@ const TEAM = {
   },
 };
 
-// Grænsen holder navnet på én linje på holdets plakette.
-const MAX_LENGTH = 18;
+// Længere navne ville krympe under plakettens mindste skriftstørrelse.
+const MAX_LENGTH = 24;
 
 export const TeamNamesSetting: FunctionComponent<{
   names: [string, string];

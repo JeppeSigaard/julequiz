@@ -60,7 +60,7 @@ const PLAQUE = {
     width: "w-[360px]",
     paper: "px-[26px] py-[17px] gap-[19px] rounded-[22px]",
     badge: "size-[70px] text-[48px]",
-    name: "text-[26px]",
+    name: { size: 26, minSize: 16, width: 219 },
     points: "text-[70px]",
     unit: "text-[22px]",
     meta: "text-[17px]",
@@ -70,12 +70,25 @@ const PLAQUE = {
     width: "w-[440px]",
     paper: "px-[34px] py-[28px] gap-[6px] rounded-[26px]",
     badge: "",
-    name: "text-[36px]",
+    name: { size: 36, minSize: 22, width: 372 },
     points: "text-[158px]",
     meta: "text-[24px]",
     stitch: "inset-[12px] rounded-[18px] border-[3px]",
   },
 };
+
+// Navnets plads (`width`) er plakettens bredde minus padding, badge og gap ovenfor.
+// Et versal i navnets font er i snit 0,79em bredt inkl. tracking; lidt luft lagt til.
+const NAME_EM_PER_CHAR = 0.82;
+
+// Lange navne krymper, så det længste ord står på én linje og hele navnet på højst to.
+// Under minSize ombrydes midt i ordet i stedet.
+function nameFontSize(name: string, fit: { size: number; minSize: number; width: number }): number {
+  const longestWord = Math.max(...name.split(/\s+/).map((word) => word.length));
+  const charsPerLine = Math.max(longestWord, name.length / 2);
+  const fitted = fit.width / (charsPerLine * NAME_EM_PER_CHAR);
+  return Math.max(fit.minSize, Math.min(fit.size, fitted));
+}
 
 const PLAQUE_TEAM = {
   1: {
@@ -127,7 +140,12 @@ export const TeamPlaque: FC<{
           </span>
         )}
         <span className={`relative flex min-w-0 max-w-full flex-col ${size === "end" ? "items-center" : ""}`}>
-          <span className={`font-black uppercase tracking-[0.08em] max-w-full break-words ${s.name} ${t.name}`}>{name}</span>
+          <span
+            className={`font-black uppercase tracking-[0.08em] max-w-full break-words ${t.name}`}
+            style={{ fontSize: nameFontSize(name, s.name) }}
+          >
+            {name}
+          </span>
           <span className={`font-display font-bold leading-[0.95] ${s.points}`}>
             <AnimatedNumber value={points} /> {size === "board" && unit}
           </span>
