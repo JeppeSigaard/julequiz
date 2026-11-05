@@ -1,6 +1,6 @@
 # Redesign: foundation
 
-> Status: in progress — redesign-foundation
+> Status: merged — 4cd6206
 
 Branch `redesign-foundation`, branched from and PR-targeting `claude/sweet-mendel-p0gtn1` (the initiative's integration branch, NOT `main`: every push to `main` deploys to GitHub Pages). Diff against `origin/claude/sweet-mendel-p0gtn1`. Master plan: `.claude/initiatives/redesign.md` (settled; this spec restates what binds this task).
 
