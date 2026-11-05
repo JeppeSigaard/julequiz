@@ -54,7 +54,9 @@ og `exactOptionalPropertyTypes`. `src/pages.gen.ts` genereres af Waku og rediger
 - `src/components/QuestionScreen.tsx` er den åbne låge: et papirkort med bånd, kristtorn og
   sløret mørk baggrund. Tastatur: Enter/mellemrum viser svaret, 1/2 giver lågen til et hold, q/x til
   ingen, Escape lukker eller går tilbage til spørgsmålet. `m` åbner indstillinger (`SettingsMenu`,
-  Escape lukker), når ingen låge er åben; `TeamPointsSetting` justerer holdenes trøstepoint med
+  Escape lukker), når ingen låge er åben; `TeamNamesSetting` ændrer holdnavnene (gemt pr. pakke
+  under sin egen nøgle i `src/quizState.ts`, så de overlever nulstilling; et tomt felt falder
+  tilbage til `Quiz.teamNames`), `TeamPointsSetting` justerer holdenes trøstepoint med
   ±5/±`pointsPerQuestion`, og `ResetQuizSetting` nulstiller pakkens gemte quiz.
 
 ### Quiz-pakker
@@ -90,13 +92,16 @@ Kopiér den nærmeste eksisterende låge frem for at opfinde en ny form.
   og følger ikke pakkens farver. Skriv `color-mix(in oklab, var(--quiz-accent) 72%, black)`. Fjern
   ikke `inline` fra `@theme`.
 - Fonte: `font-display` (Mountains of Christmas) til overskrifter og tal, `font-body` (Nunito) til
-  resten. Animationer: `animate-twinkle` (pærerne i `Garland`) og `animate-glow` (lågens glød);
+  resten. Animationer: `animate-twinkle` (pærerne i `Garland`), `animate-glow` (lågens glød) og
+  `animate-sway` (lågerne vugger i pærernes 2,4 s-takt med forskudt fase, mens musikken spiller;
+  animationen kører altid, og `sway` skruer kun det registrerede `--sway`-udsving op og ned);
   bevægelse ud over det og lågens åbning (`motion`) er ikke ønsket.
 - `src/components/decor.tsx` har de fælles primitiver: `Paper` (stiplet søm, valgfri `stitchSize`),
   `KeyCap`, `PillButton` (`team-1`/`team-2`/`neutral`/`dark`, valgfri `keyHint`) og `TeamPlaque`
   (`board`/`end`, bruger `AnimatedNumber`). Kendte grænser: `Paper` har fast radius og skygge,
   `PillButton` fast skriftstørrelse og min-bredde med tastehint efter teksten, og `TeamPlaque` har
-  ingen vinderring (det klarer `EndScreen` udenom). Skærmene er trimmet efter dem; ændr dem ikke
+  ingen vinderring (det klarer `EndScreen` udenom) og krymper lange holdnavne efter antal tegn
+  (`nameFontSize`), så de står på højst to linjer. Skærmene er trimmet efter dem; ændr dem ikke
   uden at se alle skærme igennem.
 
 ### Medier

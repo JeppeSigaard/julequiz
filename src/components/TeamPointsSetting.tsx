@@ -23,6 +23,7 @@ export const TeamPointsSetting: FunctionComponent<{
 
   return (
     <div className="flex flex-col gap-[18px]">
+      <h3 className="font-display text-[44px] font-bold leading-none">Point</h3>
       {([1, 2] as const).map((team) => {
         const name = props.teamNames[team - 1];
         return (

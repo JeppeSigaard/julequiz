@@ -15,7 +15,13 @@ import { EndScreen } from "../components/EndScreen";
 import { SettingsMenu } from "../components/SettingsMenu";
 import { TeamPointsSetting } from "../components/TeamPointsSetting";
 import { ResetQuizSetting } from "../components/ResetQuizSetting";
-import { loadQuizState, saveQuizState } from "../quizState";
+import { TeamNamesSetting } from "../components/TeamNamesSetting";
+import {
+  loadQuizState,
+  loadTeamNames,
+  saveQuizState,
+  saveTeamNames,
+} from "../quizState";
 
 import useSound from "use-sound";
 
@@ -54,6 +60,10 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
   const [noTeamCards, setNoTeamCards] = useState<number[]>([]);
   const [team1ConsolationPoints, setTeam1ConsolationPoints] = useState(0);
   const [team2ConsolationPoints, setTeam2ConsolationPoints] = useState(0);
+  const [teamNameInputs, setTeamNameInputs] = useState<[string, string]>([
+    "",
+    "",
+  ]);
   const [started, setStarted] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -114,6 +124,10 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
   const isFinished =
     questions.some((q) => !q.skip) &&
     questions.every((q, i) => q.skip || allAnswered.includes(i));
+  const teamNames: [string, string] = [
+    teamNameInputs[0].trim() || quiz.teamNames[0],
+    teamNameInputs[1].trim() || quiz.teamNames[1],
+  ];
   const team1Points =
     team1Cards.length * quiz.pointsPerQuestion + team1ConsolationPoints;
   const team2Points =
@@ -164,6 +178,8 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
         quiz.shuffle ? shuffleQuestions(quiz.questions) : quiz.questions
       );
     }
+    const savedTeamNames = loadTeamNames(quiz.name);
+    if (savedTeamNames) setTeamNameInputs(savedTeamNames);
     setIsLoaded(true);
   }, []);
 
@@ -190,12 +206,18 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
   ]);
 
   useEffect(() => {
+    if (!isLoaded) return;
+    saveTeamNames(quiz.name, teamNameInputs);
+  }, [isLoaded, teamNameInputs]);
+
+  useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.ctrlKey || event.metaKey || event.altKey) return;
       if (event.repeat) return;
       if (
         (event.key === "m" || event.key === "M") &&
-        activeQuestionIndex === null
+        activeQuestionIndex === null &&
+        !(event.target instanceof HTMLInputElement)
       ) {
         setSettingsOpen((open) => !open);
       }
@@ -222,7 +244,7 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
         )}
         {isFinished ? (
           <EndScreen
-            teamNames={quiz.teamNames}
+            teamNames={teamNames}
             points={[team1Points, team2Points]}
             doors={[team1Cards.length, team2Cards.length]}
             consolation={[team1ConsolationPoints, team2ConsolationPoints]}
@@ -235,7 +257,7 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
               <BoardHeader
                 title={quiz.title}
                 doorCount={doorCount}
-                teamNames={quiz.teamNames}
+                teamNames={teamNames}
                 points={[team1Points, team2Points]}
                 doors={[team1Cards.length, team2Cards.length]}
                 consolation={[team1ConsolationPoints, team2ConsolationPoints]}
@@ -274,9 +296,9 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
                       : "closed";
                     const teamName =
                       status === "team-1"
-                        ? quiz.teamNames[0]
+                        ? teamNames[0]
                         : status === "team-2"
-                        ? quiz.teamNames[1]
+                        ? teamNames[1]
                         : undefined;
                     return (
                       <QuestionCard
@@ -291,6 +313,7 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
                           activeQuestionIndex === null &&
                           !question.skip
                         }
+                        sway={started}
                         onClick={pickQuestion(index, question)}
                       />
                     );
@@ -314,13 +337,22 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
             }}
             onAnswer={handleAnswer}
             doorWord={quiz.doorWord}
-            teamNames={quiz.teamNames}
+            teamNames={teamNames}
           />
         )}
         {settingsOpen && (
           <SettingsMenu onClose={() => setSettingsOpen(false)}>
+            <TeamNamesSetting
+              names={teamNameInputs}
+              defaults={quiz.teamNames}
+              onChange={(team, name) =>
+                setTeamNameInputs((current) =>
+                  team === 1 ? [name, current[1]] : [current[0], name]
+                )
+              }
+            />
             <TeamPointsSetting
-              teamNames={quiz.teamNames}
+              teamNames={teamNames}
               step={quiz.pointsPerQuestion}
               onAdjust={adjustConsolation}
             />
