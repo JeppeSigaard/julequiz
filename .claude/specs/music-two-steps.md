@@ -55,10 +55,11 @@ artist, starts the answer clip, and brings up the team buttons in one go.
    - Delete the "Seek to start position once sound is loaded (for first play)" effect and its
      comment: Start is disabled until `sound` exists, so `handlePlay` always seeks itself.
    - Remove the unused `useMemo` from the `react` import.
-   - In the interval effect, also stop when the track has ended: change the condition to
-     `if (currentTime >= currentStop || !sound.playing())`. Once the hint clip grows past the end of
-     the mp3, Howler ends it and resets the position to 0, so `currentTime` never reaches
-     `currentStop` and the player hangs on "Afspiller...".
+   - Handle the track ending before `currentStop`: once the hint clip grows past the end of the mp3,
+     Howler ends it and resets the position to 0, so `currentTime` never reaches `currentStop` and
+     the player hangs on "Afspiller...". Add to the `useSound` options of `MusicBox`:
+     `onend: () => { setState("stopped"); setHintCount((c) => c + 1); }`. The interval condition
+     stays (or goes back to) plain `if (currentTime >= currentStop)` — no `sound.playing()` check.
    - Leave `handlePlay` and the unmount effect unchanged.
 2. **`src/components/MusicBox.tsx` — add `MusicAnswer`** in the same file, exported:
    - Props `{ track: string; song: string; artist: string; answerStart: number }`.
@@ -96,6 +97,13 @@ artist, starts the answer clip, and brings up the team buttons in one go.
   in `toQuestion`; `MusicBody`/`MusicBox`/`MusicAnswer` receive an already-prefixed URL. Module
   sound imports (`vinylStop`) never go through `asset()`.
 - **Do not call hooks in `toQuestion`.** It runs at pack load; hooks belong in the components.
+- **Do not detect the track's end by polling `!sound.playing()`.** While Howler's AudioContext is
+  suspended (it auto-suspends after 30 s without sound), `play()` waits for resume and `playing()`
+  stays false; a resume over 100 ms makes the first interval tick stop the clip and burn a hint
+  before any sound. Howler's `end` event fires only on a real end of track, never on `stop()`.
+- **Do not call `stop()` or read state inside `onend`.** use-sound hands the options to the Howl
+  once, at creation, so the callback is the first render's closure: `stop` there is the no-op from
+  before load. Only the stable setters (`setState`, functional `setHintCount`) are safe.
 - **Do not touch `QuestionScreen.tsx`** to relabel or hide "Vis svaret": with this change the label
   is accurate for music doors, and the footer is shared by every question type.
 - **Do not build Tailwind classes dynamically or use palette classes** (`gray-`, `red-`…); only the

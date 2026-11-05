@@ -17,6 +17,10 @@ export const MusicBox: FunctionComponent<{
 
   const [play, { stop, sound }] = useSound(props.track, {
     interrupt: true,
+    onend: () => {
+      setState("stopped");
+      setHintCount((c) => c + 1);
+    },
   });
 
   const baseDuration = props.stop - props.start;
@@ -36,7 +40,7 @@ export const MusicBox: FunctionComponent<{
 
     const checkTime = setInterval(() => {
       const currentTime = sound.seek() as number;
-      if (currentTime >= currentStop || !sound.playing()) {
+      if (currentTime >= currentStop) {
         stop();
         setState("stopped");
         setHintCount((c) => c + 1);
