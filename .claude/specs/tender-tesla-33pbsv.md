@@ -1,6 +1,6 @@
 # Forudindlæs alle medier ved start
 
-> Status: in progress — claude/tender-tesla-33pbsv
+> Status: merged — 968dc94
 
 ## Goal
 
