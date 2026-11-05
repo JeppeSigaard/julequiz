@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Projektet
 
-Den store julequiz: en julekalender-quiz med 24 låger, vist på en storskærm og styret af en
+Den store julequiz: en julekalender-quiz med låger (antallet bestemmes af den valgte quiz-pack), vist på en storskærm og styret af en
 quizmaster med mus og tastatur. To hold dyster om point. Al tekst i quizzen er på dansk; kommentarer
 og commit-beskeder er også på dansk, identifikatorer og filnavne på engelsk.
 
@@ -31,34 +31,43 @@ Waku 0.27 (React Server Components) med React 19 og React Compiler (Babel-plugin
 
 - `src/pages/_layout.tsx` er en serverkomponent (fonte, favicon, `styles.css`). Alt andet med
   tilstand, lyd eller browser-API'er er `"use client"`.
-- `src/pages/index.tsx` er hele quizzen i én klientkomponent: lågegitteret, holdenes point,
-  baggrundsmusik, sneen og fyrværkeriet ved afslutning. Rækkefølgen blandes ved mount; kun
-  `QuestionCard`-prop'en får gitterpladsen, mens `Question.id` gemmes af `quizState.ts` og skal
-  være stabil.
-- Point udledes, ikke lagres: antal vundne låger × `POINTS_PER_QUESTION` plus trøstepoint (+5 pr.
-  klik på et holdnavn). Når hver låge uden `skip` er besvaret, skiftes til
-  lynrundemusikken; brættets kolonner og blink udledes af antallet af låger. Der er ingen
-  lynrunde-konstant.
+- `src/pages/index.tsx` vælger quiz-packen efter mount ud fra `?quiz=<pack>` (ellers `DEFAULT_QUIZ`
+  i `src/config.ts`), fordi siden prerenderes uden URL'en; indtil da vises en tom grøn baggrund.
+  Et ukendt navn viser en liste over packs som `?quiz=`-links. `QuizBoard` er hele quizzen for én
+  pack: lågegitteret, holdenes point, baggrundsmusik, sneen og fyrværkeriet ved afslutning.
+  Rækkefølgen blandes ved mount, hvis packen har `shuffle`; kun `QuestionCard`-prop'en får
+  gitterpladsen, mens `Question.id` gemmes af `quizState.ts` (nøgle `julequiz-state-v2:<pack>`, én
+  pr. pack) og skal være stabil.
+- Point udledes, ikke lagres: antal vundne låger × packens `pointsPerQuestion` plus trøstepoint
+  (+5 pr. klik på et holdnavn). Når hver låge uden `skip` er besvaret, skiftes til
+  lynrundemusikken; brættets kolonner og blink udledes af antallet af låger. Titel, holdnavne
+  (`teamNames`) og lågeord (`doorWord`) kommer også fra packens `quiz.ts`.
 - `src/components/QuestionScreen.tsx` er den åbne låge. Tastatur: Enter/mellemrum viser svaret,
   1/2 giver lågen til et hold, q/x til ingen, Escape lukker eller går tilbage til spørgsmålet.
-  Holdknapperne her skriver "Hold 1"/"Hold 2" direkte i stedet for at bruge `TEAM_NAMES`.
+  Lågeord og holdnavne får den som props (`doorWord`, `teamNames`) fra packen.
 
 ### Spørgsmål
 
-Hver låge er en `QuestionSpec` (`src/types.ts`) i sin egen `src/questions/QuestionN.tsx`, og
-`src/questions/index.ts` giver den id `"1"`-`"24"` efter position. `toQuestion` i
-`src/questionTypes/index.tsx` laver den til en `Question` med én renderer-fil pr. type:
-`standard`, `wordPuzzle`, `music`, `posterReveal`, `video` og `custom` (fri JSX; kun låge 2, 7 og
-8). `backgroundVolume` dæmper baggrundsmusikken, mens lågen er åben, og `skip` gør lågen
-uvælgelig. Genbrugelige spil som `MusicBox` (én sang som props), `WordPuzzle`, `GuessThatCat` og
+Hver quiz er en pack i `src/quizzes/<pack>/` (kebab-case): `quiz.ts` default-eksporterer en `Quiz`
+(`src/types.ts`: titel, holdnavne, lågeord, shuffle, point, musik), og hver låge er en
+`QuestionSpec` i `src/quizzes/<pack>/questions/NN-<slug>.tsx` med `export default`. Filnavnet uden
+endelse er lågens id, og filnavnsrækkefølgen er den forfattede rækkefølge. `src/quizzes/index.ts`
+finder alle packs med `import.meta.glob` (eager) og eksporterer `QUIZZES`. Kopiér en pack-mappe
+for at lave en ny quiz. `toQuestion` i `src/questionTypes/index.tsx` laver en `QuestionSpec` til en
+`Question` med én renderer-fil pr. type: `standard`, `wordPuzzle`, `music`, `posterReveal`,
+`video` og `custom` (fri JSX; i jul-2025 kun låge 2, 7 og 8). `backgroundVolume` dæmper
+baggrundsmusikken, mens lågen er åben, og `skip` gør lågen uvælgelig. Genbrugelige spil som
+`MusicBox` (én sang som props), `WordPuzzle`, `GuessThatCat` (får sine billeder som `images`) og
 `FoxChickenGrain` ligger i `src/components/`. Kopiér den nærmeste eksisterende låge.
 
 ### Medier
 
-Billeder, video og lyd ligger i `public/images/`, `public/video/` og `public/audio/` og refereres gennem `asset("/images/…")` fra
-`src/asset.ts`, fordi quizzen kører under basestien `/julequiz/` på GitHub Pages. Quizsangene
-ligger i `public/audio/`. `src/audio/` rummer den baggrunds- og afslutningsmusik, der importeres
-som moduler (som lydeffekterne i `src/sfx/`); Vites typer erklærer `*.mp3`.
+En packs billeder, video og lyd ligger i `public/quizzes/<pack>/images|video|audio/` (inkl.
+baggrunds- og afslutningsmusikken) og refereres med absolut sti (`/quizzes/<pack>/images/…`), som
+køres gennem `asset()` fra `src/asset.ts` præcis én gang, fordi quizzen kører under basestien
+`/julequiz/` på GitHub Pages. Favicon ligger stadig i `public/images/`. Delte lydeffekter ligger i
+`src/sfx/` og importeres som moduler (aldrig gennem `asset()`); Vites typer erklærer `*.mp3`.
+`src/audio/` findes ikke mere.
 
 ## Arbejdsgang
 

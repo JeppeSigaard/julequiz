@@ -21,3 +21,12 @@ export type QuestionSpec = Common &
     | { type: "video"; video: string; prompt: string; caption?: string; answer: Slide }
     | { type: "custom"; body: ReactNode; answer: ReactNode }
   );
+
+export type Quiz = {
+  title: string;
+  teamNames: [string, string];
+  doorWord: string;
+  shuffle: boolean;
+  pointsPerQuestion: number;
+  music: { background: string; finale: string };
+};
