@@ -29,11 +29,25 @@ pack `jul-2025`.
 
 ## Architecture decisions
 
+- **Integration base is `claude/vibrant-euler-3tsdtn`, not `main`.** Every task branches from it
+  and its PR targets it. *Why:* every push to `main` deploys to GitHub Pages
+  (`.github/workflows/deploy.yml`), so merging task by task would publish half-finished states.
+  The user merges one finished PR to `main` afterwards.
 - **Authored vs rendered question.** Authors write a `QuestionSpec` (pinned below). One function,
   `toQuestion(spec)` in `src/questionTypes/index.tsx`, turns it into the existing rendered
   `Question` (`{ id, body, answer, setVolume?, skip? }` in `src/types.ts`), which the board and
   `QuestionScreen` keep consuming. *Why:* this keeps `index.tsx` and `QuestionScreen.tsx` out of
   the question-type tasks, so those tasks can run in parallel with the board task.
+- **`Question.id` is persisted.** `src/quizState.ts` saves the board order as `questionIds` in
+  `localStorage`, so an id must be stable and unique within a quiz. `toQuestion(spec, id)` takes the
+  id from its caller. Until `pack-loading`, the ids stay `"1"`–`"24"` (today's values). From
+  `pack-loading` on, the id is the question file's basename (`01-zwarte-piet`). Changing ids makes a
+  saved state invalid; `loadQuizState` then returns `null` and the quiz starts fresh. That is
+  acceptable.
+- **Media URLs in question data are public paths** (`"/images/x.jpg"`, later
+  `"/quizzes/jul-2025/images/x.jpg"`). The renderers wrap every URL with `asset()` from
+  `src/asset.ts`, and so does the code reading `Quiz.music`; authors never call `asset()`.
+  *Why:* the site runs under the basePath `/julequiz/`, and a bare `/images/x` is a 404 there.
 - **One renderer file per type** in `src/questionTypes/` (`Standard.tsx`, `WordPuzzle.tsx`,
   `Music.tsx`, `PosterReveal.tsx`, `Video.tsx`). `custom` passes `body` and `answer` through.
 - **Standard types normalise the layout.** There is one shared layout per type, and the font size
@@ -54,6 +68,12 @@ pack `jul-2025`.
   `MusicBox` receives one track's data instead of an index into its internal `CONFIG`.
   `GuessThatCat` receives its image list. Only truly one-off code (door 8) lives in the pack's
   question file.
+- **Music tracks become public files** in `interactive-types`: the five tracks move from
+  `src/audio/` to `public/audio/`, and `track` is a public path like every other URL. The background
+  music and finale music stay imported from `src/audio/` until `pack-loading` moves them.
+- **Saved state is per pack.** `pack-loading` keys the `localStorage` entry by pack name and makes
+  `quizState.ts` take the pack's questions as a parameter instead of importing `QUESTIONS`. Reset
+  clears only the current pack.
 - **Pack layout.** `src/quizzes/<pack>/quiz.ts` default-exports a `Quiz`.
   `src/quizzes/<pack>/questions/NN-<slug>.tsx` each default-export one `QuestionSpec`. NN is
   two-digit, and filename order is the authored order. The pack name is the folder name, in
@@ -86,6 +106,11 @@ pack `jul-2025`.
 
 ## Constraints inherited by every task
 
+- Every URL to a file in `public/` goes through `asset()` (`src/asset.ts`). Never `asset()` an
+  imported module URL (`import x from "…mp3"`): Vite has already prefixed it, so it would get the
+  base path twice.
+- Read `localStorage` only inside effects, never during render; and keep the `isLoaded` gate on the
+  save effect in `index.tsx` (see its comment).
 - `npm run check` must pass before a task is called done. It only proves typecheck and build, so
   every task also opens the quiz in `npm run dev` and clicks through the doors it touched.
 - UI text and comments are Danish; identifiers and filenames are English; commit messages are
@@ -101,6 +126,9 @@ pack `jul-2025`.
 - Only the task's Owns list may be edited; siblings own the rest.
 - Each task updates the CLAUDE.md lines its change makes false, except where its Owns list
   excludes CLAUDE.md.
+
+- The dev server and `npm start` serve at `http://localhost:3000/julequiz/`. A saved quiz survives
+  reloads, so reset it (press `m` → "Nulstil quiz") before checking a fresh board.
 
 ## Pinned contracts
 
@@ -169,7 +197,8 @@ export type Quiz = {
   `src/questionTypes/index.tsx` with `toQuestion` and `src/questionTypes/Standard.tsx`; migrate
   doors 1, 3, 4, 5, 10, 12, 16 to `standard`; wrap every other door's current JSX unchanged as
   `custom`; `src/questions/index.ts` maps the specs through `toQuestion`, so `QUESTIONS` keeps its
-  type. Fix the stray rendered `,` in doors 5, 15 and 19, and remove door 15's unused `Answer`.
+  type and keeps the ids `"1"`–`"24"`. Fix the stray rendered `,` in door 5, and remove door 15's
+  unused `Answer`.
 - **Out of scope**: the other four types (`interactive-types`); moving files or media
   (`pack-loading`); `index.tsx` and `QuestionScreen.tsx` (`dynamic-board`); CLAUDE.md.
 - **Owns**: `src/types.ts`, `src/questionTypes/`, `src/questions/`
@@ -184,13 +213,13 @@ export type Quiz = {
   them.
 - **Scope**: add the four union members and renderer files; refactor `MusicBox` to take one
   track's data as props (its `CONFIG` disappears and the track data moves into doors 13, 21, 23);
-  migrate the doors per the mapping. Tracks are still `import`ed from `src/audio/` here, because
-  an import is a string URL. Update CLAUDE.md for everything `dynamic-board`, `question-types` and
+  migrate the doors per the mapping; move the five `MusicBox` tracks from `src/audio/` to
+  `public/audio/` and reference them as public paths. Update CLAUDE.md for everything `dynamic-board`, `question-types` and
   this task changed.
 - **Out of scope**: moving media and files (`pack-loading`); `GuessThatCat` props
   (`pack-loading`); colours.
 - **Owns**: `src/types.ts`, `src/questionTypes/`, `src/questions/`, `src/components/MusicBox.tsx`,
-  `src/components/WordPuzzle.tsx`, `CLAUDE.md`
+  `src/components/WordPuzzle.tsx`, `src/audio/`, `public/audio/`, `CLAUDE.md`
 - **Done when**: `npm run check` passes; doors 6, 9, 11, 13–15, 17–24 play through to the answer
   in the browser; only doors 2, 7 and 8 remain `custom`.
 
@@ -203,7 +232,8 @@ export type Quiz = {
   `src/quizzes/jul-2025/questions/NN-<slug>.tsx` with default exports; add `jul-2025/quiz.ts`;
   add `src/quizzes/index.ts` with the eager glob; add `DEFAULT_QUIZ` to `src/config.ts` and remove
   `POINTS_PER_QUESTION` and `TEAM_NAMES` from it, since they now come from the pack; resolve the
-  pack in `index.tsx` after mount; render the unknown-pack list; apply `shuffle`,
+  pack in `index.tsx` after mount; key saved state per pack in `src/quizState.ts`, and make
+  `ResetQuizSetting` clear the current pack; render the unknown-pack list; apply `shuffle`,
   `pointsPerQuestion`, `teamNames`, `doorWord`, `title` and `music`; move every pack media file
   (`public/images`, `public/video`, `public/audio`, `src/audio`) to `public/quizzes/jul-2025/`
   and update URLs; give `GuessThatCat` an `images` prop. The favicon stays in `public/images/`.
@@ -211,8 +241,9 @@ export type Quiz = {
 - **Out of scope**: snow, colours, title font (`pack-theme`).
 - **Owns**: `src/types.ts`, `src/config.ts`, `src/quizzes/`, `src/questions/`, `src/questionTypes/`,
   `src/pages/index.tsx`, `src/components/QuestionScreen.tsx`, `src/components/GuessThatCat.tsx`,
-  `src/components/MusicBox.tsx`, `src/audio/`, `public/`, `CLAUDE.md`
-- **Done when**: `npm run check` passes; `/`, `/?quiz=jul-2025` and `/?quiz=nope` behave as
+  `src/components/MusicBox.tsx`, `src/components/ResetQuizSetting.tsx`, `src/quizState.ts`,
+  `src/pages/_layout.tsx` (favicon path only, if it moves), `src/audio/`, `public/`, `CLAUDE.md`
+- **Done when**: `npm run check` passes; `/julequiz/`, `/julequiz/?quiz=jul-2025` and `/julequiz/?quiz=nope` behave as
   decided; a copied pack folder with three questions shows three doors and finishes; all jul-2025
   media still load.
 
@@ -223,12 +254,14 @@ export type Quiz = {
 - **Goal**: Each pack controls snow, title font and colours.
 - **Scope**: add `snow`, `titleFont` and `colors` to `Quiz` and to `jul-2025/quiz.ts`, with
   today's green and red as hex; set CSS custom properties on the page root; replace the hardcoded
-  green and red classes in the board, `QuestionCard`, `QuestionScreen` and the door renderers with
+  green and red classes in the board, `QuestionCard`, `QuestionScreen`, `SettingsMenu`,
+  `ResetQuizSetting` and the door renderers with
   `(--color-*)` values; apply `titleFont` to the title and door heading. Update CLAUDE.md.
 - **Out of scope**: any font not already loaded in `_layout.tsx`; colours inside the
   `FoxChickenGrain`, `MusicBox` buttons and `WordPuzzle` internals.
 - **Owns**: `src/types.ts`, `src/quizzes/*/quiz.ts`, `src/pages/index.tsx`,
-  `src/components/QuestionCard.tsx`, `src/components/QuestionScreen.tsx`, `src/questionTypes/`,
+  `src/components/QuestionCard.tsx`, `src/components/QuestionScreen.tsx`,
+  `src/components/SettingsMenu.tsx`, `src/components/ResetQuizSetting.tsx`, `src/questionTypes/`,
   `CLAUDE.md`
 - **Done when**: `npm run check` passes; jul-2025 looks as it did after `pack-loading`; changing
   one hex in `quiz.ts` changes the board live in `npm run dev`; `snow: false` hides the snow.
@@ -244,14 +277,16 @@ export type Quiz = {
 
 After wave 4, in `npm run build && npm start` (the static build, not just dev):
 
-- `/` plays jul-2025 end to end: open each door, reveal it, award it, and see the finale with
+- `/julequiz/` plays jul-2025 end to end: open each door, reveal it, award it, and see the finale with
   fireworks and finale music once the last door is answered.
-- `/?quiz=nope` lists the packs; each link loads its pack.
+- `/julequiz/?quiz=nope` lists the packs; each link loads its pack.
 - Copy `src/quizzes/jul-2025` to `src/quizzes/test-pack`, keep three questions, change the title,
   team names, door word and a colour, and set `shuffle: false`, `snow: false`. Rebuild and confirm
   three doors in file order, the new text and colour, no snow, and that the finale triggers after
   three answers. Delete the test pack afterwards.
 - Background music dims for doors with `backgroundVolume` and restores on close.
+- Saved state: answer two doors, reload, and the board and points are restored; switching
+  `?quiz=` to another pack does not show the first pack's state.
 - Browser console: no hydration warnings, no 404s for media.
 
 ## Status
@@ -260,4 +295,5 @@ Not tracked in this file — derive it:
 
 - merged: `gh pr list --state merged --search "quiz-packs-"`
 - open: `gh pr list --state open --search "quiz-packs-"`
+- The PRs target `claude/vibrant-euler-3tsdtn`, not `main`.
 - started but unmerged: `git branch -a --list "*quiz-packs-*"`
