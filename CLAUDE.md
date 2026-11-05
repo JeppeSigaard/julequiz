@@ -71,7 +71,7 @@ bestemmer rækkefølgen før blanding og er lågens `id`. `src/quizzes/index.ts`
 i `public/quizzes/<navn>/{audio,images,video}` og refereres som `/quizzes/<navn>/…`.
 
 `QuestionSpec.type` er `standard`, `wordPuzzle`, `music`, `posterReveal`, `video` eller `custom`
-(fri JSX som `FoxChickenGrain`, `GuessThatCat`). `toQuestion` i `src/questionTypes/index.tsx` laver
+(fri JSX som `GuessThatCat`). `toQuestion` i `src/questionTypes/index.tsx` laver
 dem til `Question` (`body`/`answer`/`setVolume`/`skip`) med renderere i `src/questionTypes/`;
 dørindholdets størrelsestrin (fx `textSize`, `mediaFrame` i `Standard.tsx`) bor i rendererne.
 `backgroundVolume` dæmper baggrundsmusikken, mens lågen er åben (uanset det skærer `useMuffle` i
@@ -113,8 +113,8 @@ ikke; en pakke uden `practice/` har ingen prøverunde.
   startes; stop slukker dem uden blink). `@keyframes sway` animerer det registrerede tal
   `--sway-swing`, og wrapperen ganger det på `--sway`: brug aldrig `var()` i keyframes for
   `rotate`/`transform`/`opacity`, for Chrome kører dem på compositoren med variablens værdi fra
-  animationens start. Bevægelse ud over de fire animationer, lågens åbning (`motion`) og bådens
-  overfart i `FoxChickenGrain` er ikke ønsket.
+  animationens start. Bevægelse ud over de fire animationer og lågens åbning (`motion`) er ikke
+  ønsket.
 - `src/components/decor.tsx` har de fælles primitiver: `Paper` (stiplet søm, valgfri `stitchSize`),
   `KeyCap`, `PillButton` (`team-1`/`team-2`/`neutral`/`dark`, valgfri `keyHint`) og `TeamPlaque`
   (`board`/`end`, bruger `AnimatedNumber`). Kendte grænser: `Paper` har fast radius og skygge,
