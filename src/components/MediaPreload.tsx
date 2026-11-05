@@ -10,15 +10,17 @@ export const MediaPreload: FunctionComponent<{ urls: string[] }> = ({ urls }) =>
   if (urls.length === 0) return null;
   return (
     <div hidden aria-hidden="true">
-      {[...new Set(urls)].map((url) =>
-        VIDEO_EXT.test(url) ? (
+      {[...new Set(urls)].map((url) => {
+        // Endelsen testes uden query og fragment (fx "#t=00:00:50"), men hele URL'en hentes.
+        const path = url.split(/[?#]/)[0] ?? url;
+        return VIDEO_EXT.test(path) ? (
           <video key={url} src={url} preload="auto" muted />
-        ) : AUDIO_EXT.test(url) ? (
+        ) : AUDIO_EXT.test(path) ? (
           <audio key={url} src={url} preload="auto" />
         ) : (
           <img key={url} src={url} alt="" />
-        ),
-      )}
+        );
+      })}
     </div>
   );
 };
