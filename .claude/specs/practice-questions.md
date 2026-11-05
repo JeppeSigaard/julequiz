@@ -81,8 +81,8 @@ or with a button in the settings menu (`M`).
 4. **Practice state in `QuizBoard`** (`src/pages/index.tsx`):
    - `const [practiceIndex, setPracticeIndex] = useState<number | null>(null);`
    - `startPractice(index: number)`: if `quiz.practice[index]` is undefined → `endPractice()` and
-     return; else `setPracticeIndex(index)` and apply its `setVolume` to `bgsound` as
-     `pickQuestion` does.
+     return; else `setPracticeIndex(index)` and `bgsound?.volume(question.setVolume ?? 1)`, so a
+     lowered volume from the previous practice question never carries over and 0 is honoured.
    - `endPractice()`: `setPracticeIndex(null)` and `bgsound?.volume(1)`.
    - Render, right after the door's `QuestionScreen` block:
      `practiceQuestion && <QuestionScreen key={practiceQuestion.id} question={practiceQuestion}
@@ -92,11 +92,15 @@ or with a button in the settings menu (`M`).
      `onAnswer` ignores the team argument: nothing touches the card arrays or consolation points.
 5. **Keyboard.** In the page keydown effect: change the `m` condition to also require
    `practiceIndex === null`. Add: on `p`/`P`, when `activeQuestionIndex === null &&
-   practiceIndex === null && !settingsOpen`, call `startPractice(0)`. Add `practiceIndex` to the
-   effect's dependency array.
+   practiceIndex === null && !settingsOpen`, call `startPractice(0)`. Add `practiceIndex` and
+   `bgsound` to the effect's dependency array (the handler reads `bgsound` via `startPractice`).
+   Also add `practiceIndex === null &&` to the door `glow` condition, so doors stop pulsing behind
+   a practice card as they do behind a real door.
 6. **Settings entry.** New `src/components/PracticeSetting.tsx` (`"use client"`), props
-   `{ onStart: () => void }`, copying the `ResetQuizSetting` layout: `PillButton variant="dark"`
-   "Start prøverunde", description "To prøvespørgsmål, der ikke giver point. Genvej: P." In
+   `{ count: number; onStart: () => void }`, copying the `ResetQuizSetting` layout: `PillButton
+   variant="dark"` "Start prøverunde", description "`{count}` prøvespørgsmål, der ikke giver
+   point. Genvej: P." (so jul-2025 reads "2 prøvespørgsmål, …"); `index.tsx` passes
+   `count={quiz.practice.length}`. In
    `index.tsx`, render it inside `SettingsMenu` before `ResetQuizSetting`, only when
    `quiz.practice.length > 0`, with `onStart={() => { setSettingsOpen(false); startPractice(0); }}`.
 7. **CLAUDE.md.** In the `QuestionScreen` bullet, add that `p` starts the practice round (and that

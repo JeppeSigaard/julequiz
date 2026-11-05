@@ -3,7 +3,10 @@
 import { FunctionComponent } from "react";
 import { PillButton } from "./decor";
 
-export const PracticeSetting: FunctionComponent<{ onStart: () => void }> = (
+export const PracticeSetting: FunctionComponent<{
+  onStart: () => void;
+  count: number;
+}> = (
   props
 ) => (
   <div className="flex flex-col gap-4 items-start">
@@ -11,7 +14,7 @@ export const PracticeSetting: FunctionComponent<{ onStart: () => void }> = (
       Start prøverunde
     </PillButton>
     <p className="text-[22px] font-semibold text-ink-soft">
-      To prøvespørgsmål, der ikke giver point. Genvej: P.
+      {props.count} prøvespørgsmål, der ikke giver point. Genvej: P.
     </p>
   </div>
 );

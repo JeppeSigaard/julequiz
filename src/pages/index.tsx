@@ -90,9 +90,7 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
       return;
     }
     setPracticeIndex(index);
-    if (question.setVolume && bgsound) {
-      bgsound.volume(question.setVolume);
-    }
+    bgsound?.volume(question.setVolume ?? 1);
   };
 
   const startQuiz = () => {
@@ -233,7 +231,7 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [activeQuestionIndex, practiceIndex, settingsOpen]);
+  }, [activeQuestionIndex, practiceIndex, settingsOpen, bgsound]);
 
   return (
     <>
@@ -309,12 +307,13 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
                         key={question.id}
                         number={index + 1}
                         doorWord={quiz.doorWord}
-                                    status={status}
+                        status={status}
                         {...(teamName !== undefined ? { teamName } : {})}
                         glow={
                           tickGroup(index, columns) === (tick ? 1 : 0) &&
                           started &&
                           activeQuestionIndex === null &&
+                          practiceIndex === null &&
                           !question.skip
                         }
                         onClick={pickQuestion(index, question)}
@@ -357,6 +356,7 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
           <SettingsMenu onClose={() => setSettingsOpen(false)}>
             {quiz.practice.length > 0 && (
               <PracticeSetting
+                count={quiz.practice.length}
                 onStart={() => {
                   setSettingsOpen(false);
                   startPractice(0);
