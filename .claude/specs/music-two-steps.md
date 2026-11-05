@@ -1,6 +1,6 @@
 # Musiklåge i to trin
 
-> Status: in progress — claude/funny-archimedes-pjowmi
+> Status: merged — d613499
 
 ## Goal
 
