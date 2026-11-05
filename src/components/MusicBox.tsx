@@ -3,6 +3,8 @@
 import { FunctionComponent, useState, useEffect, useMemo } from "react";
 import useSound from "use-sound";
 
+import { PillButton } from "./decor";
+
 type State = "idle" | "playing" | "stopped" | "revealed";
 
 export const MusicBox: FunctionComponent<{
@@ -70,18 +72,17 @@ export const MusicBox: FunctionComponent<{
   return (
     <div className="flex flex-col items-center gap-4">
       {state === "idle" && (
-        <button
-          onClick={handlePlay}
-          className="flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-full transition-colors"
-        >
-          <span className="material-symbols-outlined">play_arrow</span>
+        <PillButton variant="team-1" onClick={handlePlay}>
+          <span className="material-symbols-outlined text-[44px]">
+            play_arrow
+          </span>
           Start
-        </button>
+        </PillButton>
       )}
 
       {state === "playing" && (
-        <div className="flex items-center gap-2 px-6 py-3 bg-gray-600 text-white rounded-full">
-          <span className="material-symbols-outlined animate-pulse">
+        <div className="bg-ink/10 text-ink-soft text-[26px] font-black rounded-full px-9 py-5 flex items-center gap-4">
+          <span className="material-symbols-outlined text-[44px] animate-pulse">
             graphic_eq
           </span>
           Afspiller...
@@ -89,28 +90,28 @@ export const MusicBox: FunctionComponent<{
       )}
 
       {state === "stopped" && (
-        <div className="flex gap-4">
-          <button
-            onClick={handlePlay}
-            className="flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-full transition-colors"
-          >
-            <span className="material-symbols-outlined">play_arrow</span>
+        <div className="flex gap-6">
+          <PillButton variant="team-1" onClick={handlePlay}>
+            <span className="material-symbols-outlined text-[44px]">
+              play_arrow
+            </span>
             Spil lidt mere
-          </button>
-          <button
-            onClick={handleReveal}
-            className="flex items-center gap-2 px-6 py-3 bg-amber-600 hover:bg-amber-700 text-white rounded-full transition-colors"
-          >
-            <span className="material-symbols-outlined">visibility</span>
+          </PillButton>
+          <PillButton variant="team-2" onClick={handleReveal}>
+            <span className="material-symbols-outlined text-[44px]">
+              visibility
+            </span>
             Vis svar
-          </button>
+          </PillButton>
         </div>
       )}
 
       {state === "revealed" && (
         <div className="flex flex-col items-center gap-4 text-center">
-          <div className="text-7xl font-bold">{props.song}</div>
-          <div className="text-4xl">{props.artist}</div>
+          <div className="font-display text-[96px] text-accent-deep leading-none">
+            {props.song}
+          </div>
+          <div className="text-[43px] font-bold text-ink">{props.artist}</div>
         </div>
       )}
     </div>

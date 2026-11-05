@@ -155,9 +155,9 @@ export function FoxChickenGrain() {
       <button
         key={item}
         onClick={() => handleItemClick(item)}
-        className={`text-5xl p-3 rounded-xl transition-all duration-200 ${
+        className={`text-[72px] leading-none p-3 rounded-xl transition-all duration-200 ${
           canInteract
-            ? "hover:scale-110 hover:bg-white/20 cursor-pointer"
+            ? "hover:scale-110 hover:bg-snow/20 cursor-pointer"
             : "opacity-50 cursor-not-allowed"
         }`}
         title={item.charAt(0).toUpperCase() + item.slice(1)}
@@ -184,10 +184,10 @@ export function FoxChickenGrain() {
         title="Click to sail"
       >
         <div className="flex items-center gap-2">
-          <div className="text-6xl">🚣</div>
+          <div className="text-[88px] leading-none">🚣</div>
           {cargo && (
             <span
-              className="text-4xl cursor-pointer hover:scale-110 transition-transform"
+              className="text-[56px] leading-none cursor-pointer hover:scale-110 transition-transform"
               onClick={(e) => {
                 e.stopPropagation();
                 handleItemClick(cargo);
@@ -203,15 +203,15 @@ export function FoxChickenGrain() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="relative w-80 h-96 rounded-xl overflow-hidden">
+      <div className="relative w-[520px] h-[560px] rounded-[24px] overflow-hidden">
         {/* Game over overlay */}
         {isGameOver && (
-          <div className="absolute inset-0 bg-black/80 z-20 flex items-center justify-center">
+          <div className="absolute inset-0 bg-felt-deep/90 z-20 flex items-center justify-center">
             <div className="text-center">
-              <span className="text-red-500 text-xl font-bold block mb-2">
+              <span className="text-highlight font-display text-[43px] block mb-2">
                 {message}
               </span>
-              <span className="text-white/70 text-sm">
+              <span className="text-snow font-body text-[26px]">
                 Spillet starter forfra...
               </span>
             </div>
@@ -219,7 +219,7 @@ export function FoxChickenGrain() {
         )}
 
         {/* Top bank */}
-        <div className="absolute left-0 right-0 top-0 h-[30%] bg-green-600 flex items-center justify-center gap-2">
+        <div className="absolute left-0 right-0 top-0 h-[30%] bg-felt border-b-4 border-felt-deep flex items-center justify-center gap-2">
           <div className="flex gap-2">
             {(["fox", "chicken", "grain"] as Item[]).map((item) =>
               renderItem(item, "left")
@@ -228,11 +228,13 @@ export function FoxChickenGrain() {
         </div>
 
         {/* River */}
-        <div className="absolute top-[30%] bottom-[30%] left-0 right-0 bg-blue-500">
+        <div className="absolute top-[30%] bottom-[30%] left-0 right-0 bg-felt-deep">
+          <div className="absolute inset-0 bg-mist/40" />
+          <div className="absolute inset-x-0 top-1/2 h-10 -translate-y-1/2 bg-mist/20" />
           {renderBoat()}
           {message && !isGameOver && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <span className="text-white text-center text-sm font-medium bg-black/50 px-3 py-1 rounded-lg">
+              <span className="text-snow text-center text-[26px] leading-tight font-bold bg-felt-deep/80 px-5 py-2 rounded-xl">
                 {message}
               </span>
             </div>
@@ -240,7 +242,7 @@ export function FoxChickenGrain() {
         </div>
 
         {/* Bottom bank */}
-        <div className="absolute left-0 right-0 bottom-0 h-[30%] bg-green-600 flex items-center justify-center gap-2">
+        <div className="absolute left-0 right-0 bottom-0 h-[30%] bg-felt border-t-4 border-felt-deep flex items-center justify-center gap-2">
           <div className="flex gap-2">
             {(["fox", "chicken", "grain"] as Item[]).map((item) =>
               renderItem(item, "right")

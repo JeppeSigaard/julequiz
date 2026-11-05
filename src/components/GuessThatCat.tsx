@@ -33,12 +33,14 @@ export const GuessThatCat: FunctionComponent<{
   }, []);
 
   if (!visible) {
-    return <p className="text-3xl">borte, borte, borte...</p>;
+    return <p className="font-display text-[58px] text-ink-soft">borte, borte, borte...</p>;
   }
 
   return (
     <>
-      <img src={catSrc} alt="A cute cat" className={props.className} />
+      <div className="rotate-2 bg-paper-lit p-4 pb-8 shadow-paper-edge rounded-[8px]">
+        <img src={catSrc} alt="A cute cat" className={props.className} />
+      </div>
       {visible && <audio src={mmlemSFX} autoPlay />}
     </>
   );

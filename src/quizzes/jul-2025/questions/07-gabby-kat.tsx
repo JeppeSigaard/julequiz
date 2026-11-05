@@ -4,7 +4,7 @@ import { type QuestionSpec } from "../../../types";
 const question: QuestionSpec = {
   type: "custom",
   backgroundVolume: 0.7,
-  body: <p className="text-6xl">Hvem er den Gabby-kat?</p>,
+  body: <p className="font-body text-[58px] font-bold text-ink">Hvem er den Gabby-kat?</p>,
   answer: (
     <GuessThatCat
       images={[
