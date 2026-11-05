@@ -13,12 +13,14 @@ import { Footer } from "../components/board/Footer";
 import { Stage } from "../components/Stage";
 import { EndScreen } from "../components/EndScreen";
 import { SettingsMenu } from "../components/SettingsMenu";
+import { TeamPointsSetting } from "../components/TeamPointsSetting";
 import { ResetQuizSetting } from "../components/ResetQuizSetting";
 import { loadQuizState, saveQuizState } from "../quizState";
 
 import useSound from "use-sound";
 
 import dingSFX from "../sfx/ding.mp3";
+import wrongSFX from "../sfx/wrong2.mp3";
 import { Question } from "../types";
 
 // Fisher-Yates shuffle algorithm to randomize questions
@@ -56,6 +58,7 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [ding] = useSound(dingSFX);
+  const [playWrong] = useSound(wrongSFX);
   const [playBgMusic, { stop: stopBgMusic, sound: bgsound }] = useSound(
     asset(quiz.music.background),
     {
@@ -115,10 +118,11 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
     team1Cards.length * quiz.pointsPerQuestion + team1ConsolationPoints;
   const team2Points =
     team2Cards.length * quiz.pointsPerQuestion + team2ConsolationPoints;
-  const handleConsolation = (team: 1 | 2) => {
-    ding();
-    if (team === 1) setTeam1ConsolationPoints((current) => current + 5);
-    else setTeam2ConsolationPoints((current) => current + 5);
+  const adjustConsolation = (team: 1 | 2, amount: number) => {
+    if (amount > 0) ding();
+    else playWrong();
+    if (team === 1) setTeam1ConsolationPoints((current) => current + amount);
+    else setTeam2ConsolationPoints((current) => current + amount);
   };
   const activeQuestion =
     activeQuestionIndex !== null ? questions[activeQuestionIndex] : undefined;
@@ -222,7 +226,7 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
             points={[team1Points, team2Points]}
             doors={[team1Cards.length, team2Cards.length]}
             consolation={[team1ConsolationPoints, team2ConsolationPoints]}
-            onConsolation={handleConsolation}
+            onConsolation={(team) => adjustConsolation(team, 5)}
           />
         ) : (
           <>
@@ -235,7 +239,7 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
                 points={[team1Points, team2Points]}
                 doors={[team1Cards.length, team2Cards.length]}
                 consolation={[team1ConsolationPoints, team2ConsolationPoints]}
-                onConsolation={handleConsolation}
+                onConsolation={(team) => adjustConsolation(team, 5)}
                 onTitleClick={() => {
                   if (started) {
                     stopQuiz();
@@ -315,6 +319,11 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
         )}
         {settingsOpen && (
           <SettingsMenu onClose={() => setSettingsOpen(false)}>
+            <TeamPointsSetting
+              teamNames={quiz.teamNames}
+              step={quiz.pointsPerQuestion}
+              onAdjust={adjustConsolation}
+            />
             <ResetQuizSetting pack={quiz.name} />
           </SettingsMenu>
         )}
