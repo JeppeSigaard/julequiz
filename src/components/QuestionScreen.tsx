@@ -1,6 +1,6 @@
 "use client";
 
-import { FunctionComponent, useEffect, useState } from "react";
+import { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { type Question } from "../types";
 import * as motion from "motion/react-client";
 import useSound from "use-sound";
@@ -149,7 +149,10 @@ export const QuestionScreen: FunctionComponent<{
             />
           </div>
           <main className="flex min-h-0 w-[1200px] grow flex-col items-center justify-center gap-[26px] text-center">
-            {hasAnswered ? props.question.answer : props.question.body}
+            {/* Nøgle, så samme komponenttype på begge sider ikke beholder de frosne URL'er */}
+            <Fragment key={hasAnswered ? "answer" : "body"}>
+              {hasAnswered ? props.question.answer : props.question.body}
+            </Fragment>
           </main>
           <footer className="flex min-h-[101px] w-full items-center justify-center gap-[29px]">
             {hasAnswered ? (

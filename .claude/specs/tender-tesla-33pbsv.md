@@ -106,7 +106,8 @@ Today only the answer's media are preloaded, and only while that door is open (`
      useCachedUrl(mmlemSFX)` with the other hooks, before `if (!visible) return`.
    - Remove `asset` imports that become unused.
 5. **`QuestionScreen.tsx`**: resolve each sfx with `useCachedUrl` and call `useSound(url, { format:
-   ["mp3"] })`. Delete the `<MediaPreload …/>` line and its import. Delete
+   ["mp3"] })`. Delete the `<MediaPreload …/>` line and its import. Wrap `{hasAnswered ? props.question.answer :
+   props.question.body}` in `<Fragment key={hasAnswered ? "answer" : "body"}>` (see Traps). Delete
    `src/components/MediaPreload.tsx`.
 6. **`src/pages/index.tsx` (`QuizBoard`)**: import `efek.mp3`, `swoosh2.mp3`, `vinyl-stop.mp3`,
    `yoshi-tongue.mp3` (and reuse the existing `wrongSFX` import of `wrong2.mp3`). Add `const [media,
@@ -132,6 +133,13 @@ Today only the answer's media are preloaded, and only while that door is open (`
    `custom`-låge kalder selv `cachedUrl(asset(…))`".
 
 ## Traps
+
+- **Do not let the question side and the answer side share a component instance.**
+  `QuestionScreen` renders `{hasAnswered ? props.question.answer : props.question.body}`; for a
+  `standard` door both are `<SlideView>` in the same slot, so React reuses the instance and
+  `useAsset`'s frozen state keeps the question's URLs on the answer side (door 10 shows no
+  `pickle.jpg`). Wrap that expression in `<Fragment key={hasAnswered ? "answer" : "body"}>` so each
+  side mounts fresh.
 
 - **Do not call `asset()`/`cachedUrl()` directly in render for a `src`.** `VideoBody` re-renders
   when its clip ends (`ended` state); if the blob finished meanwhile, `src` flips from the network
