@@ -2,6 +2,7 @@
 
 import type { CSSProperties, FC } from "react";
 import { Fireworks } from "@fireworks-js/react";
+import Snowfall from "react-snowfall";
 import { TeamPlaque } from "./decor";
 
 const SKY: CSSProperties = {
@@ -41,6 +42,12 @@ export const EndScreen: FC<{
     // fixed er Stage-relativ pga. Stage-transformationen og uafhængig af wrapperen i index.tsx
     <div className="fixed inset-0 overflow-hidden bg-night" style={SKY}>
       <Fireworks autostart className="absolute inset-0" />
+      <Snowfall
+        color="white"
+        radius={[1, 2.5]}
+        opacity={[0.15, 0.5]}
+        snowflakeCount={60}
+      />
 
       <div aria-hidden className="absolute inset-0 z-10">
         <div className="absolute inset-x-0 bottom-0 h-[144px] rounded-[50%_50%_0_0/72px_72px_0_0] border-t-2 border-snow/40 bg-felt" />
@@ -55,7 +62,7 @@ export const EndScreen: FC<{
           {winner === null ? "Uafgjort!" : `${teamNames[winner - 1]} vinder!`}
         </h1>
 
-        <div className="mt-[84px] flex items-end gap-[108px]">
+        <div className="mt-[140px] flex items-end gap-[108px]">
           {([1, 2] as const).map((t) => (
             <div
               key={t}
