@@ -100,11 +100,11 @@ ikke; en pakke uden `practice/` har ingen prøverunde.
 - Fonte: `font-display` (Mountains of Christmas) til overskrifter og tal, `font-body` (Nunito) til
   resten. Animationer: `animate-twinkle` (pærerne i `Garland`), `animate-glow` (lågens glød) og
   `animate-sway` (lågerne vugger i pærernes 2,4 s-takt med forskudt fase, mens musikken spiller;
-  animationen kører altid, og `sway` skruer kun det registrerede `--sway`-udsving op og ned;
-  `sway` animerer det registrerede tal `--sway-swing`, og wrapperen ganger det på `--sway`: brug
-  aldrig `var()` i keyframes for `rotate`/`transform`/`opacity`, for Chrome kører dem på
-  compositoren med variablens værdi fra animationens start);
-  bevægelse ud over det og lågens åbning (`motion`) er ikke ønsket.
+  animationen kører altid, og `sway` skruer kun det registrerede `--sway`-udsving op og ned).
+  `@keyframes sway` animerer det registrerede tal `--sway-swing`, og wrapperen ganger det på
+  `--sway`: brug aldrig `var()` i keyframes for `rotate`/`transform`/`opacity`, for Chrome kører
+  dem på compositoren med variablens værdi fra animationens start. Bevægelse ud over det og lågens
+  åbning (`motion`) er ikke ønsket.
 - `src/components/decor.tsx` har de fælles primitiver: `Paper` (stiplet søm, valgfri `stitchSize`),
   `KeyCap`, `PillButton` (`team-1`/`team-2`/`neutral`/`dark`, valgfri `keyHint`) og `TeamPlaque`
   (`board`/`end`, bruger `AnimatedNumber`). Kendte grænser: `Paper` har fast radius og skygge,
