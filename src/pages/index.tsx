@@ -287,6 +287,7 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
                           activeQuestionIndex === null &&
                           !question.skip
                         }
+                        sway={started}
                         onClick={pickQuestion(index, question)}
                       />
                     );
