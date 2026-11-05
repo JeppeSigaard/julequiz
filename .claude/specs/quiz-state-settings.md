@@ -1,6 +1,6 @@
 # Quiz state that survives refresh, plus a settings menu
 
-> Status: in progress — quiz-state-settings
+> Status: merged — f951dfd
 
 ## Goal
 
