@@ -1,6 +1,6 @@
 # Quiz packs: the wordPuzzle, music, posterReveal and video types
 
-> Status: in progress — quiz-packs-interactive-types
+> Status: merged — 294602b
 > Branch: `quiz-packs-interactive-types`, base and PR target `claude/vibrant-euler-3tsdtn` (diff against `origin/claude/vibrant-euler-3tsdtn`; never `main`).
 > Master plan: `.claude/initiatives/quiz-packs.md`. Depends on `dynamic-board` and `question-types` (both merged).
 
