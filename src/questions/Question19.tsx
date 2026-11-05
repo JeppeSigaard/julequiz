@@ -49,7 +49,7 @@ export const Question19: Question = {
   setVolume: 0.4,
   answer: (
     <>
-      <video autoPlay src={asset("/video/letgoansw.mp4")} className="w-275" />,
+      <video autoPlay src={asset("/video/letgoansw.mp4")} className="w-275" />
       <p className="text-7xl font-bold">7</p>
     </>
   ),

@@ -18,11 +18,17 @@ in `npm run dev` and in `npm start`. Every hand-written media path has to respec
   user does this by hand, and the workflow must not try to (`enablement: true` is not used).
 - Moving media from `public/` into `src/` as module imports, renaming media files, or converting
   `trille.mov`.
-- Other changes to quiz content, layout or behaviour.
+- Other changes to quiz content, layout or behaviour. The one exception is the stray-comma fix
+  decided after review (see Decisions made). The unused `Answer` components in Question15/19 stay.
 - Adding `getConfig`/`render: 'static'` to pages. The build is already fully static (see facts).
 
 ## Decisions made
 
+- After review → also remove the stray `,` after `<audio … />` in `Question15.tsx` (~line 42)
+  and after `<video … />` in `Question19.tsx` (~line 52). JSX renders it as a visible "," on the
+  answer screen. In CLAUDE.md: realign the `npm run dev` table row to the table width, mention
+  `public/audio/` alongside images/video in the Medier `asset()` sentence, and give the
+  `npm start` row the `/julequiz/` URL as well.
 - Hosting URL → project subpath `/julequiz/`, no custom domain.
 - Where the base path applies → always, via `basePath: "/julequiz/"` in `waku.config.ts`. Dev
   runs at `http://localhost:3000/julequiz/`. No env-var switch.

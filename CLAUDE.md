@@ -12,10 +12,10 @@ og commit-beskeder er også på dansk, identifikatorer og filnavne på engelsk.
 
 | Kommando        | Gør                                                                   |
 | --------------- | --------------------------------------------------------------------- |
-| `npm run dev`   | Waku-devserver med hot reload (http://localhost:3000/julequiz/)        |
+| `npm run dev`   | Waku-devserver med hot reload (http://localhost:3000/julequiz/)       |
 | `npm run check` | `tsc --noEmit` + `waku build`; skal passere, før noget meldes færdigt |
 | `npm run build` | produktionsbuild til `dist/` (statisk genereret)                      |
-| `npm start`     | serverer det byggede `dist/`                                          |
+| `npm start`     | serverer det byggede `dist/` (http://localhost:3000/julequiz/)        |
 
 Der er ingen linter og ingen tests. `check` beviser kun, at det typechecker og bygger: om en låge
 virker, ses kun ved at åbne den i browseren.
@@ -51,7 +51,7 @@ et lille spil (`FoxChickenGrain`, `WordPuzzle`, `GuessThatCat`, `MusicBox` i `sr
 
 ### Medier
 
-Billeder og video ligger i `public/images/` og `public/video/` og refereres gennem
+Billeder, video og lyd ligger i `public/images/`, `public/video/` og `public/audio/` og refereres gennem
 `asset("/images/…")` fra `src/asset.ts`, fordi quizzen kører under basestien `/julequiz/` på GitHub
 Pages. Lyd importeres som moduler fra `src/audio/` (musik) og `src/sfx/` (effekter);
 `src/env.d.ts` erklærer `*.mp3`.

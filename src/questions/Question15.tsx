@@ -39,7 +39,7 @@ export const Question15: Question = {
     <>
       <div className="text-7xl font-bold">Valdes Jul</div>
       <div className="text-4xl">Christopher</div>
-      <audio src={asset("/audio/Valdes Jul.mp3#t=00:00:50")} autoPlay />,
+      <audio src={asset("/audio/Valdes Jul.mp3#t=00:00:50")} autoPlay />
     </>
   ),
 };
