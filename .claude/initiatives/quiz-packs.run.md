@@ -17,3 +17,4 @@
 - bølge 4 færdig; integrationstjek startet.
 - integrationstjek: 5/6 PASS; FAIL: bræt med få låger (3) er højere end skærmen. Fix-opgave quiz-packs-integration-fix startet.
 - integration-fix: flettet i PR #14 (b753afa) efter 1 review uden fund. Initiativet er færdigt.
+- færdig: dev-server startet til manuel afprøvning (port 3000).
