@@ -22,7 +22,7 @@ export const PosterAnswer = ({
       <img
         src={asset(cropped)}
         alt={prompt}
-        className={`h-auto max-h-[520px] w-150 -rotate-1 ${mediaFrame}`}
+        className={`h-[520px] w-auto -rotate-1 ${mediaFrame}`}
       />
     </button>
   );

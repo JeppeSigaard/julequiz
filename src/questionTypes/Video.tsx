@@ -13,6 +13,8 @@ export const VideoBody = ({
   caption?: string;
 }) => {
   const [ended, setEnded] = useState(false);
+  const videoHeight = caption !== undefined ? "h-[420px]" : "h-[480px]";
+  const promptSize = prompt.length <= 30 ? "text-[77px]" : "text-[58px]";
 
   return (
     <>
@@ -22,7 +24,8 @@ export const VideoBody = ({
           controls={false}
           src={asset(video)}
           className={classNames(
-            "h-[480px] max-w-[1000px] transition-opacity",
+            videoHeight,
+            "max-w-[1000px] transition-opacity",
             mediaFrame,
             ended && "opacity-25"
           )}
@@ -31,14 +34,15 @@ export const VideoBody = ({
         {/* Prompten vises først når klippet er slut; den kommer aldrig frem, hvis svaret vises før. */}
         <p
           className={classNames(
-            "absolute inset-x-0 top-1/2 -translate-y-1/2 px-10 text-center font-display text-[77px] font-bold leading-tight text-ink transition-opacity",
+            "absolute inset-x-0 top-1/2 -translate-y-1/2 px-10 text-center font-display font-bold leading-tight text-ink transition-opacity",
+            promptSize,
             ended ? "opacity-100" : "opacity-0"
           )}
         >
           {prompt}
         </p>
       </div>
-      {caption !== undefined && <p className="text-[41px] text-ink-soft">{caption}</p>}
+      {caption !== undefined && <p className="max-w-300 text-center text-[41px] text-ink-soft">{caption}</p>}
     </>
   );
 };

@@ -48,9 +48,11 @@ export const toQuestion = (spec: QuestionSpec, id: string): Question => {
     case "posterReveal":
       return {
         id,
-        body: <p className="max-w-300 text-center font-display text-[110px] font-bold leading-none text-ink">
+        body: (
+          <p className="max-w-300 text-center font-display text-[110px] font-bold leading-none text-ink">
             {spec.prompt}
-          </p>,
+          </p>
+        ),
         answer: <PosterAnswer prompt={spec.prompt} cropped={spec.cropped} full={spec.full} />,
         ...common,
       };
