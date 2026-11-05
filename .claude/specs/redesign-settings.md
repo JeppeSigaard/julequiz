@@ -1,6 +1,6 @@
 # Redesign: settings
 
-> Status: in progress — redesign-settings
+> Status: merged — 630537b
 
 Branch `redesign-settings`, branched from and PR-targeting `claude/sweet-mendel-p0gtn1` (the initiative's integration branch, NOT `main`: every push to `main` deploys to GitHub Pages). Master plan: `.claude/initiatives/redesign.md` (settled; restated below). Depends on `foundation` and `door-frame`, both merged.
 
