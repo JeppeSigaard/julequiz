@@ -13,7 +13,7 @@ export const VideoBody = ({
   caption?: string;
 }) => {
   const [ended, setEnded] = useState(false);
-  const videoHeight = caption !== undefined ? "h-[420px]" : "h-[480px]";
+  const videoHeight = caption !== undefined ? "h-[420px]" : "h-[600px]";
   const promptSize = prompt.length <= 30 ? "text-[77px]" : "text-[58px]";
 
   return (
@@ -25,7 +25,7 @@ export const VideoBody = ({
           src={asset(video)}
           className={classNames(
             videoHeight,
-            "max-w-[1000px] transition-opacity",
+            "max-w-[1100px] transition-opacity",
             mediaFrame,
             ended && "opacity-25"
           )}
