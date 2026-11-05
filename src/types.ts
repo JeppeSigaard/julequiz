@@ -4,6 +4,7 @@ export type Question = {
   id: string;
   body: ReactNode;
   answer: ReactNode;
+  preload: string[];
   setVolume?: number;
   skip?: boolean;
 };
@@ -19,7 +20,7 @@ export type QuestionSpec = Common &
     | { type: "music"; track: string; song: string; artist: string; start: number; stop: number; answerStart: number }
     | { type: "posterReveal"; prompt: string; cropped: string; full: string }
     | { type: "video"; video: string; prompt: string; caption?: string; answer: Slide }
-    | { type: "custom"; body: ReactNode; answer: ReactNode }
+    | { type: "custom"; body: ReactNode; answer: ReactNode; preload?: string[] }
   );
 
 export type Quiz = {
