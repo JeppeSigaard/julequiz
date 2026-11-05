@@ -55,9 +55,10 @@ og `exactOptionalPropertyTypes`. `src/pages.gen.ts` genereres af Waku og rediger
 - `src/components/QuestionScreen.tsx` er den åbne låge: et papirkort med bånd, kristtorn og
   sløret mørk baggrund. Tastatur: Enter/mellemrum viser svaret, 1/2 giver lågen til et hold, q/x til
   ingen, Escape lukker eller går tilbage til spørgsmålet. `m` åbner indstillinger (`SettingsMenu`,
-  Escape lukker), når ingen låge er åben; `TeamNamesSetting` ændrer holdnavnene (gemt pr. pakke
-  under sin egen nøgle i `src/quizState.ts`, så de overlever nulstilling; et tomt felt falder
-  tilbage til `Quiz.teamNames`), `TeamPointsSetting` justerer holdenes trøstepoint med
+  Escape lukker), når ingen låge er åben; `p` starter prøverunden (også "Start prøverunde" i
+  indstillingerne); `TeamNamesSetting` ændrer holdnavnene (gemt pr. pakke under sin egen nøgle i
+  `src/quizState.ts`, så de overlever nulstilling; et tomt felt falder tilbage til
+  `Quiz.teamNames`), `TeamPointsSetting` justerer holdenes trøstepoint med
   ±5/±`pointsPerQuestion`, og `ResetQuizSetting` nulstiller pakkens gemte quiz.
 
 ### Quiz-pakker
@@ -78,6 +79,10 @@ Svarets billeder, video og lyd (`Question.preload`, udledt i `toQuestion`) forud
 `MediaPreload`, mens lågen er åben; en `custom`-låge angiver dem selv med `preload`. En
 ny type skal tilføjes i `QuestionSpec` og i `toQuestion` (switchen har ingen default med vilje).
 Kopiér den nærmeste eksisterende låge frem for at opfinde en ny form.
+
+Pakkens prøvespørgsmål ligger i `src/quizzes/<navn>/practice/*.tsx` (samme `QuestionSpec`-form,
+filrækkefølge). De åbnes i samme lågekort med `Prøve <n>` som bånd, giver aldrig point og gemmes
+ikke; en pakke uden `practice/` har ingen prøverunde.
 
 ### Farver og stil
 

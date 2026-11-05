@@ -13,8 +13,7 @@ import swooshSFX from "../sfx/swoosh2.mp3";
 
 export const QuestionScreen: FunctionComponent<{
   question: Question;
-  questionIndex: number;
-  doorWord: string;
+  title: string;
   teamNames: [string, string];
   onClose: () => void;
   onAnswer: (team?: number) => void;
@@ -92,7 +91,7 @@ export const QuestionScreen: FunctionComponent<{
       >
         <div
           role="dialog"
-          aria-label={`${props.doorWord} ${props.questionIndex + 1}`}
+          aria-label={props.title}
           className="relative flex h-[912px] w-[1656px] flex-col items-center rounded-[36px] bg-paper text-ink px-[84px] pb-[53px] shadow-[0_12px_0_color-mix(in_oklab,var(--quiz-paper)_80%,black),0_48px_96px_rgb(0_0_0/0.6)]"
           style={{
             backgroundImage:
@@ -140,7 +139,7 @@ export const QuestionScreen: FunctionComponent<{
               className="mt-[22px] -mr-[17px] h-[77px] w-[55px] bg-accent-deep [clip-path:polygon(0_0,100%_0,100%_100%,0_100%,34%_50%)]"
             />
             <h2 className="relative rounded-b-[22px] bg-accent px-[67px] pt-3 pb-[17px] font-display text-[79px] font-bold leading-none text-paper-lit shadow-[0_7px_0_color-mix(in_oklab,var(--quiz-accent)_72%,black)]">
-              {props.doorWord} {props.questionIndex + 1}
+              {props.title}
             </h2>
             <div
               aria-hidden="true"
