@@ -1,2 +1,77 @@
 @import "tailwindcss";
 @import "material-symbols";
+
+:root {
+  --quiz-background: #0e2c22;
+  --quiz-paper: #f6ecd9;
+  --quiz-ink: #12372a;
+  --quiz-accent: #d2393f;
+  --quiz-highlight: #f2c14e;
+  --quiz-team1: #d2393f;
+  --quiz-team2: #f2c14e;
+}
+
+/* inline, så var(--quiz-*) først opløses på det element, der bruger farven (Stage sætter dem) */
+@theme inline {
+  --color-night: color-mix(in oklab, var(--quiz-background) 60%, black);
+  --color-felt: var(--quiz-background);
+  --color-felt-deep: color-mix(in oklab, var(--quiz-background) 70%, black);
+  --color-paper: var(--quiz-paper);
+  --color-paper-lit: color-mix(in oklab, var(--quiz-paper) 70%, white);
+  --color-paper-edge: color-mix(in oklab, var(--quiz-paper) 80%, black);
+  --color-ink: var(--quiz-ink);
+  --color-ink-soft: color-mix(in oklab, var(--quiz-ink) 70%, var(--quiz-paper));
+  --color-snow: color-mix(in oklab, var(--quiz-paper) 70%, white);
+  --color-mist: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--quiz-paper) 70%, white) 55%,
+    var(--quiz-background)
+  );
+  --color-accent: var(--quiz-accent);
+  --color-accent-deep: color-mix(in oklab, var(--quiz-accent) 72%, black);
+  --color-highlight: var(--quiz-highlight);
+  --color-highlight-deep: color-mix(in oklab, var(--quiz-highlight) 72%, black);
+  --color-team-1: var(--quiz-team1);
+  --color-team-1-deep: color-mix(in oklab, var(--quiz-team1) 72%, black);
+  --color-team-1-ink: var(--quiz-paper);
+  --color-team-2: var(--quiz-team2);
+  --color-team-2-deep: color-mix(in oklab, var(--quiz-team2) 72%, black);
+  --color-team-2-ink: var(--quiz-ink);
+
+  --font-display: "Mountains of Christmas", serif;
+  --font-body: "Nunito", sans-serif;
+
+  --shadow-paper-edge:
+    0 7px 0 color-mix(in oklab, var(--quiz-paper) 80%, black),
+    0 14px 26px rgb(0 0 0 / 0.4);
+  --shadow-pill-team-1: 0 7px 0 color-mix(in oklab, var(--quiz-team1) 72%, black);
+  --shadow-pill-team-2: 0 7px 0 color-mix(in oklab, var(--quiz-team2) 72%, black);
+  --shadow-pill-dark: 0 7px 0 color-mix(in oklab, var(--quiz-ink) 60%, black);
+
+  --animate-twinkle: twinkle 2.4s ease-in-out infinite;
+  --animate-glow: glow 2s ease-in-out infinite alternate;
+
+  @keyframes twinkle {
+    0%,
+    100% {
+      opacity: 1;
+      filter: brightness(1);
+    }
+    50% {
+      opacity: 0.55;
+      filter: brightness(0.85);
+    }
+  }
+  @keyframes glow {
+    from {
+      box-shadow:
+        0 0 0 4px color-mix(in oklab, var(--quiz-highlight) 60%, transparent),
+        0 0 20px color-mix(in oklab, var(--quiz-highlight) 30%, transparent);
+    }
+    to {
+      box-shadow:
+        0 0 0 4px var(--quiz-highlight),
+        0 0 60px color-mix(in oklab, var(--quiz-highlight) 60%, transparent);
+    }
+  }
+}
