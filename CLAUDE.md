@@ -33,14 +33,17 @@ og `exactOptionalPropertyTypes`. `src/pages.gen.ts` genereres af Waku og rediger
 - `src/pages/_layout.tsx` er en serverkomponent (fonte, favicon, `styles.css`). Alt andet med
   tilstand, lyd eller browser-API'er er `"use client"`.
 - `src/components/Stage.tsx` er en fast 1920×1080-scene, skaleret til vinduet med `scale()`. Al
-  layout bruger derfor px og `cqmin`, aldrig `vw`/`vh`, og `fixed` inde i scenen er scene-relativ.
-- `src/pages/index.tsx` er hele quizzen i én klientkomponent. `Stage` omslutter `Snowfall` (kun efter
+  layout bruger derfor px (`cqmin` kun inde i en `[container-type:size]`, som `QuestionCard`),
+  aldrig `vw`/`vh`, og `fixed` inde i scenen er scene-relativ.
+- `src/pages/index.tsx` er to klientkomponenter. `HomePage` vælger pakken efter mount, fordi siden
+  prærenderes uden URL'en og indtil da kun viser en tom `bg-night`; `QuizBoard` er selve quizzen.
+  I `QuizBoard` omslutter `Stage` `Snowfall` (kun efter
   titelklik), derefter enten `EndScreen` eller `Garland` + `BoardHeader` + gitter af `QuestionCard`
   + `Footer`, så `QuestionScreen` og `SettingsMenu`. Pakken vælges med `?quiz=<navn>` (standard
   `DEFAULT_QUIZ` i `src/config.ts`); et ukendt navn viser en liste over pakker uden `Stage`.
   Gitterets kolonner og glødegrupper udledes af antal låger (`gridColumns`, `tickGroup`), og
-  rækkefølgen blandes ved mount, hvis `Quiz.shuffle` er sat. `QuestionCard` får kun nummer og
-  status, ikke spørgsmålet.
+  rækkefølgen blandes ved mount, hvis `Quiz.shuffle` er sat. `QuestionCard` får ikke spørgsmålet,
+  kun nummer, status og visningsprops.
 - Board-delene (`Garland`, `BoardHeader`, `Footer`) ligger i `src/components/board/`.
 - Point udledes, ikke lagres: antal vundne låger × `Quiz.pointsPerQuestion` plus trøstepoint (+5 pr.
   klik på et holdnavn). Staten gemmes i `localStorage` pr. pakke (`src/quizState.ts`, format `v2`).
@@ -73,11 +76,12 @@ Kopiér den nærmeste eksisterende låge frem for at opfinde en ny form.
 
 - Pakkens `colors` (background, paper, ink, accent, highlight, team1, team2) sættes af `Stage` som
   `--quiz-*` på det yderste element. `src/styles.css` har standardværdier på `:root` og afleder alle
-  farvetokens i `@theme inline` (night, felt, paper, ink, accent, highlight, team-1/2 og deres
-  `-deep`/`-lit`/`-soft`), så en ny pakkefarve omfarver alle skærme. Hold 1 er rød, Hold 2 guld.
+  farvetokens i `@theme inline` (bl.a. night, felt, paper, snow, mist, ink, accent, highlight,
+  team-1/2 og deres suffikser `-deep`/`-lit`/`-soft`/`-edge`/`-ink`), så en ny pakkefarve
+  omfarver alle skærme. Hold 1 er rød, Hold 2 guld.
 - Brug kun token-utilities (`bg-paper`, `text-ink-soft`, `border-accent/55` …): ingen rå hex og ingen
   Tailwind-paletteklasser (`green-`, `red-`, `amber-`, `gray-`).
-- Falder: afledte tokens må ALDRIG bruges som `var(--color-<afledt>)` i arbitrary values (fx
+- Faldgrube: afledte tokens må ALDRIG bruges som `var(--color-<afledt>)` i arbitrary values (fx
   `shadow-[…var(--color-accent-deep)…]`). Pga. `inline` opløses de på `:root` mod standard-`--quiz-*`
   og følger ikke pakkens farver. Skriv `color-mix(in oklab, var(--quiz-accent) 72%, black)`. Fjern
   ikke `inline` fra `@theme`.
@@ -93,10 +97,13 @@ Kopiér den nærmeste eksisterende låge frem for at opfinde en ny form.
 
 ### Medier
 
-Billeder, video og lyd til en pakke ligger i `public/quizzes/<navn>/…` og refereres gennem
-`asset("/quizzes/…")` fra `src/asset.ts`, fordi quizzen kører under basestien `/julequiz/` på GitHub
-Pages (`public/images/` rummer kun favicon). Lydeffekter, som koden bruger, importeres som moduler
-fra `src/sfx/`; `src/env.d.ts` erklærer `*.mp3`. Pakkens musik angives som sti i `quiz.ts`.
+Billeder, video og lyd til en pakke ligger i `public/quizzes/<navn>/…`. Specs og `quiz.ts` giver
+den almindelige sti `/quizzes/<navn>/…`; renderere og komponenter kører den gennem `asset()` fra
+`src/asset.ts` præcis én gang, fordi quizzen kører under basestien `/julequiz/` på GitHub Pages
+(`public/images/` rummer kun favicon). Kun håndskrevet JSX i en `custom`-låge kalder selv `asset()`.
+Lydeffekter, som koden bruger, importeres som moduler fra `src/sfx/`; `src/env.d.ts` erklærer
+`*.mp3`, og de importerede URL'er går aldrig gennem `asset()`. Pakkens musik angives som sti i
+`quiz.ts`.
 
 ## Arbejdsgang
 
