@@ -1,6 +1,6 @@
 # Dynamisk bræt (quiz-packs-dynamic-board)
 
-> Status: in progress — quiz-packs-dynamic-board
+> Status: merged — 2237260
 > Branch: `quiz-packs-dynamic-board`. Base og PR-mål: `claude/vibrant-euler-3tsdtn` (ikke `main`); diff mod `origin/claude/vibrant-euler-3tsdtn`.
 > Master plan: `.claude/initiatives/` (task `dynamic-board`, ingen afhængigheder).
 
