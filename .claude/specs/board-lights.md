@@ -1,6 +1,6 @@
 # Slukket lys før start
 
-> Status: in progress — claude/fervent-euler-eceyje
+> Status: merged — 94a18a2
 
 ## Goal
 
