@@ -46,7 +46,8 @@ og `exactOptionalPropertyTypes`. `src/pages.gen.ts` genereres af Waku og rediger
   kun nummer, status og visningsprops.
 - Board-delene (`Garland`, `BoardHeader`, `Footer`) ligger i `src/components/board/`.
 - Point udledes, ikke lagres: antal vundne låger × `Quiz.pointsPerQuestion` plus trøstepoint (+5 pr.
-  klik på et holdnavn, og kan justeres op og ned, også under 0, fra indstillingsmenuen). Staten gemmes i `localStorage` pr. pakke (`src/quizState.ts`, format `v2`).
+  klik på et holdnavn, og kan justeres op og ned, også under 0, fra indstillingsmenuen). Staten
+  gemmes i `localStorage` pr. pakke (`src/quizState.ts`, format `v2`).
   Når alle låger, der ikke er `skip`, er besvaret, vises `EndScreen` i stedet for header og gitter:
   den har sin egen `Snowfall` og `Fireworks`, kroner lederen, viser "Uafgjort!" ved lige point, og
   plaketterne giver stadig +5 ved klik. Samtidig skiftes baggrundsmusikken til `music.finale`.

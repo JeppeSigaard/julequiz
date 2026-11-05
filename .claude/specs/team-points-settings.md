@@ -152,6 +152,19 @@ Fire fund fra review af 26c7c20. Ret dem oven på den eksisterende commit.
      ±5/±`pointsPerQuestion`, ved siden af `ResetQuizSetting`.
    - Hold samme stil og linjebredde som resten af filen.
 
+## Review-rettelser (runde 3, godkendt af brugeren)
+
+To små fund fra review af 8452866. Ret dem oven på de eksisterende commits.
+
+1. **`src/components/AnimatedNumber.tsx`:** sæt `if (startValue === endValue) return;` tilbage
+   lige efter `const endValue = value;`. Det erstatter "drop den tidlige `return`" fra runde 2.
+   Uden den kører hver mount en rAF-løkke på 1,2 s, der kun gentager den viste værdi. Den er
+   sikker nu, fordi React kører den forrige effekts cleanup (`cancelAnimationFrame`) før den næste
+   effekt, så en ny værdi stopper stadig en igangværende animation. Alt andet i filen bliver som
+   det er.
+2. **`CLAUDE.md` ~l. 48–50:** bryd punktet om point om, så ingen linje er længere end ca.
+   100 tegn som resten af filen. Ordlyden ændres ikke.
+
 ## Verification
 
 Ingen tests (projektet har ingen, og logikken er en simpel addition). Kør `npm run check`, som

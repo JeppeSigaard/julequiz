@@ -16,6 +16,7 @@ export function AnimatedNumber({
   useEffect(() => {
     const startValue = shownValue.current;
     const endValue = value;
+    if (startValue === endValue) return;
     const startTime = performance.now();
     let frameId = 0;
 
