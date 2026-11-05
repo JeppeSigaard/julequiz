@@ -108,6 +108,7 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
 
   const allAnswered = [...team1Cards, ...team2Cards, ...noTeamCards];
   const columns = gridColumns(questions.length);
+  const doorCount = questions.filter((q) => !q.skip).length;
   const isFinished =
     questions.some((q) => !q.skip) &&
     questions.every((q, i) => q.skip || allAnswered.includes(i));
@@ -230,7 +231,7 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
             <div className="absolute inset-0 flex flex-col gap-[22px] px-[58px] pt-[84px] pb-[26px]">
               <BoardHeader
                 title={quiz.title}
-                doorCount={questions.filter((q) => !q.skip).length}
+                doorCount={doorCount}
                 teamNames={quiz.teamNames}
                 points={[team1Points, team2Points]}
                 doors={[team1Cards.length, team2Cards.length]}
@@ -295,7 +296,7 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
               </main>
               <Footer
                 opened={allAnswered.length}
-                total={questions.filter((q) => !q.skip).length}
+                total={doorCount}
               />
             </div>
           </>

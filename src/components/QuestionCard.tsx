@@ -6,9 +6,9 @@ import useSound from "use-sound";
 type Status = "closed" | "skip" | "nobody" | "team-1" | "team-2";
 
 const OPENED = {
-  "team-1": { rosette: "bg-team-1 text-team-1-ink shadow-[0_0_0_1.5cqmin_var(--quiz-team1)]", mark: "1", name: "text-snow" },
-  "team-2": { rosette: "bg-team-2 text-team-2-ink shadow-[0_0_0_1.5cqmin_var(--quiz-team2)]", mark: "2", name: "text-snow" },
-  nobody: { rosette: "bg-felt text-mist", mark: "–", name: "text-mist" },
+  "team-1": { rosette: "bg-team-1 text-team-1-ink shadow-[0_0_0_4px_rgb(255_255_255/0.08),0_0_26px_var(--quiz-team1)]", mark: "1", name: "text-snow" },
+  "team-2": { rosette: "bg-team-2 text-team-2-ink shadow-[0_0_0_4px_rgb(255_255_255/0.08),0_0_26px_var(--quiz-team2)]", mark: "2", name: "text-snow" },
+  nobody: { rosette: "bg-felt text-mist shadow-[0_0_0_4px_rgb(255_255_255/0.08)]", mark: "–", name: "text-mist" },
 };
 
 const Doodle: FunctionComponent<{ variant: number }> = ({ variant }) => (
@@ -106,20 +106,8 @@ export const QuestionCard: FunctionComponent<{
     <div className={wrapper} style={style}>
       <div
         aria-label={`${doorWord} ${number}: ${teamName ?? "Ingen"}`}
-        className="absolute inset-0 flex items-center gap-[8cqmin] rounded-[19px] bg-night pl-[46cqmin] shadow-[inset_0_6px_16px_rgb(0_0_0/0.7)] ring-1 ring-paper/10"
+        className="absolute inset-0 rounded-[19px] bg-night shadow-[inset_0_6px_16px_rgb(0_0_0/0.7)] ring-1 ring-paper/10"
       >
-        <span
-          aria-hidden="true"
-          className={`flex size-[36cqmin] flex-none items-center justify-center rounded-full font-display text-[22cqmin] font-bold leading-none ${opened.rosette}`}
-        >
-          {opened.mark}
-        </span>
-        <span className="flex min-w-0 flex-col leading-tight">
-          <span className="truncate text-[10cqmin] font-extrabold uppercase tracking-[0.1em] text-mist">
-            {doorWord} {number}
-          </span>
-          <span className={`truncate text-[17cqmin] font-black ${opened.name}`}>{teamName ?? "Ingen"}</span>
-        </span>
         <motion.div
           aria-hidden="true"
           initial={{ rotateY: 0 }}
@@ -128,6 +116,20 @@ export const QuestionCard: FunctionComponent<{
           style={{ transformPerspective: 500 }}
           className="absolute inset-y-0 left-0 w-[40%] origin-left rounded-l-[19px] bg-paper-edge shadow-[6px_0_14px_rgb(0_0_0/0.45)]"
         />
+        <div className="absolute inset-y-0 left-[40%] right-0 flex items-center justify-center gap-[8cqmin] px-[4cqmin]">
+          <span
+            aria-hidden="true"
+            className={`flex size-[36cqmin] flex-none items-center justify-center rounded-full font-display text-[22cqmin] font-bold leading-none ${opened.rosette}`}
+          >
+            {opened.mark}
+          </span>
+          <span className="flex min-w-0 flex-col leading-tight">
+            <span className="truncate text-[10cqmin] font-extrabold uppercase tracking-[0.1em] text-mist">
+              {doorWord} {number}
+            </span>
+            <span className={`truncate text-[17cqmin] font-black ${opened.name}`}>{teamName ?? "Ingen"}</span>
+          </span>
+        </div>
       </div>
     </div>
   );
