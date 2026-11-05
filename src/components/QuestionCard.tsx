@@ -69,7 +69,7 @@ export const QuestionCard: FunctionComponent<{
   const tilt = (((number - 1) * 37) % 7 - 3) * 0.45;
   // Typen skaleres med lågens størrelse (container-enheder), så den virker for ethvert antal låger; kræver en definit størrelse.
   // Animationen kører altid fra mount, så den holder takt med Garland; musikken skruer kun udsvinget op og ned.
-  const swayAmount = sway && status !== "skip" ? 2 + ((number * 5) % 3) * 0.25 : 0;
+  const swayAmount = sway && status !== "skip" ? 1 + ((number * 5) % 3) * 0.125 : 0;
   const wrapper =
     "relative h-full w-full origin-top animate-sway transition-[--sway] duration-1000 [container-type:size]";
   const style = {
@@ -82,12 +82,19 @@ export const QuestionCard: FunctionComponent<{
   if (status === "closed") {
     return (
       <div className={wrapper} style={style}>
+        {/* Gløden ligger i sit eget lag, der altid animerer, så den kan tones hurtigt ind og ud med opacity. */}
+        <span
+          aria-hidden="true"
+          className={`pointer-events-none absolute inset-0 animate-glow rounded-[19px] transition-opacity duration-300 ${
+            glow ? "opacity-100" : "opacity-0"
+          }`}
+        />
         <button
           type="button"
           aria-label={`${doorWord} ${number}`}
           onClick={handleClick}
-          className={`absolute inset-0 cursor-pointer rounded-[19px] transition-colors duration-500 ${
-            glow ? "bg-paper-lit animate-glow" : "bg-paper shadow-paper-edge hover:bg-paper-lit"
+          className={`absolute inset-0 cursor-pointer rounded-[19px] [transition:background-color_0.5s,box-shadow_0.3s] ${
+            glow ? "bg-paper-lit shadow-none" : "bg-paper shadow-paper-edge hover:bg-paper-lit"
           }`}
         >
           <span aria-hidden="true" className="absolute inset-[10px] rounded-[12px] border-2 border-dashed border-accent/40" />
