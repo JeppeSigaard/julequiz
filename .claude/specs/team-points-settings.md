@@ -165,6 +165,32 @@ To små fund fra review af 8452866. Ret dem oven på de eksisterende commits.
 2. **`CLAUDE.md` ~l. 48–50:** bryd punktet om point om, så ingen linje er længere end ca.
    100 tegn som resten af filen. Ordlyden ændres ikke.
 
+## Integration med main (runde 4, godkendt af brugeren)
+
+`main` har fået #25–#27, mens branchen var åben. Bl.a. kom `TeamNamesSetting` (#26): holdnavnene
+kan ændres i samme menu. `index.tsx` har derfor nu `teamNameInputs`-state og en udledt `teamNames`,
+som de øvrige komponenter får i stedet for `quiz.teamNames`.
+
+1. Merge `origin/main` ind i branchen med `git merge origin/main`. Brug ikke rebase, for branchen
+   er allerede pushet og må ikke force-pushes. Der er konflikt i `src/pages/index.tsx` og
+   `CLAUDE.md`, og `decor.tsx` auto-merges.
+2. `src/pages/index.tsx`: behold alt fra begge sider: main's `teamNameInputs`/`teamNames`, gem-
+   og indlæs-effekter, `sway` og `HTMLInputElement`-tjekket, og branchens `playWrong` og
+   `adjustConsolation`.
+   - Menuen skal indeholde, i denne rækkefølge: `TeamNamesSetting` (som på main),
+     `TeamPointsSetting` og `ResetQuizSetting`.
+   - `TeamPointsSetting` får `teamNames={teamNames}` (de udledte navne), ikke
+     `quiz.teamNames`. Ellers viser pointrækkerne de gamle navne efter en omdøbning.
+3. `src/components/TeamPointsSetting.tsx`: giv sektionen en overskrift "Point". Den skal have
+   samme element og klasser som `TeamNamesSetting`'s "Holdnavne"
+   (`<h3 className="font-display text-[44px] font-bold leading-none">`), så de to sektioner ser
+   ens ud.
+4. `CLAUDE.md`: behold begge sider. Indstillingsafsnittet nævner `TeamNamesSetting`,
+   `TeamPointsSetting` og `ResetQuizSetting` i menuens rækkefølge. Afsnittet om point beholder
+   branchens ordlyd, og afsnittene om fonte og `TeamPlaque` beholder main's. Ingen linje må være
+   over ca. 100 tegn.
+5. Kør `npm run check`, og commit merge'en.
+
 ## Verification
 
 Ingen tests (projektet har ingen, og logikken er en simpel addition). Kør `npm run check`, som
