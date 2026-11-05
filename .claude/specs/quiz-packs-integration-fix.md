@@ -1,6 +1,6 @@
 # Quiz packs: brættet skal passe på skærmen
 
-> Status: in progress — quiz-packs-integration-fix
+> Status: merged — b753afa
 
 ## Goal
 

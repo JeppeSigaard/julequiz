@@ -16,3 +16,4 @@
 - pack-theme: flettet i PR #11 (c005bba) efter 1 review + 1 minor-fix (CLAUDE.md).
 - bølge 4 færdig; integrationstjek startet.
 - integrationstjek: 5/6 PASS; FAIL: bræt med få låger (3) er højere end skærmen. Fix-opgave quiz-packs-integration-fix startet.
+- integration-fix: flettet i PR #14 (b753afa) efter 1 review uden fund. Initiativet er færdigt.
