@@ -356,7 +356,8 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
                           practiceIndex === null &&
                           !question.skip
                         }
-                        sway={started}
+                        // Sway er slået fra for nu; sæt tilbage til `started` for at lade lågerne vugge med musikken.
+                        sway={false}
                         onClick={pickQuestion(index, question)}
                       />
                     );
