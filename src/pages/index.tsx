@@ -15,7 +15,7 @@ import { loadQuizState, saveQuizState } from "../quizState";
 import useSound from "use-sound";
 
 import bgmusic from "../audio/waiting-music-116216.mp3";
-import lightningRoundMusic from "../audio/lightning-round.mp3";
+import lightningRoundMusic from "../audio/christmas-disco-groove.mp3";
 import dingSFX from "../sfx/ding.mp3";
 import classNames from "classnames";
 import { Question } from "../types";
