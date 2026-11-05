@@ -74,7 +74,7 @@ export const QuestionScreen: FunctionComponent<{
 
   return (
     <>
-      {/* Skyggen er søskende til fjeder-wrapperen, så den ikke skalerer op fra 0 sammen med kortet */}
+      {/* Sløret er søskende til fjeder-wrapperen, så det ikke skalerer op fra 0 sammen med kortet */}
       <div
         aria-hidden="true"
         className="fixed inset-0 z-40 bg-night/80 backdrop-blur-[4px]"
