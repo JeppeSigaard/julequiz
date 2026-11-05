@@ -1,6 +1,6 @@
 # Fox chicken grain-off: tur, trækketæller og sejlende båd
 
-> Status: in progress — claude/fervent-allen-lcpiq9
+> Status: merged — 42a17e9
 
 ## Goal
 
