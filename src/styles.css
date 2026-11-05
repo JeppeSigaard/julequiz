@@ -11,6 +11,13 @@
   --quiz-team2: #f2c14e;
 }
 
+/* Registreret, så udsvinget kan glide ind og ud med en transition, mens sway-animationen kører videre. */
+@property --sway {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
 /* inline, så var(--quiz-*) først opløses på det element, der bruger farven (Stage sætter dem) */
 @theme inline {
   --color-night: color-mix(in oklab, var(--quiz-background) 60%, black);
@@ -50,6 +57,7 @@
 
   --animate-twinkle: twinkle 2.4s ease-in-out infinite;
   --animate-glow: glow 2s ease-in-out infinite alternate;
+  --animate-sway: sway 2.4s ease-in-out infinite;
 
   @keyframes twinkle {
     0%,
@@ -60,6 +68,15 @@
     50% {
       opacity: 0.55;
       filter: brightness(0.85);
+    }
+  }
+  @keyframes sway {
+    0%,
+    100% {
+      rotate: var(--sway);
+    }
+    50% {
+      rotate: calc(var(--sway) * -1);
     }
   }
   @keyframes glow {

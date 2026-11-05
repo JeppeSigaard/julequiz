@@ -5,6 +5,7 @@ import { type Question } from "../types";
 import * as motion from "motion/react-client";
 import useSound from "use-sound";
 import { PillButton } from "./decor";
+import { MediaPreload } from "./MediaPreload";
 
 import answerSFX from "../sfx/efek.mp3";
 import wrongSFX from "../sfx/wrong2.mp3";
@@ -73,6 +74,7 @@ export const QuestionScreen: FunctionComponent<{
 
   return (
     <>
+      <MediaPreload urls={props.question.preload} />
       {/* Sløret er søskende til fjeder-wrapperen, så det ikke skalerer op fra 0 sammen med kortet */}
       <div
         aria-hidden="true"

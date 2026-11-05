@@ -86,3 +86,32 @@ export function clearQuizState(pack: string): void {
     localStorage.removeItem(storageKey(pack));
   } catch {}
 }
+
+// Holdnavnene gemmes for sig, så "Nulstil quiz" ikke sletter dem.
+const teamNamesKey = (pack: string) => `julequiz-team-names-v1:${pack}`;
+
+export function loadTeamNames(pack: string): [string, string] | null {
+  try {
+    const raw = localStorage.getItem(teamNamesKey(pack));
+    if (raw === null) return null;
+    const data: unknown = JSON.parse(raw);
+    if (!Array.isArray(data)) return null;
+    const [team1, team2] = data;
+    if (
+      data.length !== 2 ||
+      typeof team1 !== "string" ||
+      typeof team2 !== "string"
+    ) {
+      return null;
+    }
+    return [team1, team2];
+  } catch {
+    return null;
+  }
+}
+
+export function saveTeamNames(pack: string, names: [string, string]): void {
+  try {
+    localStorage.setItem(teamNamesKey(pack), JSON.stringify(names));
+  } catch {}
+}

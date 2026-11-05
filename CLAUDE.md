@@ -54,7 +54,9 @@ og `exactOptionalPropertyTypes`. `src/pages.gen.ts` genereres af Waku og rediger
   sløret mørk baggrund. Tastatur: Enter/mellemrum viser svaret, 1/2 giver lågen til et hold, q/x til
   ingen, Escape lukker eller går tilbage til spørgsmålet. `m` åbner indstillinger (`SettingsMenu`,
   Escape lukker), når ingen låge er åben; `p` starter prøverunden (også "Start prøverunde" i
-  indstillingerne); `ResetQuizSetting` nulstiller pakkens gemte quiz.
+  indstillingerne); `TeamNamesSetting` ændrer holdnavnene (gemt pr. pakke under sin egen nøgle i
+  `src/quizState.ts`, så de overlever nulstilling; et tomt felt falder tilbage til
+  `Quiz.teamNames`), og `ResetQuizSetting` nulstiller pakkens gemte quiz.
 
 ### Quiz-pakker
 
@@ -69,7 +71,9 @@ i `public/quizzes/<navn>/{audio,images,video}` og refereres som `/quizzes/<navn>
 (fri JSX som `FoxChickenGrain`, `GuessThatCat`). `toQuestion` i `src/questionTypes/index.tsx` laver
 dem til `Question` (`body`/`answer`/`setVolume`/`skip`) med renderere i `src/questionTypes/`;
 dørindholdets størrelsestrin (fx `textSize`, `mediaFrame` i `Standard.tsx`) bor i rendererne.
-`backgroundVolume` dæmper baggrundsmusikken, mens lågen er åben, og `skip` gør lågen uvælgelig. En
+`backgroundVolume` dæmper baggrundsmusikken, mens lågen er åben, og `skip` gør lågen uvælgelig.
+Svarets billeder, video og lyd (`Question.preload`, udledt i `toQuestion`) forudindlæses skjult af
+`MediaPreload`, mens lågen er åben; en `custom`-låge angiver dem selv med `preload`. En
 ny type skal tilføjes i `QuestionSpec` og i `toQuestion` (switchen har ingen default med vilje).
 Kopiér den nærmeste eksisterende låge frem for at opfinde en ny form.
 
@@ -91,13 +95,16 @@ ikke; en pakke uden `practice/` har ingen prøverunde.
   og følger ikke pakkens farver. Skriv `color-mix(in oklab, var(--quiz-accent) 72%, black)`. Fjern
   ikke `inline` fra `@theme`.
 - Fonte: `font-display` (Mountains of Christmas) til overskrifter og tal, `font-body` (Nunito) til
-  resten. Animationer: `animate-twinkle` (pærerne i `Garland`) og `animate-glow` (lågens glød);
+  resten. Animationer: `animate-twinkle` (pærerne i `Garland`), `animate-glow` (lågens glød) og
+  `animate-sway` (lågerne vugger i pærernes 2,4 s-takt med forskudt fase, mens musikken spiller;
+  animationen kører altid, og `sway` skruer kun det registrerede `--sway`-udsving op og ned);
   bevægelse ud over det og lågens åbning (`motion`) er ikke ønsket.
 - `src/components/decor.tsx` har de fælles primitiver: `Paper` (stiplet søm, valgfri `stitchSize`),
   `KeyCap`, `PillButton` (`team-1`/`team-2`/`neutral`/`dark`, valgfri `keyHint`) og `TeamPlaque`
   (`board`/`end`, bruger `AnimatedNumber`). Kendte grænser: `Paper` har fast radius og skygge,
   `PillButton` fast skriftstørrelse og min-bredde med tastehint efter teksten, og `TeamPlaque` har
-  ingen vinderring (det klarer `EndScreen` udenom). Skærmene er trimmet efter dem; ændr dem ikke
+  ingen vinderring (det klarer `EndScreen` udenom) og krymper lange holdnavne efter antal tegn
+  (`nameFontSize`), så de står på højst to linjer. Skærmene er trimmet efter dem; ændr dem ikke
   uden at se alle skærme igennem.
 
 ### Medier

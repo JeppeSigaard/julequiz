@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, type CSSProperties } from "react";
 import * as motion from "motion/react-client";
 import openSFX from "../sfx/levelup.mp3";
 import useSound from "use-sound";
@@ -10,6 +10,9 @@ const OPENED = {
   "team-2": { rosette: "bg-team-2 text-team-2-ink shadow-[0_0_0_4px_rgb(255_255_255/0.08),0_0_26px_var(--quiz-team2)]", mark: "2", name: "text-snow" },
   nobody: { rosette: "bg-felt text-mist shadow-[0_0_0_4px_rgb(255_255_255/0.08)]", mark: "–", name: "text-mist" },
 };
+
+// Fase i kvarte svingninger, så kortene følger pærernes forskudte blink uden at svinge i takt med naboen.
+const SWAY_PHASES = [0, 2, 1, 3, 2, 0, 3];
 
 const Doodle: FunctionComponent<{ variant: number }> = ({ variant }) => (
   <svg
@@ -54,8 +57,9 @@ export const QuestionCard: FunctionComponent<{
   status: Status;
   teamName?: string;
   glow?: boolean;
+  sway?: boolean;
   onClick: () => void;
-}> = ({ number, doorWord, status, teamName, glow, onClick }) => {
+}> = ({ number, doorWord, status, teamName, glow, sway, onClick }) => {
   const [play] = useSound(openSFX);
   const handleClick = () => {
     play();
@@ -64,8 +68,15 @@ export const QuestionCard: FunctionComponent<{
 
   const tilt = (((number - 1) * 37) % 7 - 3) * 0.45;
   // Typen skaleres med lågens størrelse (container-enheder), så den virker for ethvert antal låger; kræver en definit størrelse.
-  const wrapper = "relative h-full w-full [container-type:size]";
-  const style = { transform: `rotate(${tilt}deg)` };
+  // Animationen kører altid fra mount, så den holder takt med Garland; musikken skruer kun udsvinget op og ned.
+  const swayAmount = sway && status !== "skip" ? 0.9 + ((number * 5) % 3) * 0.3 : 0;
+  const wrapper =
+    "relative h-full w-full origin-top animate-sway transition-[--sway] duration-1000 [container-type:size]";
+  const style = {
+    transform: `rotate(${tilt}deg)`,
+    "--sway": `${swayAmount}deg`,
+    animationDelay: `${SWAY_PHASES[(number - 1) % SWAY_PHASES.length]! * 0.6}s`,
+  } as CSSProperties;
 
   if (status === "closed") {
     return (
