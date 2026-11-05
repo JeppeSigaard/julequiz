@@ -401,7 +401,6 @@ const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
             key={practiceQuestion.id}
             question={practiceQuestion}
             title={`Prøve ${practiceIndex! + 1}`}
-            ribbon={`Prøve ${practiceIndex! + 1}`}
             teamNames={teamNames}
             onAnswer={() => startPractice(practiceIndex! + 1)}
             onClose={endPractice}

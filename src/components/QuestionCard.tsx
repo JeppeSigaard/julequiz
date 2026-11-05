@@ -6,9 +6,9 @@ import useSound from "use-sound";
 type Status = "closed" | "skip" | "nobody" | "team-1" | "team-2";
 
 const OPENED = {
-  "team-1": { rosette: "bg-team-1 text-team-1-ink shadow-[0_0_0_4px_rgb(255_255_255/0.08),0_0_26px_var(--quiz-team1)]", mark: "1", name: "text-snow" },
-  "team-2": { rosette: "bg-team-2 text-team-2-ink shadow-[0_0_0_4px_rgb(255_255_255/0.08),0_0_26px_var(--quiz-team2)]", mark: "2", name: "text-snow" },
-  nobody: { rosette: "bg-felt text-mist shadow-[0_0_0_4px_rgb(255_255_255/0.08)]", mark: "–", name: "text-mist" },
+  "team-1": { rosette: "bg-team-1 text-team-1-ink shadow-[0_0_0_4px_rgb(255_255_255/0.08),0_0_26px_var(--quiz-team1)]", mark: "1" },
+  "team-2": { rosette: "bg-team-2 text-team-2-ink shadow-[0_0_0_4px_rgb(255_255_255/0.08),0_0_26px_var(--quiz-team2)]", mark: "2" },
+  nobody: { rosette: "bg-felt text-mist shadow-[0_0_0_4px_rgb(255_255_255/0.08)]", mark: "–" },
 };
 
 // Fase i kvarte svingninger, så kortene følger pærernes forskudte blink uden at svinge i takt med naboen.
@@ -146,7 +146,6 @@ export const QuestionCard: FunctionComponent<{
             <span className="truncate text-[10cqmin] font-extrabold uppercase tracking-[0.1em] text-mist">
               {doorWord} {number}
             </span>
-            <span className={`truncate text-[17cqmin] font-black ${opened.name}`}>{teamName ?? "Ingen"}</span>
           </span>
         </div>
       </div>
