@@ -22,7 +22,7 @@ export const BoardHeader: FC<{
   onTitleClick,
   lit,
 }) => {
-  const light = lit ? "animate-flicker" : "[filter:brightness(0.5)_saturate(0.6)]";
+  const light = lit ? "animate-flicker" : "[filter:brightness(0.65)_saturate(0.7)]";
   return (
     <div className="flex h-[214px] flex-none items-start justify-between">
       <div className="mt-[10px]">
