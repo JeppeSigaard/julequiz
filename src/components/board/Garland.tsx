@@ -19,7 +19,7 @@ const BULBS = Array.from({ length: Math.floor(WIDTH / SPACING) }, (_, k) => {
 });
 
 export const Garland: FC<{ lit: boolean }> = ({ lit }) => (
-  // Dæmpningen ligger på det yderste lag, fordi twinkle ejer pærernes egen filter
+  // Dæmpningen ligger på det yderste lag, fordi twinkle ejer pærernes eget filter
   <div
     aria-hidden="true"
     className={`absolute top-0 left-0 w-full h-[108px] pointer-events-none ${lit ? "animate-flicker" : "[filter:brightness(0.3)_saturate(0.4)]"}`}
