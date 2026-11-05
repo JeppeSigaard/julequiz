@@ -2,6 +2,7 @@
 
 import { FunctionComponent, useEffect, useState } from "react";
 import { type Question } from "../types";
+import { TEAM_NAMES } from "../config";
 import * as motion from "motion/react-client";
 import useSound from "use-sound";
 
@@ -112,7 +113,7 @@ export const QuestionScreen: FunctionComponent<{
                   className="font-bold cursor-pointer text-lg"
                   onClick={onAnswer(1)}
                 >
-                  Hold 1
+                  {TEAM_NAMES[0]}
                 </button>
                 <button
                   className="font-bold cursor-pointer text-lg"
@@ -124,7 +125,7 @@ export const QuestionScreen: FunctionComponent<{
                   className="font-bold cursor-pointer text-lg"
                   onClick={onAnswer(2)}
                 >
-                  Hold 2
+                  {TEAM_NAMES[1]}
                 </button>
               </>
             </nav>
