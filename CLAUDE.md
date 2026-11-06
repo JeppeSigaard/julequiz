@@ -70,8 +70,8 @@ En pakke er `src/quizzes/<navn>/quiz.ts` (`Quiz` i `src/types.ts`: titel, holdna
 `shuffle`, `pointsPerQuestion`, `music.background`/`music.finale` og de syv `colors`) plus
 `src/quizzes/<navn>/questions/*.tsx`, hver med en `QuestionSpec` som default-eksport. Filnavnet
 bestemmer rækkefølgen før blanding og er lågens `id`. `src/quizzes/index.ts` finder pakkerne med
-`import.meta.glob`, så en ekstra mappe udgives med det samme (slet testpakker igen). Mappenavnet er også URL-stien og må
-derfor ikke være `images`, `quizzes`, `assets`, `RSC` eller `404`. Medier ligger
+`import.meta.glob`, så en ekstra mappe udgives med det samme (slet testpakker igen). Mappenavnet er
+også URL-stien og må derfor ikke være `images`, `quizzes`, `assets`, `RSC` eller `404`. Medier ligger
 i `public/quizzes/<navn>/{audio,images,video}` og refereres som `/quizzes/<navn>/…`.
 
 `QuestionSpec.type` er `standard`, `wordPuzzle`, `music`, `posterReveal`, `priceGuess` (prisopslag
@@ -114,7 +114,7 @@ ikke; en pakke uden `practice/` har ingen prøverunde.
 - Fonte: `font-display` (Mountains of Christmas) til overskrifter og tal, `font-body` (Nunito) til
   resten. Animationer: `animate-twinkle` (pærerne i `Garland`), `animate-glow` (lågens glød),
   `animate-sway` (lågerne vugger i pærernes 2,4 s-takt med forskudt fase, mens musikken spiller;
-  animationen kører altid, og `sway` skruer kun det registrerede `--sway`-udsving op og ned; slået fra for nu med `sway={false}` i `index.tsx`) og
+  animationen kører altid, og `sway` skruer kun det registrerede `--sway`-udsving op og ned; slået fra for nu med `sway={false}` i `src/components/QuizBoard.tsx`) og
   `animate-flicker` (guirlanden er dæmpet med `brightness(0.3) saturate(0.4)` og titlen og snirklen
   med `brightness(0.65) saturate(0.7)`, indtil quizzen startes, og de blinker én gang op, når den
   startes; stop slukker dem uden blink). `@keyframes sway` animerer det registrerede tal

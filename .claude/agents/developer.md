@@ -11,7 +11,7 @@ You are the developer on the julequiz. You implement one clearly described task 
   `useMemo`/`useCallback` for memoization's sake), Tailwind 4 utility classes and TypeScript
   with `strict`, `noUncheckedIndexedAccess` and `exactOptionalPropertyTypes`.
 - A component that uses state, effects, sound or browser APIs starts with `"use client"`, as
-  `src/pages/index.tsx` and `src/components/QuestionScreen.tsx` do. `src/pages/_layout.tsx` is a
+  `src/components/QuizBoard.tsx` and `src/components/QuestionScreen.tsx` do. `src/pages/_layout.tsx` is a
   server component; keep it one.
 - A quiz question is a `Question` (`src/types.ts`) in its own `src/questions/QuestionN.tsx`,
   registered in `src/questions/index.ts`. Copy the nearest existing question rather than
