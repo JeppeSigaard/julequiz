@@ -90,7 +90,7 @@ nedenfor er taget derfra.
        Uden pris er indholdet `?` med `text-[130px]`. Med pris er indholdet prisen med `priceSize(price)`.
    - Størrelsestrin, lokale funktioner ligesom `textSize` (hele klassenavne):
      - `titleSize`: ≤20 tegn `text-[64px]`, ≤44 `text-[52px]`, ellers `text-[44px]`.
-     - `descriptionSize`: ≤60 tegn `text-[36px]`, ≤140 `text-[30px]`, ellers `text-[26px]`.
+     - `descriptionSize`: ≤60 tegn `text-[36px]`, ≤150 `text-[30px]`, ellers `text-[26px]`.
      - `priceSize`: ≤11 tegn `text-[80px]`, ≤16 `text-[64px]`, ellers `text-[52px]`.
 
 3. **`src/questionTypes/index.tsx`**: importér `PriceListing` og tilføj efter `posterReveal`:
@@ -110,7 +110,7 @@ nedenfor er taget derfra.
 
 5. **`CLAUDE.md`**: i afsnittet Quiz-pakker skal `QuestionSpec.type er …` også nævne `priceGuess`
    (prisopslag med billede, titel, beskrivelse og pris som tekst). Tilføj under "Kendte grænser" eller
-   samme sted: kortet har plads til en titel på ca. 44 tegn og en beskrivelse på ca. 140 tegn. Længere
+   samme sted: kortet har plads til en titel på ca. 44 tegn og en beskrivelse på ca. 150 tegn. Længere
    tekst løber ind under prismærket.
 
 6. Commit på dansk, f.eks. "Tilføj lågetypen Gæt en pris og brug den på låge 16".

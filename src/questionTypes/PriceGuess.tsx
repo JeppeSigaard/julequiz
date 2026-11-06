@@ -4,7 +4,7 @@ const titleSize = (text: string) =>
   text.length <= 20 ? "text-[64px]" : text.length <= 44 ? "text-[52px]" : "text-[44px]";
 
 const descriptionSize = (text: string) =>
-  text.length <= 60 ? "text-[36px]" : text.length <= 140 ? "text-[30px]" : "text-[26px]";
+  text.length <= 60 ? "text-[36px]" : text.length <= 150 ? "text-[30px]" : "text-[26px]";
 
 const priceSize = (text: string) =>
   text.length <= 11 ? "text-[80px]" : text.length <= 16 ? "text-[64px]" : "text-[52px]";
@@ -44,17 +44,11 @@ export const PriceListing = ({
               aria-hidden
               className="absolute left-9 top-[62px] size-[26px] rounded-full bg-paper-lit shadow-[inset_0_3px_0_color-mix(in_oklab,var(--quiz-highlight)_72%,black)]"
             />
-            {price === undefined ? (
-              <span className="font-display text-[130px] font-bold leading-none whitespace-nowrap text-ink">
-                ?
-              </span>
-            ) : (
-              <span
-                className={`font-display font-bold leading-none whitespace-nowrap text-ink ${priceSize(price)}`}
-              >
-                {price}
-              </span>
-            )}
+            <span
+              className={`font-display font-bold leading-none whitespace-nowrap text-ink ${price === undefined ? "text-[130px]" : priceSize(price)}`}
+            >
+              {price ?? "?"}
+            </span>
           </div>
         </div>
       </div>
