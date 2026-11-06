@@ -1,4 +1,5 @@
 import { type Question, type QuestionSpec, type Slide } from "../types";
+import { EmbedBody } from "./Embed";
 import { MusicAnswer } from "../components/MusicBox";
 import { MusicBody } from "./Music";
 import { PosterAnswer, PosterBody } from "./PosterReveal";
@@ -84,6 +85,19 @@ export const toQuestion = (spec: QuestionSpec, id: string): Question => {
         ),
         answer: <SlideView slide={spec.answer} />,
         preload: [spec.video, ...slideMedia(spec.answer)],
+        ...common,
+      };
+    case "embed":
+      return {
+        id,
+        body: (
+          <EmbedBody
+            url={spec.question.url}
+            {...(spec.question.text !== undefined && { text: spec.question.text })}
+          />
+        ),
+        answer: <SlideView slide={spec.answer} />,
+        preload: [...slideMedia(spec.answer)],
         ...common,
       };
     case "custom":
