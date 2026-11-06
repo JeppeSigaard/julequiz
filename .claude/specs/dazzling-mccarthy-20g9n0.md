@@ -1,6 +1,6 @@
 # Quiz-pakker vælges med stien i stedet for ?quiz=
 
-> Status: in progress — claude/dazzling-mccarthy-20g9n0
+> Status: merged — 5e18e1e
 
 ## Goal
 
