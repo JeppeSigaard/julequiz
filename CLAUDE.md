@@ -70,7 +70,7 @@ bestemmer rækkefølgen før blanding og er lågens `id`. `src/quizzes/index.ts`
 `import.meta.glob`, så en ekstra mappe udgives med det samme (slet testpakker igen). Medier ligger
 i `public/quizzes/<navn>/{audio,images,video}` og refereres som `/quizzes/<navn>/…`.
 
-`QuestionSpec.type` er `standard`, `wordPuzzle`, `music`, `posterReveal`, `video` eller `custom`
+`QuestionSpec.type` er `standard`, `wordPuzzle`, `music`, `posterReveal`, `priceGuess` (prisopslag med billede, titel, beskrivelse og pris som tekst), `video` eller `custom`
 (fri JSX som `GuessThatCat`). `toQuestion` i `src/questionTypes/index.tsx` laver
 dem til `Question` (`body`/`answer`/`setVolume`/`skip`) med renderere i `src/questionTypes/`;
 dørindholdets størrelsestrin (fx `textSize`, `mediaFrame` i `Standard.tsx`) bor i rendererne.
@@ -85,7 +85,7 @@ fremskridtet. Renderere opløser stier med `useAsset` (lydeffekterne i `Question
 hentet) én gang pr. montering, og `useSound` skal have `format`, fordi en `blob:`-URL ingen
 filendelse har. En ny type skal tilføjes i
 `QuestionSpec` og i `toQuestion` (switchen har ingen default med vilje). Kopiér den nærmeste
-eksisterende låge frem for at opfinde en ny form.
+eksisterende låge frem for at opfinde en ny form. `priceGuess`-kortet har plads til en titel på ca. 44 tegn og en beskrivelse på ca. 140 tegn; længere tekst løber ind under prismærket.
 
 Pakkens prøvespørgsmål ligger i `src/quizzes/<navn>/practice/*.tsx` (samme `QuestionSpec`-form,
 filrækkefølge). De åbnes i samme lågekort med `Prøve <n>` som bånd, giver aldrig point og gemmes
