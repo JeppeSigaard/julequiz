@@ -22,7 +22,7 @@ Julequizzen får spørgsmålstypen `embed`: en låge, hvis spørgsmålsside er e
 - Pinnet form (må ikke afvige): `{ type: "embed"; question: { url: string; text?: string }; answer: Slide; backgroundVolume?: number }`. `answer` har `standard`s svarform, dvs. `Slide`.
 - Iframen har `allow="fullscreen; autoplay"`. Fuldskærmsknappen kalder `requestFullscreen()` på iframe-elementet selv (ikke på kortet eller siden).
 - Når svaret vises, afmonteres iframen (det sker allerede: `QuestionScreen.tsx:153` bruger `<Fragment key=...>` med body eller answer). Byg ikke noget ekstra til det.
-- Ingen medier: `preload: []`.
+- Preload: kun svarets medier via `slideMedia(spec.answer)`; selve iframe-URL'en forudindlæses ikke.
 - Ingen kommunikation med iframen; vinderen afgøres manuelt med musen/tastaturet som i alle låger.
 - Fuldskærm ejes af julequizzen (Fingerspurt får ingen knap).
 

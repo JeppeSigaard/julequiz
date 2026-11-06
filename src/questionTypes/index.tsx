@@ -97,7 +97,7 @@ export const toQuestion = (spec: QuestionSpec, id: string): Question => {
           />
         ),
         answer: <SlideView slide={spec.answer} />,
-        preload: [...slideMedia(spec.answer)],
+        preload: slideMedia(spec.answer),
         ...common,
       };
     case "custom":
