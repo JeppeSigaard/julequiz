@@ -1,6 +1,6 @@
 # Ny lågetype: Gæt en pris (`priceGuess`)
 
-> Status: in progress — claude/wonderful-noether-a7np70
+> Status: merged — 045cdd1
 
 ## Goal
 
