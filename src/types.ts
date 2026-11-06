@@ -21,6 +21,7 @@ export type QuestionSpec = Common &
     | { type: "posterReveal"; prompt: string; cropped: string; full: string }
     | { type: "priceGuess"; image: string; title: string; description: string; price: string }
     | { type: "video"; video: string; prompt: string; caption?: string; answer: Slide }
+    | { type: "embed"; question: { url: string; text?: string }; answer: Slide }
     | { type: "custom"; body: ReactNode; answer: ReactNode; preload?: string[] }
   );
 
