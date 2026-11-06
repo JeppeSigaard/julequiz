@@ -57,7 +57,7 @@ for (const [path, mod] of Object.entries(quizModules)) {
 }
 loaded.sort((a, b) => (a.name < b.name ? -1 : 1));
 
-// Map, så ?quiz=constructor er en ukendt quiz og ikke et prototype-opslag.
+// Map, så et pakkenavn som "constructor" er ukendt og ikke et prototype-opslag.
 export const QUIZZES = new Map<string, LoadedQuiz>(
   loaded.map((quiz) => [quiz.name, quiz])
 );

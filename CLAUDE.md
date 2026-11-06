@@ -36,15 +36,18 @@ og `exactOptionalPropertyTypes`. `src/pages.gen.ts` genereres af Waku og rediger
 - `src/components/Stage.tsx` er en fast 1920×1080-scene, skaleret til vinduet med `scale()`. Al
   layout bruger derfor px (`cqmin` kun inde i en `[container-type:size]`, som `QuestionCard`),
   aldrig `vw`/`vh`, og `fixed` inde i scenen er scene-relativ.
-- `src/pages/index.tsx` er to klientkomponenter. `HomePage` vælger pakken efter mount, fordi siden
-  prærenderes uden URL'en og indtil da kun viser en tom `bg-night`; `QuizBoard` er selve quizzen.
-  I `QuizBoard` omslutter `Stage` `Snowfall` (kun efter
-  titelklik), derefter enten `EndScreen` eller `Garland` + `BoardHeader` + gitter af `QuestionCard`
-  + `Footer`, så `QuestionScreen` og `SettingsMenu`. Pakken vælges med `?quiz=<navn>` (standard
-  `DEFAULT_QUIZ` i `src/config.ts`); et ukendt navn viser en liste over pakker uden `Stage`.
-  Gitterets kolonner og glødegrupper udledes af antal låger (`gridColumns`, `tickGroup`), og
-  rækkefølgen blandes ved mount, hvis `Quiz.shuffle` er sat. `QuestionCard` får ikke spørgsmålet,
-  kun nummer, status og visningsprops.
+- `src/pages/index.tsx` (roden, viser `DEFAULT_QUIZ`), `src/pages/[quiz]/index.tsx` (én statisk side
+  pr. pakke via `staticPaths` fra en ikke-eager glob, så `QUIZZES` aldrig når serverbygget) og
+  `src/pages/404.tsx` (`UnknownPack`) er serverkomponenter, der kun giver pakkenavnet videre til
+  klientkomponenter i `src/components/`: `QuizPage` venter på mount (siden prærenderes, og indtil da
+  vises kun en tom `bg-night`) og slår pakken op, `QuizBoard` er selve quizzen og `PackList` er listen
+  over pakker. Pakken vælges med stien `/julequiz/<navn>` (uden afsluttende `/`: devserveren giver
+  500 for `/julequiz/<navn>/`); roden viser `DEFAULT_QUIZ`, og en ukendt sti viser 404-siden med
+  pakkelisten. I `QuizBoard` omslutter `Stage` `Snowfall` (kun efter titelklik), derefter enten
+  `EndScreen` eller `Garland` + `BoardHeader` + gitter af `QuestionCard` + `Footer`, så
+  `QuestionScreen` og `SettingsMenu`. Gitterets kolonner og glødegrupper udledes af antal låger
+  (`gridColumns`, `tickGroup`), og rækkefølgen blandes ved mount, hvis `Quiz.shuffle` er sat.
+  `QuestionCard` får ikke spørgsmålet, kun nummer, status og visningsprops.
 - Board-delene (`Garland`, `BoardHeader`, `Footer`) ligger i `src/components/board/`.
 - Point udledes, ikke lagres: antal vundne låger × `Quiz.pointsPerQuestion` plus trøstepoint (+5 pr.
   klik på et holdnavn, og kan justeres op og ned, også under 0, fra indstillingsmenuen). Staten
@@ -67,7 +70,8 @@ En pakke er `src/quizzes/<navn>/quiz.ts` (`Quiz` i `src/types.ts`: titel, holdna
 `shuffle`, `pointsPerQuestion`, `music.background`/`music.finale` og de syv `colors`) plus
 `src/quizzes/<navn>/questions/*.tsx`, hver med en `QuestionSpec` som default-eksport. Filnavnet
 bestemmer rækkefølgen før blanding og er lågens `id`. `src/quizzes/index.ts` finder pakkerne med
-`import.meta.glob`, så en ekstra mappe udgives med det samme (slet testpakker igen). Medier ligger
+`import.meta.glob`, så en ekstra mappe udgives med det samme (slet testpakker igen). Mappenavnet er også URL-stien og må
+derfor ikke være `images`, `quizzes`, `assets`, `RSC` eller `404`. Medier ligger
 i `public/quizzes/<navn>/{audio,images,video}` og refereres som `/quizzes/<navn>/…`.
 
 `QuestionSpec.type` er `standard`, `wordPuzzle`, `music`, `posterReveal`, `priceGuess` (prisopslag
