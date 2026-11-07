@@ -1,6 +1,6 @@
 # Embed-låge (julequiz): spørgsmålstypen `embed`
 
-> Status: in progress — fingerspurt-laage-embed
+> Status: merged — b99a9ef
 > Branch: `claude/gg26-julequiz-spectator-gate-t7du9e` (allerede checket ud i worktreet; executoren committer dér og pusher aldrig)
 
 ## Goal
