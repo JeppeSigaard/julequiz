@@ -26,7 +26,7 @@ export const EmbedBody = ({ url, text }: { url: string; text?: string }) => {
         ref={ref}
         src={url}
         title="Indlejret side"
-        allow="fullscreen; autoplay"
+        allow="fullscreen; autoplay; screen-wake-lock"
         className={classNames(
           mediaFrame,
           "w-[1100px] bg-paper-lit",
