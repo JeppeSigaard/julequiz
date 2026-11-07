@@ -1,6 +1,6 @@
 # Fingerspurt-lågen i gg26
 
-> Status: in progress — fingerspurt-laage-gg26-laagen (verificeret i browseren)
+> Status: in progress — fingerspurt-laage-gg26-laagen
 > Branch: `claude/gg26-julequiz-spectator-gate-t7du9e`
 
 ## Goal
