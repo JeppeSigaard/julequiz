@@ -76,7 +76,7 @@ i `public/quizzes/<navn>/{audio,images,video}` og refereres som `/quizzes/<navn>
 
 `QuestionSpec.type` er `standard`, `wordPuzzle`, `music`, `posterReveal`, `priceGuess` (prisopslag
 med billede, titel, beskrivelse og pris som tekst),
-`video`, `embed` (iframe til en https-URL med fuldskærmsknap; svar som `standard`) eller `custom` (fri JSX som `GuessThatCat`). `toQuestion` i
+`video`, `embed` (16:9-iframe til en https-URL med rund fuldskærmsknap midt ovenpå; svar som `standard`) eller `custom` (fri JSX som `GuessThatCat`). `toQuestion` i
 `src/questionTypes/index.tsx` laver
 dem til `Question` (`body`/`answer`/`setVolume`/`skip`) med renderere i `src/questionTypes/`;
 dørindholdets størrelsestrin (fx `textSize`, `mediaFrame` i `Standard.tsx`) bor i rendererne.

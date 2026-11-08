@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import classNames from "classnames";
-import { PillButton } from "../components/decor";
 import { mediaFrame } from "./Standard";
 
 export const EmbedBody = ({ url, text }: { url: string; text?: string }) => {
@@ -22,20 +21,29 @@ export const EmbedBody = ({ url, text }: { url: string; text?: string }) => {
           {text}
         </p>
       )}
-      <iframe
-        ref={ref}
-        src={url}
-        title="Indlejret side"
-        allow="fullscreen; autoplay; screen-wake-lock"
-        className={classNames(
-          mediaFrame,
-          "w-[1100px] bg-paper-lit",
-          text !== undefined ? "h-[460px]" : "h-[560px]"
-        )}
-      />
-      <PillButton variant="neutral" onClick={() => void ref.current?.requestFullscreen()}>
-        Fuldskærm
-      </PillButton>
+      {/* Rammen bærer kanten, så selve iframen er præcis 16:9. */}
+      <div className={classNames(mediaFrame, "relative overflow-hidden bg-paper-lit")}>
+        <iframe
+          ref={ref}
+          src={url}
+          title="Indlejret side"
+          allow="fullscreen; autoplay; screen-wake-lock"
+          className={classNames(
+            "block aspect-video",
+            text !== undefined ? "w-[816px]" : "w-[992px]"
+          )}
+        />
+        <button
+          type="button"
+          aria-label="Fuldskærm"
+          title="Fuldskærm"
+          onClick={() => void ref.current?.requestFullscreen()}
+          className="absolute top-1/2 left-1/2 flex size-[132px] -translate-1/2 cursor-pointer items-center justify-center rounded-full bg-ink/85 text-snow shadow-pill-dark hover:bg-ink"
+        >
+          {/* `!`, fordi material-symbols-CSS’en ligger uden for Tailwinds lag og ellers vinder. */}
+          <span className="material-symbols-outlined text-[84px]!">fullscreen</span>
+        </button>
+      </div>
     </div>
   );
 };
