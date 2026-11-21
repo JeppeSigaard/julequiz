@@ -55,9 +55,15 @@ async function fetchImage(imageUrl) {
   if (response.status !== 200) {
     fail("Billedet kunne ikke hentes: " + response.status + " " + JSON.stringify(imageUrl));
   }
+  if (new URL(response.url).protocol !== "https:") {
+    fail("Billedet blev omdirigeret til en url, der ikke er https: " + JSON.stringify(response.url));
+  }
   const contentType = response.headers.get("content-type") ?? "";
   if (!contentType.startsWith("image/")) {
     fail("Billedet har forkert content-type: " + JSON.stringify(contentType));
+  }
+  if (Number(response.headers.get("content-length")) > MAX_IMAGE_BYTES) {
+    fail("Billedet er over 5 MB: " + JSON.stringify(imageUrl));
   }
   const buffer = Buffer.from(await response.arrayBuffer());
   if (buffer.byteLength > MAX_IMAGE_BYTES) {
@@ -132,5 +138,6 @@ for (const [index, item] of picked.entries()) {
     "};\n\n" +
     "export default question;\n";
   await writeFile(path("src/quizzes/gg26/questions/" + file), source);
-  console.log(file + " | " + item.title + " | " + item.price + " | https://www.guloggratis.dk" + item.url);
+  const link = JSON.stringify("https://www.guloggratis.dk" + item.url);
+  console.log(file + " | " + item.title + " | " + item.price + " | " + link);
 }

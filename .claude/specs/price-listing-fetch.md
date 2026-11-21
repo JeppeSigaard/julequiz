@@ -144,6 +144,25 @@ Forventede resultater (bruges i Verification), alle med `priceKroner = 500`:
 - Fejlsvarets 300 tegn skrives med `JSON.stringify`, så styretegn ikke når terminalen.
 - Begge scriptfiler formateres som resten af repoet: 2 mellemrum, dobbelte anførselstegn, semikolon.
 
+### Rettelser efter anden gennemgang (gælder forud for alt ovenfor, hvor de afviger)
+
+- `krone`/`kroner` i regel 1 kræver som `kr`, at næste tegn ikke er et bogstav: `4 kronelys` og
+  `2 kronekager` står urørt, `1200 krone` → `X krone`. `krone` er IKKE et prisord i regel 2:
+  `Krone 12 cm i guld` står urørt.
+- `til` fjernes fra fyldordene i regel 2 (`sælges til` er stadig sit eget prisord):
+  `pris til 4 personer` og `byd til 8 personer` står urørt.
+- Intervaller i regel 2 (tal EFTER prisord) er kun tæt bindestreg: `NUM[-–]NUM` uden whitespace.
+  `kr 800-1200` → `kr X-X`; `koster 250 og 24 låger` → `koster X og 24 låger`;
+  `pris 300 - 12 kugler` → `pris X - 12 kugler`. Regel 1 (tal FØR prisord) beholder alle
+  intervalformer; at `str. 38/40 kr 100` bliver `str. X/X kr X` er accepteret.
+- Accepteret uden ændring: `købt for 3 år siden` → `købt for X år siden` og lignende antal/tid efter
+  et prisord. Tilføj ingen lookahead for `år`, `personer`, `stk`.
+- `clean` fjerner også usynlige formattegn helt (ikke til mellemrum):
+  `[\u200b-\u200f\u2028-\u202e\u2060-\u2064\ufeff]`, så `1<U+200B>200 kr` → `X kr`.
+- Scriptet: varens `url` skrives til terminalen med `JSON.stringify`; efter billedhentning afvises
+  svaret, hvis `new URL(response.url).protocol` ikke er `https:` (omdirigeringer følges stadig); et `content-length` over 5 MB afvises før kroppen læses (det eksisterende
+  tjek efter læsning bliver stående).
+
 ## Traps
 
 - **Hent ikke varer i browseren og tilføj ingen `fetch` i `src/`.** API'ets CORS-regel
