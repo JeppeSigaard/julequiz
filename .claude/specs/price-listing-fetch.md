@@ -1,6 +1,6 @@
 # Hent prislåger fra guloggratis med et script
 
-> Status: ready for execution
+> Status: in progress — claude/festive-mendel-itplvf
 
 ## Goal
 
