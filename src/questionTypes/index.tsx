@@ -14,8 +14,10 @@ const slideMedia = (slide: Slide) =>
 export const toQuestion = (spec: QuestionSpec, id: string): Question => {
   // exactOptionalPropertyTypes: valgfrie felter udelades frem for at sættes til undefined.
   const common = {
+    type: spec.type,
     ...(spec.backgroundVolume !== undefined && { setVolume: spec.backgroundVolume }),
     ...(spec.skip !== undefined && { skip: spec.skip }),
+    ...(spec.minDoor !== undefined && { minDoor: spec.minDoor }),
   };
   // Ingen default: en ny spørgsmålstype skal give en kompileringsfejl her.
   switch (spec.type) {

@@ -2,16 +2,18 @@ import { ReactNode } from "react";
 
 export type Question = {
   id: string;
+  type: QuestionSpec["type"];
   body: ReactNode;
   answer: ReactNode;
   preload: string[];
   setVolume?: number;
   skip?: boolean;
+  minDoor?: number;
 };
 
 export type Slide = { text?: string; note?: string; image?: string; video?: string; audio?: string };
 
-type Common = { backgroundVolume?: number; skip?: boolean };
+type Common = { backgroundVolume?: number; skip?: boolean; minDoor?: number };
 
 export type QuestionSpec = Common &
   (

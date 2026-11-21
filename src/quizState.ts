@@ -1,8 +1,10 @@
 import type { Question } from "./types";
 
-// Kortene er gitterpositioner, så questionIds skal altid gemmes sammen med dem.
+// Kortene er lågeindekser, så tildelingerne skal altid gemmes sammen med dem.
+export type Assignment = { door: number; id: string };
+
 export type SavedQuizState = {
-  questionIds: string[];
+  assignments: Assignment[];
   team1Cards: number[];
   team2Cards: number[];
   noTeamCards: number[];
@@ -10,7 +12,7 @@ export type SavedQuizState = {
   team2ConsolationPoints: number;
 };
 
-const storageKey = (pack: string) => `julequiz-state-v2:${pack}`;
+const storageKey = (pack: string) => `julequiz-state-v3:${pack}`;
 
 function isCardArray(value: unknown, count: number): value is number[] {
   return (
@@ -33,21 +35,30 @@ export function loadQuizState(
     if (typeof data !== "object" || data === null) return null;
     const state = data as Record<string, unknown>;
 
-    const { questionIds } = state;
-    if (
-      !Array.isArray(questionIds) ||
-      questionIds.length !== questions.length ||
-      !questionIds.every((id) => typeof id === "string")
-    ) {
-      return null;
-    }
+    const { assignments } = state;
+    if (!Array.isArray(assignments)) return null;
     const knownIds = new Set(questions.map((q) => q.id));
-    const seenIds = new Set<string>(questionIds);
-    if (
-      seenIds.size !== questions.length ||
-      !questionIds.every((id) => knownIds.has(id))
-    ) {
-      return null;
+    const seenDoors = new Set<number>();
+    const seenIds = new Set<string>();
+    const restored: Assignment[] = [];
+    for (const item of assignments as unknown[]) {
+      if (typeof item !== "object" || item === null) return null;
+      const { door, id } = item as Record<string, unknown>;
+      if (
+        typeof door !== "number" ||
+        !Number.isInteger(door) ||
+        door < 0 ||
+        door >= questions.length ||
+        typeof id !== "string" ||
+        !knownIds.has(id) ||
+        seenDoors.has(door) ||
+        seenIds.has(id)
+      ) {
+        return null;
+      }
+      seenDoors.add(door);
+      seenIds.add(id);
+      restored.push({ door, id });
     }
 
     const { team1Cards, team2Cards, noTeamCards } = state;
@@ -63,7 +74,7 @@ export function loadQuizState(
     }
 
     return {
-      questionIds,
+      assignments: restored,
       team1Cards,
       team2Cards,
       noTeamCards,
