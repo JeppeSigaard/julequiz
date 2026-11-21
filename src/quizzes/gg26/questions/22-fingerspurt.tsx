@@ -8,6 +8,7 @@ const question: QuestionSpec = {
   },
   answer: { text: "Hvem vandt løbet? Giv lågen til vinderens hold." },
   backgroundVolume: 0,
+  minDoor: 20,
 };
 
 export default question;

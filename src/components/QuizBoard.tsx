@@ -21,7 +21,9 @@ import {
   loadTeamNames,
   saveQuizState,
   saveTeamNames,
+  type Assignment,
 } from "../quizState";
+import { assignQuestion } from "../assignQuestion";
 import { useMuffle } from "../muffle";
 
 import useSound from "use-sound";
@@ -33,19 +35,6 @@ import swooshSFX from "../sfx/swoosh2.mp3";
 import vinylStopSFX from "../sfx/vinyl-stop.mp3";
 import yoshiSFX from "../sfx/yoshi-tongue.mp3";
 import { preloadMedia } from "../mediaCache";
-import { Question } from "../types";
-
-// Fisher-Yates shuffle algorithm to randomize questions
-function shuffleQuestions<T>(array: T[]): T[] {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    const temp = shuffled[i]!;
-    shuffled[i] = shuffled[j]!;
-    shuffled[j] = temp;
-  }
-  return shuffled;
-}
 
 function gridColumns(count: number): number {
   return Math.max(1, Math.round(Math.sqrt(count * 1.5)));
@@ -57,7 +46,8 @@ function tickGroup(index: number, columns: number): 0 | 1 {
 
 export const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const [questions, setQuestions] = useState<Question[]>(quiz.questions);
+  const doors = quiz.questions.filter((q) => !q.skip);
+  const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [activeQuestionIndex, setActiveQuestionIndex] = useState<number | null>(
     null
   );
@@ -114,7 +104,29 @@ export const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => 
     activeQuestionIndex !== null || practiceIndex !== null || settingsOpen
   );
 
-  const pickQuestion = (index: number, question: Question) => () => {
+  const questionAt = (index: number) =>
+    quiz.shuffle
+      ? doors.find(
+          (q) => q.id === assignments.find((a) => a.door === index)?.id
+        )
+      : doors[index];
+
+  const pickQuestion = (index: number) => () => {
+    let question = questionAt(index);
+    if (!question) {
+      const pool = doors.filter(
+        (q) => !assignments.some((a) => a.id === q.id)
+      );
+      const freeDoors = doors
+        .map((_, i) => i)
+        .filter((i) => !assignments.some((a) => a.door === i))
+        .map((i) => i + 1);
+      const recentTypes = [...assignments]
+        .reverse()
+        .flatMap((a) => doors.find((q) => q.id === a.id)?.type ?? []);
+      question = assignQuestion(pool, freeDoors, index + 1, recentTypes);
+      setAssignments([...assignments, { door: index, id: question.id }]);
+    }
     setActiveQuestionIndex(index);
     if (question.setVolume && bgsound) {
       bgsound.volume(question.setVolume);
@@ -166,11 +178,10 @@ export const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => 
   };
 
   const allAnswered = [...team1Cards, ...team2Cards, ...noTeamCards];
-  const columns = gridColumns(questions.length);
-  const doorCount = questions.filter((q) => !q.skip).length;
+  const columns = gridColumns(doors.length);
+  const doorCount = doors.length;
   const isFinished =
-    questions.some((q) => !q.skip) &&
-    questions.every((q, i) => q.skip || allAnswered.includes(i));
+    doors.length > 0 && doors.every((_, i) => allAnswered.includes(i));
   const teamNames: [string, string] = [
     teamNameInputs[0].trim() || quiz.teamNames[0],
     teamNameInputs[1].trim() || quiz.teamNames[1],
@@ -186,7 +197,7 @@ export const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => 
     else setTeam2ConsolationPoints((current) => current + amount);
   };
   const activeQuestion =
-    activeQuestionIndex !== null ? questions[activeQuestionIndex] : undefined;
+    activeQuestionIndex !== null ? questionAt(activeQuestionIndex) : undefined;
   const practiceQuestion =
     practiceIndex !== null ? quiz.practice[practiceIndex] : undefined;
 
@@ -211,21 +222,14 @@ export const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => 
   }, [started]);
 
   useEffect(() => {
-    const saved = loadQuizState(quiz.name, quiz.questions);
+    const saved = loadQuizState(quiz.name, doors);
     if (saved) {
-      const restored = saved.questionIds.map(
-        (id) => quiz.questions.find((q) => q.id === id)!
-      );
-      setQuestions(restored);
+      setAssignments(saved.assignments);
       setTeam1Cards(saved.team1Cards);
       setTeam2Cards(saved.team2Cards);
       setNoTeamCards(saved.noTeamCards);
       setTeam1ConsolationPoints(saved.team1ConsolationPoints);
       setTeam2ConsolationPoints(saved.team2ConsolationPoints);
-    } else {
-      setQuestions(
-        quiz.shuffle ? shuffleQuestions(quiz.questions) : quiz.questions
-      );
     }
     const savedTeamNames = loadTeamNames(quiz.name);
     if (savedTeamNames) setTeamNameInputs(savedTeamNames);
@@ -237,7 +241,7 @@ export const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => 
     // anden load-kørsel ville så læse dem i stedet for den gemte quiz.
     if (!isLoaded) return;
     saveQuizState(quiz.name, {
-      questionIds: questions.map((q) => q.id),
+      assignments,
       team1Cards,
       team2Cards,
       noTeamCards,
@@ -246,7 +250,7 @@ export const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => 
     });
   }, [
     isLoaded,
-    questions,
+    assignments,
     team1Cards,
     team2Cards,
     noTeamCards,
@@ -328,19 +332,17 @@ export const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => 
                   style={{
                     gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
                     gridTemplateRows: `repeat(${Math.ceil(
-                      questions.length / columns
+                      doors.length / columns
                     )}, minmax(0, 1fr))`,
                   }}
                 >
-                  {questions.map((question, index) => {
+                  {doors.map((_, index) => {
                     const status = team1Cards.includes(index)
                       ? "team-1"
                       : team2Cards.includes(index)
                       ? "team-2"
                       : noTeamCards.includes(index)
                       ? "nobody"
-                      : question.skip
-                      ? "skip"
                       : "closed";
                     const teamName =
                       status === "team-1"
@@ -350,7 +352,7 @@ export const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => 
                         : undefined;
                     return (
                       <QuestionCard
-                        key={question.id}
+                        key={index}
                         number={index + 1}
                         doorWord={quiz.doorWord}
                         status={status}
@@ -359,12 +361,11 @@ export const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => 
                           tickGroup(index, columns) === (tick ? 1 : 0) &&
                           started &&
                           activeQuestionIndex === null &&
-                          practiceIndex === null &&
-                          !question.skip
+                          practiceIndex === null
                         }
                         // Sway er slået fra for nu; sæt tilbage til `started` for at lade lågerne vugge med musikken.
                         sway={false}
-                        onClick={pickQuestion(index, question)}
+                        onClick={pickQuestion(index)}
                       />
                     );
                   })}

@@ -12,7 +12,7 @@ export const QuizPage: FunctionComponent<{ name: string }> = ({ name }) => {
     setMounted(true);
   }, []);
 
-  // Et prerenderet bræt ville vise lågerne i filrækkefølge i skala 1, før blanding, gemt tilstand og skalering slår igennem.
+  // Et prerenderet bræt ville vise lågerne i filrækkefølge i skala 1, før gemt tilstand og skalering slår igennem.
   if (!mounted) return <div className="bg-night h-screen" />;
 
   const quiz = QUIZZES.get(name);

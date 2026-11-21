@@ -1,6 +1,6 @@
 # Løbende tildeling af spørgsmål til låger
 
-> Status: ready for execution
+> Status: in progress — claude/youthful-davinci-wlc04o
 
 ## Goal
 

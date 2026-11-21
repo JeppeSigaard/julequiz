@@ -46,13 +46,15 @@ og `exactOptionalPropertyTypes`. `src/pages.gen.ts` genereres af Waku og rediger
   pakkelisten. I `QuizBoard` omslutter `Stage` `Snowfall` (kun efter titelklik), derefter enten
   `EndScreen` eller `Garland` + `BoardHeader` + gitter af `QuestionCard` + `Footer`, så
   `QuestionScreen` og `SettingsMenu`. Gitterets kolonner og glødegrupper udledes af antal låger
-  (`gridColumns`, `tickGroup`), og rækkefølgen blandes ved mount, hvis `Quiz.shuffle` er sat.
+  (`gridColumns`, `tickGroup`), og er `Quiz.shuffle` sat, får en låge først sit spørgsmål, når den åbnes første gang
+  (`assignQuestion` i `src/assignQuestion.ts`: aldrig samme type som forrige tildeling, hvis der er
+  andre; tildelingen gemmes og skifter ikke). Uden `shuffle` følger lågerne filrækkefølgen.
   `QuestionCard` får ikke spørgsmålet, kun nummer, status og visningsprops.
 - Board-delene (`Garland`, `BoardHeader`, `Footer`) ligger i `src/components/board/`.
 - Point udledes, ikke lagres: antal vundne låger × `Quiz.pointsPerQuestion` plus trøstepoint (+5 pr.
   klik på et holdnavn, og kan justeres op og ned, også under 0, fra indstillingsmenuen). Staten
-  gemmes i `localStorage` pr. pakke (`src/quizState.ts`, format `v2`).
-  Når alle låger, der ikke er `skip`, er besvaret, vises `EndScreen` i stedet for header og gitter:
+  gemmes i `localStorage` pr. pakke (`src/quizState.ts`, format `v3`).
+  Når alle låger er besvaret, vises `EndScreen` i stedet for header og gitter:
   den har sin egen `Snowfall` og `Fireworks`, kroner lederen, viser "Uafgjort!" ved lige point, og
   plaketterne giver stadig +5 ved klik. Samtidig skiftes baggrundsmusikken til `music.finale`.
 - `src/components/QuestionScreen.tsx` er den åbne låge: et papirkort med bånd, kristtorn og
@@ -69,7 +71,7 @@ og `exactOptionalPropertyTypes`. `src/pages.gen.ts` genereres af Waku og rediger
 En pakke er `src/quizzes/<navn>/quiz.ts` (`Quiz` i `src/types.ts`: titel, holdnavne, `doorWord`,
 `shuffle`, `pointsPerQuestion`, `music.background`/`music.finale` og de syv `colors`) plus
 `src/quizzes/<navn>/questions/*.tsx`, hver med en `QuestionSpec` som default-eksport. Filnavnet
-bestemmer rækkefølgen før blanding og er lågens `id`. `src/quizzes/index.ts` finder pakkerne med
+bestemmer rækkefølgen uden `shuffle` og er spørgsmålets `id`. `src/quizzes/index.ts` finder pakkerne med
 `import.meta.glob`, så en ekstra mappe udgives med det samme (slet testpakker igen). Mappenavnet er
 også URL-stien og må derfor ikke være `images`, `quizzes`, `assets`, `RSC` eller `404`. Medier ligger
 i `public/quizzes/<navn>/{audio,images,video}` og refereres som `/quizzes/<navn>/…`.
@@ -78,11 +80,12 @@ i `public/quizzes/<navn>/{audio,images,video}` og refereres som `/quizzes/<navn>
 med billede, titel, beskrivelse og pris som tekst),
 `video`, `embed` (16:9-iframe til en https-URL med rund fuldskærmsknap midt ovenpå; svar som `standard`) eller `custom` (fri JSX som `GuessThatCat`). `toQuestion` i
 `src/questionTypes/index.tsx` laver
-dem til `Question` (`body`/`answer`/`setVolume`/`skip`) med renderere i `src/questionTypes/`;
+dem til `Question` (`type`/`body`/`answer`/`setVolume`/`skip`/`minDoor`) med renderere i `src/questionTypes/`;
 dørindholdets størrelsestrin (fx `textSize`, `mediaFrame` i `Standard.tsx`) bor i rendererne.
 `backgroundVolume` dæmper baggrundsmusikken, mens lågen er åben (uanset det skærer `useMuffle` i
 `src/muffle.ts` diskanten af den med et lavpasfilter, mens en låge, et prøvespørgsmål eller
-indstillingsmenuen er åben), og `skip` gør lågen uvælgelig. Alle
+indstillingsmenuen er åben), `skip` udelader spørgsmålet fra brættet (én låge færre), og `minDoor` er det laveste lågenummer,
+spørgsmålet må tildeles (Fingerspurt i `gg26`: 20). Alle
 lågers og prøvespørgsmåls billeder, video og lyd (`Question.preload`: rå stier fra begge sider,
 udledt i `toQuestion`; en `custom`-låge angiver selv alle sine medier med `preload`) og lågens
 lydeffekter hentes som blobs ved start af `preloadMedia` i `src/mediaCache.ts`, mens footeren viser
