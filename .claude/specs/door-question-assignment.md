@@ -1,6 +1,6 @@
 # Løbende tildeling af spørgsmål til låger
 
-> Status: in progress — claude/youthful-davinci-wlc04o
+> Status: merged — 9efa823
 
 ## Goal
 
