@@ -117,6 +117,33 @@ Forventede resultater (bruges i Verification), alle med `priceKroner = 500`:
 | `Fra 1950, 3 stk, kr 75 pr. stk` | `Fra 1950, 3 stk, kr X pr. stk` |
 | `Krystal fra 1920 og 12 kranse` | `Krystal fra 1920 og 12 kranse` |
 
+### Rettelser efter gennemgang (gælder forud for reglerne ovenfor, hvor de afviger)
+
+- `NUM`: decimaldelen er `[.,]\d{1,2}` (ikke kun komma), og `NUM` må ikke efterfølges af et ciffer
+  (`(?!\d)`). `1200.50 kr` → `X kr`, `kr. 1.200.00` → `kr. X`, `5.00 kr` → `X kr`.
+- Regel 1 får også suffikset `.-` og ordet `krone`: `1200.-` → `X.-`, `1.200.- kr` → `X.- kr`.
+- Regel 2: prisordet `pris`/`prisen` må have bogstaver foran (`[a-zæøå]*pris(?:en)?`, fx `normalpris`,
+  `udsalgspris`, `nyprisen`); `bud`, `kr`, `dkk` kræver stadig, at der ikke står et bogstav foran.
+  Nye prisord: `værdi`, `sælges til`, `købt for`, `solgt for`, `byd`. Fyldordene må gentages op til
+  tre gange og udvides med `var`, `til`, `over`, `pr.`, `stk.`, `normalt`.
+  `prisen er på 1200` → `prisen er på X`, `pris fra ca. 1200` → `pris fra ca. X`.
+- Regel 1 og 2 dækker intervaller: `NUM`, valgfri whitespace, et af `-`, `–`, `/`, `til`, `og`,
+  valgfri whitespace, `NUM` maskeres begge. `800-1200 kr` → `X-X kr`, `kr 800-1200` → `kr X-X`,
+  `mellem 800 og 1200 kr` → `mellem X og X kr`.
+- Tvetydige tusindtal med mellemrum (`iPhone 12 500 kr`, `26x500 mm` ved pris 500) ændres IKKE: der
+  findes ingen ren regel, og quizmasteren læser teksten i `git diff`.
+- De fem rækker i tabellen ovenfor skal stadig give præcis samme output, og `12 kranse`, `3 kroge`,
+  `budget 1200`, `lampris 12`, `Kr. Himmelfart 2026` skal stadig stå urørt (`lampris` er et kendt
+  offer for den nye `*pris`-regel og må gerne blive `lampris X`).
+- `clean` erstatter også styretegn (`[\u0000-\u001f\u007f-\u009f]`) med mellemrum før sammentrækningen.
+- `truncate` regner i kodepunkter (`Array.from(text)`), så en emoji aldrig deles; `max` tæller
+  kodepunkter.
+- Billeder: afvis (kode 1, intet skrevet), hvis URL'ens protokol ikke er `https:`, hvis
+  `content-type` ikke begynder med `image/`, eller hvis filen er over 5 MB. Ingen værtskontrol:
+  billedværten er ikke bekræftet, og et forkert gæt ville gøre scriptet ubrugeligt.
+- Fejlsvarets 300 tegn skrives med `JSON.stringify`, så styretegn ikke når terminalen.
+- Begge scriptfiler formateres som resten af repoet: 2 mellemrum, dobbelte anførselstegn, semikolon.
+
 ## Traps
 
 - **Hent ikke varer i browseren og tilføj ingen `fetch` i `src/`.** API'ets CORS-regel
