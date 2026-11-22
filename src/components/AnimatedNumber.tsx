@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { formatPoints } from "../doorValue";
 
 interface AnimatedNumberProps {
   value: number;
@@ -41,5 +42,5 @@ export function AnimatedNumber({
     return () => cancelAnimationFrame(frameId);
   }, [value, duration]);
 
-  return <span>{displayValue < 0 ? `−${-displayValue}` : displayValue}</span>;
+  return <span>{formatPoints(displayValue)}</span>;
 }

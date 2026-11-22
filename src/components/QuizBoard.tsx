@@ -22,7 +22,9 @@ import {
   saveQuizState,
   saveTeamNames,
   type Assignment,
+  type DoorValue,
 } from "../quizState";
+import { doorValue, formatPoints } from "../doorValue";
 import { assignQuestion } from "../assignQuestion";
 import { useMuffle } from "../muffle";
 
@@ -48,6 +50,7 @@ export const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const doors = quiz.questions.filter((q) => !q.skip);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [doorValues, setDoorValues] = useState<DoorValue[]>([]);
   const [activeQuestionIndex, setActiveQuestionIndex] = useState<number | null>(
     null
   );
@@ -111,6 +114,16 @@ export const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => 
         )
       : doors[index];
 
+  const valueAt = (door: number) =>
+    doorValues.find((v) => v.door === door)?.value;
+  const cardPoints = (cards: number[]) =>
+    cards.reduce(
+      (sum, door) => sum + (valueAt(door) ?? quiz.pointsPerQuestion),
+      0
+    );
+  const team1Points = cardPoints(team1Cards) + team1ConsolationPoints;
+  const team2Points = cardPoints(team2Cards) + team2ConsolationPoints;
+
   const pickQuestion = (index: number) => () => {
     let question = questionAt(index);
     if (!question) {
@@ -126,6 +139,21 @@ export const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => 
         .flatMap((a) => doors.find((q) => q.id === a.id)?.type ?? []);
       question = assignQuestion(pool, freeDoors, index + 1, recentTypes);
       setAssignments([...assignments, { door: index, id: question.id }]);
+    }
+    if (valueAt(index) === undefined) {
+      setDoorValues([
+        ...doorValues,
+        {
+          door: index,
+          value: doorValue(
+            quiz.pointsPerQuestion,
+            doorValues.length,
+            doors.length,
+            Math.abs(team1Points - team2Points),
+            Math.random()
+          ),
+        },
+      ]);
     }
     setActiveQuestionIndex(index);
     if (question.setVolume && bgsound) {
@@ -186,10 +214,6 @@ export const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => 
     teamNameInputs[0].trim() || quiz.teamNames[0],
     teamNameInputs[1].trim() || quiz.teamNames[1],
   ];
-  const team1Points =
-    team1Cards.length * quiz.pointsPerQuestion + team1ConsolationPoints;
-  const team2Points =
-    team2Cards.length * quiz.pointsPerQuestion + team2ConsolationPoints;
   const adjustConsolation = (team: 1 | 2, amount: number) => {
     if (amount > 0) ding();
     else playWrong();
@@ -198,6 +222,8 @@ export const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => 
   };
   const activeQuestion =
     activeQuestionIndex !== null ? questionAt(activeQuestionIndex) : undefined;
+  const activeValue =
+    activeQuestionIndex !== null ? valueAt(activeQuestionIndex) : undefined;
   const practiceQuestion =
     practiceIndex !== null ? quiz.practice[practiceIndex] : undefined;
 
@@ -225,6 +251,7 @@ export const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => 
     const saved = loadQuizState(quiz.name, doors);
     if (saved) {
       setAssignments(saved.assignments);
+      setDoorValues(saved.doorValues);
       setTeam1Cards(saved.team1Cards);
       setTeam2Cards(saved.team2Cards);
       setNoTeamCards(saved.noTeamCards);
@@ -242,6 +269,7 @@ export const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => 
     if (!isLoaded) return;
     saveQuizState(quiz.name, {
       assignments,
+      doorValues,
       team1Cards,
       team2Cards,
       noTeamCards,
@@ -251,6 +279,7 @@ export const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => 
   }, [
     isLoaded,
     assignments,
+    doorValues,
     team1Cards,
     team2Cards,
     noTeamCards,
@@ -350,6 +379,8 @@ export const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => 
                         : status === "team-2"
                         ? teamNames[1]
                         : undefined;
+                    const value =
+                      teamName !== undefined ? valueAt(index) : undefined;
                     return (
                       <QuestionCard
                         key={index}
@@ -357,6 +388,7 @@ export const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => 
                         doorWord={quiz.doorWord}
                         status={status}
                         {...(teamName !== undefined ? { teamName } : {})}
+                        {...(value !== undefined ? { value } : {})}
                         glow={
                           tickGroup(index, columns) === (tick ? 1 : 0) &&
                           started &&
@@ -393,7 +425,11 @@ export const QuizBoard: FunctionComponent<{ quiz: LoadedQuiz }> = ({ quiz }) => 
         {activeQuestion && (
           <QuestionScreen
             question={activeQuestion}
-            title={`${quiz.doorWord} ${activeQuestionIndex! + 1}`}
+            title={
+              activeValue !== undefined
+                ? `${quiz.doorWord} ${activeQuestionIndex! + 1} · ${formatPoints(activeValue)} point`
+                : `${quiz.doorWord} ${activeQuestionIndex! + 1}`
+            }
             onClose={() => {
               setActiveQuestionIndex(null);
               bgsound?.volume(1);

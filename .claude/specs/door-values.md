@@ -1,6 +1,6 @@
 # Lågeværdier: stigende point med skjult forskelsled
 
-> Status: ready for execution
+> Status: in progress — claude/blissful-sagan-oiebat
 
 ## Goal
 
