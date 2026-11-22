@@ -7,7 +7,8 @@
     "dev": "waku dev",
     "build": "waku build",
     "start": "waku start",
-    "check": "tsc --noEmit && waku build"
+    "check": "tsc --noEmit && waku build",
+    "fetch-prices": "node scripts/fetch-price-listings.mjs"
   },
   "dependencies": {
     "@fireworks-js/react": "^2.10.8",

@@ -17,6 +17,7 @@ filnavne på engelsk.
 | `npm run check` | `tsc --noEmit` + `waku build`; skal passere, før noget meldes færdigt |
 | `npm run build` | produktionsbuild til `dist/` (statisk genereret)                      |
 | `npm start`     | serverer det byggede `dist/` (http://localhost:8080/julequiz/)        |
+| `npm run fetch-prices` | henter fire julevarer fra guloggratis og overskriver gg26's prislåger og billederne `gg-pris-1..4.webp`; køres lokalt, gennemse `git diff` før commit |
 
 Der er ingen linter og ingen tests. `check` beviser kun, at det typechecker og bygger: om en låge
 virker, ses kun ved at åbne den i browseren.
@@ -95,7 +96,8 @@ hentet) én gang pr. montering, og `useSound` skal have `format`, fordi en `blob
 filendelse har. En ny type skal tilføjes i
 `QuestionSpec` og i `toQuestion` (switchen har ingen default med vilje). Kopiér den nærmeste
 eksisterende låge frem for at opfinde en ny form. `priceGuess`-kortet har plads til en titel på
-ca. 44 tegn og en beskrivelse på ca. 150 tegn; længere tekst løber ind under prismærket.
+ca. 44 tegn og en beskrivelse på ca. 150 tegn; længere tekst løber ind under prismærket. `scripts/listingText.mjs` maskerer priser og afkorter teksten til
+de grænser, når `npm run fetch-prices` fylder prislågerne.
 
 Pakkens prøvespørgsmål ligger i `src/quizzes/<navn>/practice/*.tsx` (samme `QuestionSpec`-form,
 filrækkefølge). De åbnes i samme lågekort med `Prøve <n>` som bånd, giver aldrig point og gemmes
