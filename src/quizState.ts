@@ -3,8 +3,11 @@ import type { Question } from "./types";
 // Kortene er lågeindekser, så tildelingerne skal altid gemmes sammen med dem.
 export type Assignment = { door: number; id: string };
 
+export type DoorValue = { door: number; value: number };
+
 export type SavedQuizState = {
   assignments: Assignment[];
+  doorValues: DoorValue[];
   team1Cards: number[];
   team2Cards: number[];
   noTeamCards: number[];
@@ -12,7 +15,7 @@ export type SavedQuizState = {
   team2ConsolationPoints: number;
 };
 
-const storageKey = (pack: string) => `julequiz-state-v3:${pack}`;
+const storageKey = (pack: string) => `julequiz-state-v4:${pack}`;
 
 function isCardArray(value: unknown, count: number): value is number[] {
   return (
@@ -61,6 +64,28 @@ export function loadQuizState(
       restored.push({ door, id });
     }
 
+    const { doorValues } = state;
+    if (!Array.isArray(doorValues)) return null;
+    const valuedDoors = new Set<number>();
+    const restoredValues: DoorValue[] = [];
+    for (const item of doorValues as unknown[]) {
+      if (typeof item !== "object" || item === null) return null;
+      const { door, value } = item as Record<string, unknown>;
+      if (
+        typeof door !== "number" ||
+        !Number.isInteger(door) ||
+        door < 0 ||
+        door >= questions.length ||
+        valuedDoors.has(door) ||
+        typeof value !== "number" ||
+        !Number.isFinite(value)
+      ) {
+        return null;
+      }
+      valuedDoors.add(door);
+      restoredValues.push({ door, value });
+    }
+
     const { team1Cards, team2Cards, noTeamCards } = state;
     const { team1ConsolationPoints, team2ConsolationPoints } = state;
     if (
@@ -75,6 +100,7 @@ export function loadQuizState(
 
     return {
       assignments: restored,
+      doorValues: restoredValues,
       team1Cards,
       team2Cards,
       noTeamCards,

@@ -52,9 +52,14 @@ og `exactOptionalPropertyTypes`. `src/pages.gen.ts` genereres af Waku og rediger
   andre; tildelingen gemmes og skifter ikke). Uden `shuffle` følger lågerne filrækkefølgen.
   `QuestionCard` får ikke spørgsmålet, kun nummer, status og visningsprops.
 - Board-delene (`Garland`, `BoardHeader`, `Footer`) ligger i `src/components/board/`.
-- Point udledes, ikke lagres: antal vundne låger × `Quiz.pointsPerQuestion` plus trøstepoint (+5 pr.
-  klik på et holdnavn, og kan justeres op og ned, også under 0, fra indstillingsmenuen). Staten
-  gemmes i `localStorage` pr. pakke (`src/quizState.ts`, format `v3`).
+- Point udledes, ikke lagres: summen af de vundne lågers værdier plus trøstepoint (+5 pr.
+  klik på et holdnavn, og kan justeres op og ned, også under 0, fra indstillingsmenuen). En låge
+  får sin værdi, første gang den åbnes (`doorValue` i `src/doorValue.ts`), og beholder den: mindst
+  en trinværdi (`Quiz.pointsPerQuestion` × 1/2/3 efter hvor stor en tredjedel af lågerne der er
+  åbnet), ellers en tilfældig andel (30–110 %) af pointforskellen, rundet op til en halv
+  grundværdi. Værdien er ens for begge hold, har intet loft, står på lågens bånd og under
+  rosetten på en vundet låge, og reglen forklares ikke i UI. Point vises med `formatPoints`
+  (tusindtalspunktum). Staten gemmes i `localStorage` pr. pakke (`src/quizState.ts`, format `v4`).
   Når alle låger er besvaret, vises `EndScreen` i stedet for header og gitter:
   den har sin egen `Snowfall` og `Fireworks`, kroner lederen, viser "Uafgjort!" ved lige point, og
   plaketterne giver stadig +5 ved klik. Samtidig skiftes baggrundsmusikken til `music.finale`.
@@ -132,7 +137,8 @@ ikke; en pakke uden `practice/` har ingen prøverunde.
   (`board`/`end`, bruger `AnimatedNumber`). Kendte grænser: `Paper` har fast radius og skygge,
   `PillButton` fast skriftstørrelse og min-bredde med tastehint efter teksten, og `TeamPlaque` har
   ingen vinderring (det klarer `EndScreen` udenom) og krymper lange holdnavne efter antal tegn
-  (`nameFontSize`), så de står på højst to linjer. Skærmene er trimmet efter dem; ændr dem ikke
+  (`nameFontSize`), så de står på højst to linjer, og lange pointtal (`pointsFontSize`), så de
+  står på én. Skærmene er trimmet efter dem; ændr dem ikke
   uden at se alle skærme igennem.
 
 ### Medier

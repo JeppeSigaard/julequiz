@@ -1,5 +1,6 @@
 import type { ComponentProps, FC, ReactNode } from "react";
 import { AnimatedNumber } from "./AnimatedNumber";
+import { formatPoints } from "../doorValue";
 
 const STITCH = {
   accent: "border-accent/55",
@@ -62,6 +63,7 @@ const PLAQUE = {
     badge: "size-[70px] text-[48px]",
     name: { size: 26, minSize: 16, width: 219 },
     points: "text-[70px]",
+    pointsFit: { size: 70, width: 149 },
     unit: "text-[22px]",
     stitch: "inset-[10px] rounded-[12px] border-2",
     // Plaketten sidder 94px under scenens top; snorene går op over kanten og klippes af scenen.
@@ -73,6 +75,7 @@ const PLAQUE = {
     badge: "",
     name: { size: 36, minSize: 22, width: 372 },
     points: "text-[158px]",
+    pointsFit: { size: 158, width: 372 },
     meta: "text-[24px]",
     stitch: "inset-[12px] rounded-[18px] border-[3px]",
     string: "-top-[72px] h-[77px]",
@@ -90,6 +93,13 @@ function nameFontSize(name: string, fit: { size: number; minSize: number; width:
   const charsPerLine = Math.max(longestWord, name.length / 2);
   const fitted = fit.width / (charsPerLine * NAME_EM_PER_CHAR);
   return Math.max(fit.minSize, Math.min(fit.size, fitted));
+}
+
+// Et ciffer i display-fonten er ca. 0,46em bredt, et tusindtalspunktum ca. 0,2em.
+function pointsFontSize(points: number, fit: { size: number; width: number }): number {
+  const text = formatPoints(points);
+  const dots = text.split(".").length - 1;
+  return Math.min(fit.size, fit.width / ((text.length - dots) * 0.46 + dots * 0.2));
 }
 
 const PLAQUE_TEAM = {
@@ -149,7 +159,7 @@ export const TeamPlaque: FC<{
             {name}
           </span>
           <span className={`font-display font-bold leading-[0.95] ${s.points}`}>
-            <AnimatedNumber value={points} /> {size === "board" && unit}
+            <span style={{ fontSize: pointsFontSize(points, s.pointsFit) }}><AnimatedNumber value={points} /></span> {size === "board" && unit}
           </span>
           {size === "end" && (
             <span className={`font-bold text-ink-soft ${PLAQUE.end.meta}`}>point · {doors} låger</span>
